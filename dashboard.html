@@ -4,15 +4,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MediCare — Healthcare Management System</title>
+    <title>Lardizabal Dental Clinic</title>
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
   <body>
-    <!-- SIDEBAR -->
+
     <div id="sidebar">
       <div class="sidebar-logo">
         <img src="/images/LardizabalLogo.png" alt="" />
@@ -22,24 +23,24 @@
       <nav class="sidebar-nav">
         <div class="nav-section">Main</div>
         <div class="nav-item active" onclick="navigate('dashboard')">
-          <span class="icon">🏠</span> Dashboard
+          <span class="icon"><i class="fas fa-th-large"></i></span> Dashboard
         </div>
         <div class="nav-section">Records</div>
         <div class="nav-item" onclick="navigate('patients')">
-          <span class="icon">👥</span> Patients
+          <span class="icon"><i class="fas fa-user-injured"></i></span> Patients
         </div>
         <div class="nav-item" onclick="navigate('doctors')">
-          <span class="icon">👨‍⚕️</span> Doctors
+          <span class="icon"><i class="fas fa-user-md"></i></span> Doctors
         </div>
         <div class="nav-item" onclick="navigate('appointments')">
-          <span class="icon">📅</span> Appointments
+          <span class="icon"><i class="fas fa-calendar-alt"></i></span> Appointments
         </div>
         <div class="nav-section">Medical</div>
         <div class="nav-item" onclick="navigate('records')">
-          <span class="icon">📋</span> Medical Records
+          <span class="icon"><i class="fas fa-file-medical"></i></span> Medical Records
         </div>
         <div class="nav-item" onclick="navigate('billing')">
-          <span class="icon">💳</span> Billing
+          <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span> Billing
         </div>
       </nav>
       <div class="sidebar-footer">
@@ -52,7 +53,7 @@
         </div>
       </div>
     </div>
-
+    
     <!-- MAIN -->
     <div id="main">
       <div id="topbar">
@@ -87,7 +88,7 @@
         <div id="page-patients" class="page">
           <div class="search-bar">
             <div class="search-input-wrap">
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i class="fas fa-search"></i></span>
               <input
                 type="text"
                 id="patient-search"
@@ -112,7 +113,7 @@
             </select>
             <div style="margin-left: auto">
               <button class="btn btn-primary" onclick="openModal('patient')">
-                + Add Patient
+                <span class="icon"><i class="fas fa-plus"></i></span> Add Patient
               </button>
             </div>
           </div>
@@ -141,7 +142,7 @@
         <div id="page-doctors" class="page">
           <div class="search-bar">
             <div class="search-input-wrap">
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i class="fas fa-search"></i></span>
               <input
                 type="text"
                 id="doctor-search"
@@ -166,7 +167,7 @@
             </select>
             <div style="margin-left: auto">
               <button class="btn btn-primary" onclick="openModal('doctor')">
-                + Add Doctor
+                <span class="icon"><i class="fas fa-plus"></i></span> Add Doctor
               </button>
             </div>
           </div>
@@ -194,7 +195,7 @@
         <div id="page-appointments" class="page">
           <div class="search-bar">
             <div class="search-input-wrap">
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i class="fas fa-search"></i></span>
               <input
                 type="text"
                 id="appt-search"
@@ -218,7 +219,7 @@
                 class="btn btn-primary"
                 onclick="openModal('appointment')"
               >
-                + New Appointment
+                <span class="icon"><i class="fas fa-plus"></i></span> New Appointment
               </button>
             </div>
           </div>
@@ -246,7 +247,7 @@
         <div id="page-records" class="page">
           <div class="search-bar">
             <div class="search-input-wrap">
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i class="fas fa-search"></i></span>
               <input
                 type="text"
                 id="record-search"
@@ -256,7 +257,7 @@
             </div>
             <div style="margin-left: auto">
               <button class="btn btn-primary" onclick="openModal('record')">
-                + Add Record
+                <span class="icon"><i class="fas fa-plus"></i></span> Add Record
               </button>
             </div>
           </div>
@@ -284,7 +285,7 @@
         <div id="page-billing" class="page">
           <div class="search-bar">
             <div class="search-input-wrap">
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i class="fas fa-search"></i></span>
               <input
                 type="text"
                 id="billing-search"
@@ -304,7 +305,7 @@
             </select>
             <div style="margin-left: auto">
               <button class="btn btn-primary" onclick="openModal('billing')">
-                + Add Bill
+                <span class="icon"><i class="fas fa-plus"></i></span> Add Bill
               </button>
             </div>
           </div>

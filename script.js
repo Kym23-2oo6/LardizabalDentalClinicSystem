@@ -622,7 +622,7 @@ function renderPatients() {
   );
   const tbody = document.getElementById("patients-tbody");
   if (patients.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">👥</div><p>No patients found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-injured"></i></span></div><p>No patients found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = patients
@@ -685,7 +685,7 @@ function renderDoctors() {
   );
   const tbody = document.getElementById("doctors-tbody");
   if (doctors.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">👨‍⚕️</div><p>No doctors found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-md"></i></span></div><p>No doctors found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = doctors
@@ -724,7 +724,7 @@ function renderAppointments() {
 
   const tbody = document.getElementById("appointments-tbody");
   if (appts.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📅</div><p>No appointments found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-calendar"></i></span></div><p>No appointments found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = appts
@@ -761,7 +761,7 @@ function renderRecords() {
 
   const tbody = document.getElementById("records-tbody");
   if (records.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><p>No records found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-clipboard"></i></span></div><p>No records found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = records
@@ -799,7 +799,7 @@ function renderBilling() {
 
   const tbody = document.getElementById("billing-tbody");
   if (bills.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">💳</div><p>No bills found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-file-invoice-dollar"></i></span></div><p>No bills found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = bills
