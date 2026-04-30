@@ -1,3 +1,11 @@
+function getTodayDateString() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 const DB = {
   get(key) { return JSON.parse(localStorage.getItem('hms_' + key) || '[]'); },
   set(key, data) { localStorage.setItem('hms_' + key, JSON.stringify(data)); },
@@ -369,7 +377,7 @@ function getStatusBadge(status) {
     'Scheduled': 'badge-blue', 'On Leave': 'badge-yellow', 'Pending': 'badge-yellow',
     'Critical': 'badge-red', 'Cancelled': 'badge-red', 'Overdue': 'badge-red',
     'Inactive': 'badge-gray', 'No Show': 'badge-gray',
-    'Consultation': 'badge-purple', 'Follow-up': 'badge-blue',
+    'Consultation': 'badge-gold', 'Follow-up': 'badge-blue',
     'Emergency': 'badge-red', 'Procedure': 'badge-blue',
   };
   return `<span class="badge ${map[status] || 'badge-gray'}">${status}</span>`;
@@ -399,7 +407,7 @@ function renderPatients() {
   );
   const tbody = document.getElementById('patients-tbody');
   if (patients.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">👥</div><p>No patients found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-injured"></i></span></div><p>No patients found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = patients.map(p => `
@@ -455,14 +463,14 @@ function renderDoctors() {
   );
   const tbody = document.getElementById('doctors-tbody');
   if (doctors.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">👨‍⚕️</div><p>No doctors found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-md"></i></span></div><p>No doctors found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = doctors.map(d => `
     <tr>
       <td style="color:var(--text-muted);font-size:12px">D-${String(d.id).padStart(3,'0')}</td>
       <td><strong>${d.name}</strong><br><span style="font-size:12px;color:var(--text-muted)">${d.license || ''}</span></td>
-      <td><span class="badge badge-purple">${d.spec}</span></td>
+      <td><span class="badge badge-gold">${d.spec}</span></td>
       <td>${d.phone}</td>
       <td style="font-size:13px">${d.schedule}</td>
       <td>${getStatusBadge(d.status)}</td>
@@ -484,7 +492,7 @@ function renderAppointments() {
 
   const tbody = document.getElementById('appointments-tbody');
   if (appts.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📅</div><p>No appointments found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-calendar"></i></span></div><p>No appointments found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = appts.map(a => `
@@ -511,7 +519,7 @@ function renderRecords() {
 
   const tbody = document.getElementById('records-tbody');
   if (records.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><p>No records found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-clipboard"></i></span></div><p>No records found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = records.map(r => `
@@ -540,7 +548,7 @@ function renderBilling() {
 
   const tbody = document.getElementById('billing-tbody');
   if (bills.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon">💳</div><p>No bills found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-file-invoice-dollar"></i></span></div><p>No bills found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = bills.map(b => `
@@ -566,27 +574,30 @@ function renderDashboard() {
   const billing = DB.get('billing');
 
   const today = new Date().toISOString().split('T')[0];
-  const todayAppts = appointments.filter(a => a.date === today).length;
+  const todayAppts = appointments.filter(a => 
+  a.date === today && 
+  !['Completed', 'Cancelled', 'No Show'].includes(a.status)
+  ).length;
   const totalRevenue = billing.filter(b => b.status === 'Paid').reduce((s, b) => s + b.amount, 0);
 
   document.getElementById('stats-grid').innerHTML = `
     <div class="stat-card">
-      <div class="stat-icon" style="background:#dbeafe;font-size:22px">👥</div>
+      <div class="stat-icon" style="background:#e3f4ff;font-size:22px"><span class="icon"><i class="fas fa-user-injured"></i></span></div>
       <div class="stat-value">${patients.length}</div>
       <div class="stat-label">Total Patients</div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon" style="background:#dcfce7;font-size:22px">👨‍⚕️</div>
+      <div class="stat-icon" style="background:#e3f4ff;font-size:22px"><span class="icon"><i class="fas fa-user-md"></i></span></div>
       <div class="stat-value">${doctors.filter(d => d.status === 'Active').length}</div>
       <div class="stat-label">Active Doctors</div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon" style="background:#fef9c3;font-size:22px">📅</div>
+      <div class="stat-icon" style="background:#e3f4ff;font-size:22px"><span class="icon"><i class="fas fa-calendar"></i></span></div>
       <div class="stat-value">${todayAppts}</div>
       <div class="stat-label">Today's Appointments</div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon" style="background:#ede9fe;font-size:22px">💳</div>
+      <div class="stat-icon" style="background:#e3f4ff;font-size:22px"><span class="icon"><i class="fas fa-file-invoice-dollar"></i></span></div>
       <div class="stat-value">₱${totalRevenue.toLocaleString()}</div>
       <div class="stat-label">Total Revenue</div>
     </div>
