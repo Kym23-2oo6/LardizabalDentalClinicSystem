@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal | Lardizabal Dental Clinic</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="portal-styles.css">
+</head>
+<body>
+    <div class="portal-container">
+        <div class="portal-card">
+            <div class="portal-header">
+                <img src="images/lardizaballogo.png" alt="LDC Logo" class="portal-logo">
+                <h1>Lardizabal Dental Clinic</h1>
+                <p>Management System (LDCMS)</p>
+            </div>
+            
+<!-- Replace the .portal-content div in portal.html -->
+<div class="portal-content">
+    <div id="portal-main-view">
+        <div class="portal-welcome">
+            <h2>Welcome</h2>
+            <p>Select an option below to continue to the clinical management suite.</p>
+        </div>
+        
+        <div class="portal-actions">
+            <button onclick="location.href='admin-dashboard.html';" class="portal-btn primary">Admin Dashboard</button>
+            <button onclick="location.href='doctor-dashboard.html';" class="portal-btn primary">Doctor Dashboard</button>
+            <!-- Clicking this will now trigger the UI transition -->
+            <button onclick="showPatientAuth()" class="portal-btn primary">Patient Dashboard</button>
+        </div>
+    </div>
+
+    <!-- This area starts hidden and will show the Sign In/Up look -->
+    <div id="patient-auth-view" style="display: none;">
+        <!-- Inside <div id="patient-auth-view"> in portal.html -->
+<div id="auth-success" class="alert alert-success" style="display:none; margin-top:10px; background:#dcfce7; color:#166534; padding:10px; border-radius:8px; font-size:13px; text-align:center;"></div>
+<div id="auth-error" class="alert alert-error" style="display:none; margin-top:10px;"></div>
+        <div class="portal-welcome">
+            <h2 id="auth-title">Patient Sign In</h2>
+            <p id="auth-subtitle">Access your dental records and appointments.</p>
+        </div>
+
+        <div id="login-form">
+            <div class="form-group form-full">
+                <label>Full Name</label>
+                <input type="text" id="login-name" placeholder="Enter your full name">
+            </div>
+            <button class="portal-btn primary" style="width:100%; margin-top:15px;" onclick="handleLogin()">Sign In</button>
+            <p class="auth-toggle-text">
+                Don't have an account? <a href="#" onclick="toggleAuth(true)">Sign Up</a>
+            </p>
+        </div>
+
+        <div id="signup-form" style="display:none;">
+            <div class="form-group form-full">
+                <label>Full Name</label>
+                <input type="text" id="reg-name" placeholder="Full Name">
+            </div>
+            <div class="form-group form-full" style="margin-top:10px;">
+                <label>Phone Number</label>
+                <input type="tel" id="reg-phone" placeholder="09XX XXX XXXX">
+            </div>
+            <button class="portal-btn primary" style="width:100%; margin-top:15px;" onclick="handleSignup()">Create Account</button>
+            <p class="auth-toggle-text">
+                Already have an account? <a href="#" onclick="toggleAuth(false)">Sign In</a>
+            </p>
+        </div>
+        
+        <div id="auth-error" class="alert alert-error" style="display:none; margin-top:10px;"></div>
+        
+        <button class="btn btn-ghost" style="width: 100%; margin-top: 20px;" onclick="backToPortal()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+    </div>
+</div>
+            
+            <div class="portal-footer">
+                <p>&copy; 2026 Lardizabal Dental Clinic System</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="portal-script.js"></script>
+
+</body>
+</html>

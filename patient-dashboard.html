@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lardizabal Dental Clinic - Patient Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="patient-styles.css">
+</head>
+<body>
+
+    <div id="sidebar">
+        <div class="sidebar-logo">
+            <img class="lardizabal-logo" src="images/lardizaballogo.png">
+            <h1>Lardizabal Dental Clinic</h1>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Main</div>
+            <div class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard')">
+                <span class="icon"><i class="fas fa-th-large"></i></span> Dashboard
+            </div>
+            <div class="nav-section">Records</div>
+            <div class="nav-item" id="nav-records" onclick="navigate('records')">
+                <span class="icon"><i class="fas fa-file-medical"></i></span> My Records
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="user-avatar" id="footer-avatar">P</div>
+                <div class="user-info">
+                    <p id="footer-name">Patient</p>
+                    <span>Patient</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main" style="margin-left: 0; width: 100%;">
+        <div id="topbar">
+            <div class="topbar-left">
+                <h2 id="page-title">Dashboard</h2>
+                <p id="page-subtitle">Manage your health profile and dental visits.</p>
+            </div>
+            <div class="topbar-right">
+                    <span
+                        id="current-date"
+                        style="font-size: 13px; color: var(--text-muted)"
+                    ></span>
+                <a href="portal.html" class="btn btn-ghost">Sign out</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <!-- DASHBOARD PAGE -->
+            <div id="page-dashboard" class="page active">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header"><h3>Profile</h3></div>
+                        <div class="card-body">
+                            <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+                                <div class="user-avatar" id="avatar-circle" style="width:60px; height:60px; font-size:24px;">P</div>
+                                <div><h4 style="margin:0;" id="prof-name">Patient</h4></div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><div class="lbl">Age</div><div class="val" id="prof-age">--</div></div>
+                                <div class="detail-item"><div class="lbl">Gender</div><div class="val" id="prof-gender">--</div></div>
+                                <div class="detail-item"><div class="lbl">Phone</div><div class="val" id="prof-phone">--</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><h3>Book Appointment</h3></div>
+                        <div class="card-body">
+                            <form id="appointment-form">
+                                <div class="form-group form-full">
+                                    <label>Doctor</label>
+                                    <select id="a-doctor" required></select>
+                                </div>
+                                <div class="form-group form-full" style="margin-top:10px;">
+                                    <label>Service</label>
+                                    <select id="a-service" required>
+                                        <option>Dental Checkup</option>
+                                        <option>Cleaning / Prophylaxis</option>
+                                        <option>Tooth Extraction</option>
+                                    </select>
+                                </div>
+                                <div class="form-grid" style="margin-top:10px;">
+                                    <div class="form-group"><label>Date</label><input type="date" id="a-date" required></div>
+                                    <div class="form-group"><label>Time</label><input type="time" id="a-time" required></div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="margin-top:15px; width:100%;">Book Now</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECORDS PAGE -->
+            <div id="page-records" class="page" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="tabs">
+                            <div class="tab active" id="tab-appointments-btn" onclick="switchTab('appointments')">Appointments</div>
+                            <div class="tab" id="tab-medical-btn" onclick="switchTab('medical')">Medical History</div>
+                            <div class="tab" id="tab-profile-btn" onclick="switchTab('profile')">Edit Profile</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="content-appointments" class="tab-pane active">
+                            <div id="patient-appointments-list"></div>
+                        </div>
+                        <div id="content-medical" class="tab-pane" style="display: none;">
+                            <p style="color: var(--text-muted); text-align: center; padding: 20px;">No medical records available.</p>
+                        </div>
+                        <!-- Profile Update Form -->
+                        <div id="content-profile" class="tab-pane" style="display: none;">
+                            <form id="profile-update-form" class="form-grid">
+                                <div class="form-group form-full">
+                                    <label>Full Name</label>
+                                    <input type="text" id="edit-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" id="edit-phone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date of Birth</label>
+                                    <input type="date" id="edit-dob" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Gender</label>
+                                    <select id="edit-gender">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Emergency Contact</label>
+                                    <input type="text" id="edit-emergency" placeholder="Name & Phone">
+                                </div>
+                                <div class="form-full" style="margin-top: 20px;">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="patient-script.js"></script>
+</body>
+</html>
