@@ -1,10 +1,10 @@
-function getTodayDateString() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+/**
+ * HOSPITAL MANAGEMENT SYSTEM - CORE SCRIPT
+ */
+
+// ==========================================
+// 1. UTILITIES & CONFIGURATION
+// ==========================================
 
 const DB = {
   get(key) { return JSON.parse(localStorage.getItem('hms_' + key) || '[]'); },
@@ -15,40 +15,45 @@ const DB = {
   }
 };
 
-// ===== SEED DATA =====
-function seedData() {
-  if (DB.get('patients').length > 0) return;
-
-  DB.set('patients', [
-    { id: 1, name: 'Vets Tres', dob: '2006-12-30', gender: 'Male', blood: '--', phone: '09090909090', address: 'Taguig City, Metro Manila', history: 'Hypertension, Penicillin allergy', status: 'Active', emergency: '09171234568' },
-    { id: 2, name: 'Jun Jez', dob: '2006-06-21', gender: 'Male', blood: '--', phone: '09090909090', address: 'Taguig City, Metro Manila', history: 'Type 2 Diabetes', status: 'Critical', emergency: 'Liberty' },
-    { id: 3, name: 'Sao', dob: '2006-02-27', gender: 'Male', blood: '--', phone: '09090909090', address: 'Taguig City, Metro Manila', history: 'Ngek', status: 'Active', emergency: '' },
-  ]);
-
-  DB.set('doctors', [
-    { id: 1, name: 'Dr. John Michael', spec: 'Cardiology', phone: '09171112222', email: 'lreyes@hospital.com', license: 'PRC-12345', schedule: 'Mon-Fri (Morning)', status: 'Active' },
-    { id: 2, name: 'Dr. Joshua', spec: 'General Medicine', phone: '09282223333', email: 'rsantos@hospital.com', license: 'PRC-23456', schedule: 'Mon-Fri (Afternoon)', status: 'Active' },
-    { id: 3, name: 'Dr. Kym Brian', spec: 'Pediatrics', phone: '09453334444', email: 'cvillanueva@hospital.com', license: 'PRC-34567', schedule: 'Tue-Sat', status: 'Active' },
-  ]);
-
-  const today = new Date().toISOString().split('T')[0];
-  DB.set('appointments', [
-    { id: 1, patient: 'Steven Tres', doctor: 'Dr. John Michael', date: today, time: '09:00', reason: 'Routine checkup', status: 'Scheduled', notes: '' },
-    { id: 2, patient: 'Jez Jun', doctor: 'Dr. Joshua', date: today, time: '10:30', reason: 'Fever and cough', status: 'Completed', notes: 'Prescribed Amoxicillin' },
-  ]);
-
-  DB.set('records', [
-    { id: 1, patient: 'Steven Tres', doctor: 'Dr. John Michael', diagnosis: 'Hypertension Stage 1', prescription: 'Amlodipine 5mg daily', notes: 'Monitor BP weekly', date: today, type: 'Consultation' },
-    { id: 2, patient: 'Jez Jun', doctor: 'Dr. Joshua', diagnosis: 'Acute Upper Respiratory Infection', prescription: 'Amoxicillin 500mg TID x 7 days, Paracetamol PRN', notes: 'Rest and hydration', date: today, type: 'Consultation' },
-  ]);
-
-  DB.set('billing', [
-    { id: 1, patient: 'Steven Tres', service: 'Consultation – Cardiology', amount: 1500, date: today, status: 'Paid', method: 'Cash' },
-    { id: 3, patient: 'Jez Jun', service: 'Diabetes Monitoring Package', amount: 2200, date: today, status: 'Pending', method: 'PhilHealth' },
-  ]);
+function getTodayDateString() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
-// ===== NAVIGATION =====
+function formatDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function calcAge(dob) {
+  if (!dob) return '—';
+  const today = new Date();
+  const birth = new Date(dob);
+  let age = today.getFullYear() - birth.getFullYear();
+  if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age--;
+  return age;
+}
+
+function getStatusBadge(status) {
+  const map = {
+    'Active': 'badge-green', 'Completed': 'badge-green', 'Paid': 'badge-green',
+    'Scheduled': 'badge-blue', 'On Leave': 'badge-yellow', 'Pending': 'badge-yellow',
+    'Critical': 'badge-red', 'Cancelled': 'badge-red', 'Overdue': 'badge-red',
+    'Inactive': 'badge-gray', 'No Show': 'badge-gray',
+    'Consultation': 'badge-gold', 'Follow-up': 'badge-blue',
+    'Emergency': 'badge-red', 'Procedure': 'badge-blue',
+  };
+  return `<span class="badge ${map[status] || 'badge-gray'}">${status}</span>`;
+}
+
+// ==========================================
+// 2. NAVIGATION & PAGE CONTROL
+// ==========================================
+
 let currentPage = 'dashboard';
 let editingId = null;
 
@@ -72,36 +77,45 @@ function navigate(page) {
   document.getElementById('page-title').textContent = titles[page][0];
   document.getElementById('page-subtitle').textContent = titles[page][1];
 
-  if (page === 'dashboard') renderDashboard();
-  if (page === 'patients') renderPatients();
-  if (page === 'doctors') renderDoctors();
-  if (page === 'appointments') renderAppointments();
-  if (page === 'records') renderRecords();
-  if (page === 'billing') renderBilling();
+  // Render specific page content
+  const renderers = {
+    dashboard: renderDashboard,
+    patients: renderPatients,
+    doctors: renderDoctors,
+    appointments: renderAppointments,
+    records: renderRecords,
+    billing: renderBilling
+  };
+  if (renderers[page]) renderers[page]();
 }
 
-// ===== MODAL =====
+// ==========================================
+// 3. MODAL MANAGEMENT (ADD/EDIT/VIEW)
+// ==========================================
+
 let currentModal = null;
+
 function openModal(type, id = null) {
   editingId = id;
   document.getElementById('modal-overlay').style.display = 'flex';
   currentModal = type;
 
-  // Hide all modals
+  // Hide all modals first
   ['patient','doctor','appointment','record','billing'].forEach(t =>
     document.getElementById('modal-' + t).style.display = 'none'
   );
   document.getElementById('modal-' + type).style.display = 'block';
 
-  // Populate dropdowns
-  if (type === 'appointment' || type === 'record' || type === 'billing') {
+  // Populate dynamic dropdowns
+  if (['appointment', 'record', 'billing'].includes(type)) {
     const patients = DB.get('patients');
     const selectors = { appointment: 'a-patient', record: 'r-patient', billing: 'b-patient' };
     const sel = document.getElementById(selectors[type]);
     sel.innerHTML = '<option value="">Select Patient...</option>' +
       patients.map(p => `<option>${p.name}</option>`).join('');
   }
-  if (type === 'appointment' || type === 'record') {
+  
+  if (['appointment', 'record'].includes(type)) {
     const doctors = DB.get('doctors');
     const selectors = { appointment: 'a-doctor', record: 'r-doctor' };
     const sel = document.getElementById(selectors[type]);
@@ -109,15 +123,12 @@ function openModal(type, id = null) {
       doctors.map(d => `<option>${d.name}</option>`).join('');
   }
 
-  // Set today's date
   const today = new Date().toISOString().split('T')[0];
 
   if (id !== null) {
-    // Edit mode
-    const data = DB.get(type === 'billing' ? 'billing' :
-      type === 'record' ? 'records' :
-      type === 'appointment' ? 'appointments' :
-      type + 's').find(i => i.id === id);
+    // Populate Edit Mode
+    const key = type === 'billing' ? 'billing' : type === 'record' ? 'records' : type === 'appointment' ? 'appointments' : type + 's';
+    const data = DB.get(key).find(i => i.id === id);
 
     if (type === 'patient') {
       document.getElementById('patient-modal-title').textContent = 'Edit Patient';
@@ -167,97 +178,30 @@ function openModal(type, id = null) {
       document.getElementById('b-method').value = data.method;
     }
   } else {
-    // Add mode – reset forms
+    // Reset for Add Mode
     document.getElementById('patient-modal-title').textContent = 'Add Patient';
     document.getElementById('doctor-modal-title').textContent = 'Add Doctor';
     document.getElementById('appt-modal-title').textContent = 'New Appointment';
     document.getElementById('record-modal-title').textContent = 'Add Medical Record';
     document.getElementById('billing-modal-title').textContent = 'Add Bill';
 
-    ['p-name','p-dob','p-phone','p-address','p-history','p-emergency'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    ['d-name','d-phone','d-email','d-license'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    ['a-reason','a-notes'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    ['r-diagnosis','r-prescription','r-notes'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    ['b-service'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    const bamt = document.getElementById('b-amount'); if (bamt) bamt.value = '';
+    ['p-name','p-dob','p-phone','p-address','p-history','p-emergency',
+     'd-name','d-phone','d-email','d-license',
+     'a-reason','a-notes','r-diagnosis','r-prescription','r-notes','b-service','b-amount'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
 
-    // Set default dates
-    const dateIds = ['a-date', 'r-date', 'b-date'];
-    dateIds.forEach(id => { const el = document.getElementById(id); if (el) el.value = today; });
-
-    // Default time
+    ['a-date', 'r-date', 'b-date'].forEach(id => { const el = document.getElementById(id); if (el) el.value = today; });
     const atime = document.getElementById('a-time'); if (atime) atime.value = '09:00';
   }
 
-  // Hide errors
+  // Hide error messages
   ['patient','doctor','appt','record','billing'].forEach(t => {
     const el = document.getElementById(t + '-err');
     if (el) el.style.display = 'none';
   });
 }
-// --- Add these functions to admin-script.js ---
 
-// --- Updated checkNotifications in admin-script.js ---
-function checkNotifications() {
-    const notifications = DB.get('notifications') || [];
-    const unread = notifications.filter(n => !n.read);
-    const countEl = document.getElementById('notification-count');
-    const listEl = document.getElementById('notification-list');
-
-    if (unread.length > 0) {
-        countEl.innerText = unread.length;
-        countEl.style.display = 'block';
-    } else {
-        countEl.style.display = 'none';
-    }
-
-    if (notifications.length === 0) {
-        listEl.innerHTML = '<div style="padding:15px; text-align:center; color:var(--text-muted); font-size:13px;">No new notifications</div>';
-    } else {
-        listEl.innerHTML = notifications.reverse().map(n => {
-            // Determine background color based on notification type
-            const bgColor = n.type === 'cancellation' ? '#fff1f2' : (n.read ? 'transparent' : '#f0f9ff');
-            const iconColor = n.type === 'cancellation' ? 'var(--danger)' : 'var(--primary)';
-            
-            return `
-                <div style="padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 13px; background: ${bgColor}">
-                    <div style="display: flex; gap: 8px; align-items: start;">
-                        <i class="fas ${n.type === 'cancellation' ? 'fa-times-circle' : 'fa-calendar-plus'}" style="margin-top: 3px; color: ${iconColor}"></i>
-                        <div style="flex: 1;">
-                            <strong>${n.patient}</strong>
-                            <div style="color: var(--text-muted); font-size: 11px;">${n.message}</div>
-                            <div style="color: var(--text-muted); font-size: 10px; margin-top: 4px;">${n.time}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-}
-
-function toggleNotifications() {
-    const dropdown = document.getElementById('notification-dropdown');
-    const isVisible = dropdown.style.display === 'block';
-    dropdown.style.display = isVisible ? 'none' : 'block';
-    
-    if (!isVisible) {
-        // Mark all as read when opening
-        let notifications = DB.get('notifications');
-        notifications.forEach(n => n.read = true);
-        DB.set('notifications', notifications);
-        checkNotifications();
-    }
-}
-
-function clearNotifications(e) {
-    e.stopPropagation();
-    DB.set('notifications', []);
-    checkNotifications();
-}
-
-// Initialize check and set interval to look for new ones
-setInterval(checkNotifications, 5000); // Checks every 5 seconds
-document.addEventListener('DOMContentLoaded', checkNotifications);
 function closeModal() {
   document.getElementById('modal-overlay').style.display = 'none';
   currentModal = null; editingId = null;
@@ -266,6 +210,7 @@ function closeModal() {
 function closeModalOverlay(e) {
   if (e.target === document.getElementById('modal-overlay')) closeModal();
 }
+
 function closeViewModal(e) {
   if (e.target === document.getElementById('modal-view-overlay'))
     document.getElementById('modal-view-overlay').style.display = 'none';
@@ -277,7 +222,10 @@ function showErr(id, msg) {
   el.style.display = 'block';
 }
 
-// ===== SAVE FUNCTIONS =====
+// ==========================================
+// 4. DATA PERSISTENCE (SAVE / DELETE)
+// ==========================================
+
 function savePatient() {
   const name = document.getElementById('p-name').value.trim();
   const dob = document.getElementById('p-dob').value;
@@ -415,12 +363,13 @@ function saveBilling() {
   renderBilling();
 }
 
-// ===== DELETE =====
 function deleteItem(type, id) {
   if (!confirm('Are you sure you want to delete this record?')) return;
   const key = type === 'billing' ? 'billing' : type === 'record' ? 'records' : type + 's';
   const data = DB.get(key).filter(i => i.id !== id);
   DB.set(key, data);
+  
+  // Refresh current view
   if (type === 'patient') renderPatients();
   if (type === 'doctor') renderDoctors();
   if (type === 'appointment') renderAppointments();
@@ -429,33 +378,67 @@ function deleteItem(type, id) {
   if (currentPage === 'dashboard') renderDashboard();
 }
 
-// ===== RENDER FUNCTIONS =====
-function getStatusBadge(status) {
-  const map = {
-    'Active': 'badge-green', 'Completed': 'badge-green', 'Paid': 'badge-green',
-    'Scheduled': 'badge-blue', 'On Leave': 'badge-yellow', 'Pending': 'badge-yellow',
-    'Critical': 'badge-red', 'Cancelled': 'badge-red', 'Overdue': 'badge-red',
-    'Inactive': 'badge-gray', 'No Show': 'badge-gray',
-    'Consultation': 'badge-gold', 'Follow-up': 'badge-blue',
-    'Emergency': 'badge-red', 'Procedure': 'badge-blue',
-  };
-  return `<span class="badge ${map[status] || 'badge-gray'}">${status}</span>`;
+// ==========================================
+// 5. NOTIFICATION SYSTEM
+// ==========================================
+
+function checkNotifications() {
+  const notifications = DB.get('notifications') || [];
+  const unread = notifications.filter(n => !n.read);
+  const countEl = document.getElementById('notification-count');
+  const listEl = document.getElementById('notification-list');
+
+  if (unread.length > 0) {
+    countEl.innerText = unread.length;
+    countEl.style.display = 'block';
+  } else {
+    countEl.style.display = 'none';
+  }
+
+  if (notifications.length === 0) {
+    listEl.innerHTML = '<div style="padding:15px; text-align:center; color:var(--text-muted); font-size:13px;">No new notifications</div>';
+  } else {
+    listEl.innerHTML = notifications.reverse().map(n => {
+      const bgColor = n.type === 'cancellation' ? '#fff1f2' : (n.read ? 'transparent' : '#f0f9ff');
+      const iconColor = n.type === 'cancellation' ? 'var(--danger)' : 'var(--primary)';
+      
+      return `
+        <div style="padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 13px; background: ${bgColor}">
+          <div style="display: flex; gap: 8px; align-items: start;">
+            <i class="fas ${n.type === 'cancellation' ? 'fa-times-circle' : 'fa-calendar-plus'}" style="margin-top: 3px; color: ${iconColor}"></i>
+            <div style="flex: 1;">
+              <strong>${n.patient}</strong>
+              <div style="color: var(--text-muted); font-size: 11px;">${n.message}</div>
+              <div style="color: var(--text-muted); font-size: 10px; margin-top: 4px;">${n.time}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
 }
 
-function formatDate(d) {
-  if (!d) return '—';
-  const dt = new Date(d + 'T00:00:00');
-  return dt.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+function toggleNotifications() {
+  const dropdown = document.getElementById('notification-dropdown');
+  const isVisible = dropdown.style.display === 'block';
+  dropdown.style.display = isVisible ? 'none' : 'block';
+  
+  if (!isVisible) {
+    let notifications = DB.get('notifications');
+    notifications.forEach(n => n.read = true);
+    DB.set('notifications', notifications);
+    checkNotifications();
+  }
 }
 
-function calcAge(dob) {
-  if (!dob) return '—';
-  const today = new Date();
-  const birth = new Date(dob);
-  let age = today.getFullYear() - birth.getFullYear();
-  if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age--;
-  return age;
+function clearNotifications(e) {
+  e.stopPropagation();
+  DB.set('notifications', []);
+  checkNotifications();
 }
+
+// ==========================================
+// 6. RENDER FUNCTIONS (UI GENERATION)
+// ==========================================
 
 function renderPatients() {
   const q = document.getElementById('patient-search').value.toLowerCase();
@@ -483,8 +466,7 @@ function renderPatients() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('patient', ${p.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('patient', ${p.id})">Del</button>
       </td>
-    </tr>
-  `).join('');
+    </tr>`).join('');
 }
 
 function viewPatient(id) {
@@ -508,8 +490,7 @@ function viewPatient(id) {
     </div>
     <div><strong style="font-size:13px">Billing (${billing.length})</strong>
       ${billing.length ? billing.map(b => `<div style="margin-top:8px;padding:10px;background:var(--bg);border-radius:8px;font-size:13px;display:flex;justify-content:space-between"><span>${b.service}</span><span><strong>₱${b.amount.toLocaleString()}</strong> ${getStatusBadge(b.status)}</span></div>`).join('') : '<p style="font-size:13px;color:var(--text-muted);margin-top:6px">No billing</p>'}
-    </div>
-  `;
+    </div>`;
   document.getElementById('modal-view-overlay').style.display = 'flex';
 }
 
@@ -537,8 +518,7 @@ function renderDoctors() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('doctor', ${d.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('doctor', ${d.id})">Del</button>
       </td>
-    </tr>
-  `).join('');
+    </tr>`).join('');
 }
 
 function renderAppointments() {
@@ -566,8 +546,7 @@ function renderAppointments() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('appointment', ${a.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('appointment', ${a.id})">Del</button>
       </td>
-    </tr>
-  `).join('');
+    </tr>`).join('');
 }
 
 function renderRecords() {
@@ -593,8 +572,7 @@ function renderRecords() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('record', ${r.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('record', ${r.id})">Del</button>
       </td>
-    </tr>
-  `).join('');
+    </tr>`).join('');
 }
 
 function renderBilling() {
@@ -622,8 +600,7 @@ function renderBilling() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('billing', ${b.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('billing', ${b.id})">Del</button>
       </td>
-    </tr>
-  `).join('');
+    </tr>`).join('');
 }
 
 function renderDashboard() {
@@ -634,8 +611,7 @@ function renderDashboard() {
 
   const today = new Date().toISOString().split('T')[0];
   const todayAppts = appointments.filter(a => 
-  a.date === today && 
-  !['Completed', 'Cancelled', 'No Show'].includes(a.status)
+    a.date === today && !['Completed', 'Cancelled', 'No Show'].includes(a.status)
   ).length;
   const totalRevenue = billing.filter(b => b.status === 'Paid').reduce((s, b) => s + b.amount, 0);
 
@@ -659,10 +635,9 @@ function renderDashboard() {
       <div class="stat-icon" style="background:#e3f4ff;font-size:22px"><span class="icon"><i class="fas fa-file-invoice-dollar"></i></span></div>
       <div class="stat-value">₱${totalRevenue.toLocaleString()}</div>
       <div class="stat-label">Total Revenue</div>
-    </div>
-  `;
+    </div>`;
 
-  // Recent appointments
+  // Recent appointments list
   const recentAppts = appointments.slice(-5).reverse();
   document.getElementById('dash-appointments').innerHTML = recentAppts.length
     ? recentAppts.map(a => `
@@ -676,11 +651,10 @@ function renderDashboard() {
           <div style="font-size:12px;color:var(--text-muted)">${a.doctor} · ${a.time}</div>
         </div>
         ${getStatusBadge(a.status)}
-      </div>
-    `).join('')
+      </div>`).join('')
     : '<div class="empty-state"><p>No appointments yet</p></div>';
 
-  // Recent patients
+  // Recent patients list
   const recentPatients = patients.slice(-5).reverse();
   document.getElementById('dash-patients').innerHTML = recentPatients.length
     ? recentPatients.map(p => `
@@ -693,13 +667,59 @@ function renderDashboard() {
           <div style="font-size:12px;color:var(--text-muted)">${p.gender} · ${calcAge(p.dob)} yrs · ${p.blood || 'N/A'}</div>
         </div>
         ${getStatusBadge(p.status)}
-      </div>
-    `).join('')
+      </div>`).join('')
     : '<div class="empty-state"><p>No patients yet</p></div>';
 }
 
-// ===== INIT =====
-document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+// ==========================================
+// 7. SEED DATA (INITIALIZATION)
+// ==========================================
 
-seedData();
-renderDashboard();
+function seedData() {
+  if (DB.get('patients').length > 0) return;
+
+  DB.set('patients', [
+    { id: 1, name: 'Vets Tres', dob: '2006-12-30', gender: 'Male', blood: '--', phone: '09090909090', address: 'Taguig City, Metro Manila', history: 'Hypertension, Penicillin allergy', status: 'Active', emergency: '09171234568' },
+    { id: 2, name: 'Jun Jez', dob: '2006-06-21', gender: 'Male', blood: '--', phone: '09090909090', address: 'Taguig City, Metro Manila', history: 'Type 2 Diabetes', status: 'Critical', emergency: 'Liberty' },
+    { id: 3, name: 'Sao', dob: '2006-02-27', gender: 'Male', blood: '--', phone: '09090909090', address: 'Taguig City, Metro Manila', history: 'Ngek', status: 'Active', emergency: '' },
+  ]);
+
+  DB.set('doctors', [
+    { id: 1, name: 'Dr. John Michael', spec: 'Cardiology', phone: '09171112222', email: 'lreyes@hospital.com', license: 'PRC-12345', schedule: 'Mon-Fri (Morning)', status: 'Active' },
+    { id: 2, name: 'Dr. Joshua', spec: 'General Medicine', phone: '09282223333', email: 'rsantos@hospital.com', license: 'PRC-23456', schedule: 'Mon-Fri (Afternoon)', status: 'Active' },
+    { id: 3, name: 'Dr. Kym Brian', spec: 'Pediatrics', phone: '09453334444', email: 'cvillanueva@hospital.com', license: 'PRC-34567', schedule: 'Tue-Sat', status: 'Active' },
+  ]);
+
+  const today = new Date().toISOString().split('T')[0];
+  DB.set('appointments', [
+    { id: 1, patient: 'Steven Tres', doctor: 'Dr. John Michael', date: today, time: '09:00', reason: 'Routine checkup', status: 'Scheduled', notes: '' },
+    { id: 2, patient: 'Jez Jun', doctor: 'Dr. Joshua', date: today, time: '10:30', reason: 'Fever and cough', status: 'Completed', notes: 'Prescribed Amoxicillin' },
+  ]);
+
+  DB.set('records', [
+    { id: 1, patient: 'Steven Tres', doctor: 'Dr. John Michael', diagnosis: 'Hypertension Stage 1', prescription: 'Amlodipine 5mg daily', notes: 'Monitor BP weekly', date: today, type: 'Consultation' },
+    { id: 2, patient: 'Jez Jun', doctor: 'Dr. Joshua', diagnosis: 'Acute Upper Respiratory Infection', prescription: 'Amoxicillin 500mg TID x 7 days, Paracetamol PRN', notes: 'Rest and hydration', date: today, type: 'Consultation' },
+  ]);
+
+  DB.set('billing', [
+    { id: 1, patient: 'Steven Tres', service: 'Consultation – Cardiology', amount: 1500, date: today, status: 'Paid', method: 'Cash' },
+    { id: 3, patient: 'Jez Jun', service: 'Diabetes Monitoring Package', amount: 2200, date: today, status: 'Pending', method: 'PhilHealth' },
+  ]);
+}
+
+// ==========================================
+// 8. INITIALIZATION & LISTENERS
+// ==========================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  const dateStr = new Date().toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const dateEl = document.getElementById('current-date');
+  if (dateEl) dateEl.textContent = dateStr;
+
+  seedData();
+  renderDashboard();
+  checkNotifications();
+  
+  // Polling for notifications
+  setInterval(checkNotifications, 5000);
+});

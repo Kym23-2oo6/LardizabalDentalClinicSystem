@@ -1,38 +1,31 @@
+/**
+ * PATIENT PORTAL - CORE SCRIPT
+ * File: patient-script.js
+ */
+
+// ==========================================
+// 1. DATABASE & CONFIGURATION
+// ==========================================
+
 const SharedDB = {
     get(key) { return JSON.parse(localStorage.getItem('hms_' + key) || '[]'); },
     set(key, data) { localStorage.setItem('hms_' + key, JSON.stringify(data)); }
 };
 
-// Change this line in your patient-script.js[cite: 5]
+// Current patient session ID
 const PATIENT_ID = parseInt(localStorage.getItem('current_patient_id')) || 0;
 
-// Update the syncAndRenderProfile function to handle missing data gracefully
-function syncAndRenderProfile() {
-    const patients = SharedDB.get('patients');
-    let myData = patients.find(p => p.id === PATIENT_ID);
+// ==========================================
+// 2. NAVIGATION & TAB LOGIC
+// ==========================================
 
-    if (!myData) {
-        // Redirect back to portal if no session is found
-        window.location.href = 'portal.html';
-        return;
-    }
-
-    // Existing render logic remains same...[cite: 5]
-    document.getElementById('prof-name').innerText = myData.name;
-    document.getElementById('footer-name').innerText = myData.name;
-    document.getElementById('footer-avatar').innerText = myData.name.charAt(0).toUpperCase();
-    document.getElementById('avatar-circle').innerText = myData.name.charAt(0).toUpperCase();
-    document.getElementById('prof-age').innerText = calculateAge(myData.dob);
-    document.getElementById('prof-gender').innerText = myData.gender;
-    document.getElementById('prof-phone').innerText = myData.phone;
-}
-
-// --- NAVIGATION LOGIC ---
 function navigate(page) {
+    // Toggle Nav Items
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const navItem = document.getElementById('nav-' + page);
     if(navItem) navItem.classList.add('active');
 
+    // Toggle Page Visibility
     document.querySelectorAll('.page').forEach(p => {
         p.style.display = 'none';
         p.classList.remove('active');
@@ -42,6 +35,7 @@ function navigate(page) {
     activePage.style.display = 'block';
     activePage.classList.add('active');
 
+    // Update Headers
     const titles = {
         dashboard: ['Welcome!', 'Manage your health profile and dental visits.'],
         records: ['My Records', 'Review your appointment history and medical notes.']
@@ -52,29 +46,31 @@ function navigate(page) {
     if (page === 'records') renderPatientAppointments();
 }
 
-// --- TAB SWITCHING LOGIC (Standardized) ---
 function switchTab(tabName) {
-    // 1. Clear Tab Buttons
+    // Clear Tab Buttons
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     
-    // 2. Hide Content Panes
+    // Hide Content Panes
     document.querySelectorAll('.tab-pane').forEach(p => {
         p.style.display = 'none';
         p.classList.remove('active');
     });
 
-    // 3. Activate Selection
+    // Activate Selection
     document.getElementById(`tab-${tabName}-btn`).classList.add('active');
     const targetPane = document.getElementById(`content-${tabName}`);
     targetPane.style.display = 'block';
     targetPane.classList.add('active');
 
-    // 4. Specific actions per tab
+    // Contextual Actions
     if (tabName === 'profile') loadProfileIntoForm();
     if (tabName === 'appointments') renderPatientAppointments();
 }
 
-// --- PROFILE LOGIC ---
+// ==========================================
+// 3. PROFILE MANAGEMENT
+// ==========================================
+
 function calculateAge(dob) {
     if (!dob) return "N/A";
     const diff = Date.now() - new Date(dob).getTime();
@@ -85,19 +81,24 @@ function syncAndRenderProfile() {
     const patients = SharedDB.get('patients');
     let myData = patients.find(p => p.id === PATIENT_ID);
 
+    // Redirect if no session found
+    if (!myData && PATIENT_ID !== 0) {
+        window.location.href = 'portal.html';
+        return;
+    }
+
+    // Default data for new sessions
     if (!myData) {
         myData = { id: PATIENT_ID, name: 'Patient', dob: '2000-05-15', gender: 'Female', phone: '09123456789', status: 'Active' };
         patients.push(myData);
         SharedDB.set('patients', patients);
     }
 
-    // Update Header & Sidebar
+    // Update UI Elements
     document.getElementById('prof-name').innerText = myData.name;
     document.getElementById('footer-name').innerText = myData.name;
     document.getElementById('footer-avatar').innerText = myData.name.charAt(0).toUpperCase();
     document.getElementById('avatar-circle').innerText = myData.name.charAt(0).toUpperCase();
-    
-    // Update Details
     document.getElementById('prof-age').innerText = calculateAge(myData.dob);
     document.getElementById('prof-gender').innerText = myData.gender;
     document.getElementById('prof-phone').innerText = myData.phone;
@@ -133,7 +134,10 @@ document.getElementById('profile-update-form').addEventListener('submit', functi
     }
 });
 
-// --- APPOINTMENTS LOGIC ---
+// ==========================================
+// 4. APPOINTMENT SYSTEM
+// ==========================================
+
 document.getElementById('appointment-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const patients = SharedDB.get('patients');
@@ -154,7 +158,7 @@ document.getElementById('appointment-form').addEventListener('submit', function(
     appointments.push(newAppt);
     SharedDB.set('appointments', appointments);
 
-    // --- NEW: Trigger Admin Notification ---
+    // Trigger Admin Notification
     let notifications = SharedDB.get('notifications') || [];
     notifications.push({
         id: Date.now(),
@@ -181,7 +185,6 @@ function renderPatientAppointments() {
     }
 
     container.innerHTML = myAppts.reverse().map(appt => {
-        // Logic to conditionally show the cancel button
         const showCancelButton = appt.status !== 'Completed' && appt.status !== 'Cancelled';
         
         return `
@@ -205,16 +208,15 @@ function renderPatientAppointments() {
     }).join('');
 }
 
-// --- Updated cancelAppt in patient-script.js ---
 window.cancelAppt = function(id) {
     if (confirm("Cancel this appointment?")) {
         let appts = SharedDB.get('appointments');
-        const apptToCancel = appts.find(a => a.id == id); //
+        const apptToCancel = appts.find(a => a.id == id);
         const patients = SharedDB.get('patients');
-        const myData = patients.find(p => p.id === PATIENT_ID); //
+        const myData = patients.find(p => p.id === PATIENT_ID);
 
         if (apptToCancel) {
-            // --- NEW: Trigger Admin Notification for Cancellation ---
+            // Trigger Admin Notification for Cancellation
             let notifications = SharedDB.get('notifications') || [];
             notifications.push({
                 id: Date.now(),
@@ -222,23 +224,36 @@ window.cancelAppt = function(id) {
                 patient: myData.name,
                 time: new Date().toLocaleTimeString(),
                 read: false,
-                type: 'cancellation' // Added type for styling if needed
+                type: 'cancellation'
             });
             SharedDB.set('notifications', notifications);
         }
 
-        SharedDB.set('appointments', appts.filter(a => a.id != id)); //[cite: 5]
-        renderPatientAppointments(); //[cite: 5]
+        // Update DB and re-render
+        SharedDB.set('appointments', appts.filter(a => a.id != id));
+        renderPatientAppointments();
     }
 };
 
+// ==========================================
+// 5. INITIALIZATION
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Initial profile sync
     syncAndRenderProfile();
+    
+    // Load doctors into selection
     const doctors = SharedDB.get('doctors');
     document.getElementById('a-doctor').innerHTML = doctors.map(d => 
         `<option value="${d.name}">${d.name}</option>`
     ).join('');
 
-document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
+    // Set display date
+    document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-PH', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
 });

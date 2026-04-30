@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. ROOT VARIABLES & GLOBAL STYLES
+   ========================================================================== */
 :root {
   --primary: #014D5B; 
   --secondary: #37ACBE; 
@@ -17,6 +20,9 @@ body, html {
     overflow: hidden;
 }
 
+/* ==========================================================================
+   2. PORTAL LAYOUT & CONTAINER
+   ========================================================================== */
 .portal-container {
     height: 100vh;
     display: flex;
@@ -43,6 +49,9 @@ body, html {
     object-fit: cover;
 }
 
+/* ==========================================================================
+   3. PORTAL CONTENT (HEADERS & TEXT)
+   ========================================================================== */
 .portal-header h1 {
     font-size: 24px;
     color: var(--primary);
@@ -70,6 +79,15 @@ body, html {
     line-height: 1.5;
 }
 
+.portal-footer {
+    margin-top: 40px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   4. BUTTONS & ACTIONS
+   ========================================================================== */
 .portal-actions {
     display: flex;
     flex-direction: column;
@@ -110,16 +128,12 @@ body, html {
     background: #e2e8ed;
 }
 
-.portal-footer {
-    margin-top: 40px;
-    font-size: 11px;
-    color: var(--text-muted);
-}
-/* Patient Auth specific styling */
+/* ==========================================================================
+   5. PATIENT AUTHENTICATION VIEW
+   ========================================================================== */
 #patient-auth-view {
     animation: fadeIn 0.3s ease;
 }
-
 
 .auth-toggle-text {
     font-size: 13px;
@@ -138,7 +152,7 @@ body, html {
     text-decoration: underline;
 }
 
-/* Reusing form styles for the portal look */
+/* Auth Form Elements */
 #patient-auth-view .form-group {
     text-align: left;
     margin-bottom: 15px;
