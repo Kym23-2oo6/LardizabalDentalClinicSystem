@@ -1,12 +1,13 @@
+/*admin-styles.css*/
 /* ==========================================================================
    1. ROOT VARIABLES & GLOBAL STYLES
    ========================================================================== */
 :root {
-  --primary: #014D5B; 
-  --secondary: #37ACBE; 
-  --accent: #00ac86; 
+  --primary: #014d5b;
+  --secondary: #37acbe;
+  --accent: #00ac86;
   --bg: #f4f7fa;
-  --sidebar-bg: #014D5B;
+  --sidebar-bg: #014d5b;
   --sidebar-text: #adb5bd;
   --sidebar-active: #ffffff;
   --card: #ffffff;
@@ -54,13 +55,13 @@ body {
 }
 
 .sidebar-logo {
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
   padding: 25px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-logo h1 {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   font-size: 1.2rem;
   color: #fff;
   letter-spacing: 1px;
@@ -128,8 +129,11 @@ body {
 
 /* Sidebar Footer & User Profile */
 .sidebar-footer {
+  width: 100%;
   padding: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 24px solid rgba(255, 255, 255, 0.07);
+  position: relative;
+  top: 19%;
 }
 
 .sidebar-user {
@@ -222,22 +226,41 @@ body {
   transition: all 0.15s;
 }
 
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { opacity: 0.8; }
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  opacity: 0.8;
+}
 
 .btn-ghost {
+  text-decoration: none;
   background: transparent;
   color: var(--text-muted);
   border: 1px solid var(--border);
 }
-.btn-ghost:hover { background: var(--bg); }
+.btn-ghost:hover {
+  background: var(--bg);
+}
 
-.btn-danger { background: var(--danger); color: #fff; }
-.btn-danger:hover { background: #dc2626; }
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn-danger:hover {
+  background: #dc2626;
+}
 
-.btn-success { background: var(--success); color: #fff; }
+.btn-success {
+  background: var(--success);
+  color: #fff;
+}
 
-.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
 
 /* Cards & Dashboards */
 .dashboard-grid {
@@ -300,7 +323,9 @@ body {
   margin-bottom: 12px;
 }
 
-.stat-icon i { font-size: 24px; }
+.stat-icon i {
+  font-size: 24px;
+}
 
 .stat-value {
   font-size: 28px;
@@ -323,19 +348,39 @@ body {
   font-weight: 500;
 }
 
-.badge-green { background: #dcfce7; color: #166534; }
-.badge-yellow { background: #fef9c3; color: #854d0e; }
-.badge-red { background: #fee2e2; color: #991b1b; }
-.badge-blue { background: #e3efff; color: #00858a; }
-.badge-gray { background: #f1f5f9; color: #475569; }
-.badge-gold { background: #fff6e4; color: #e29624; }
+.badge-green {
+  background: #dcfce7;
+  color: #166534;
+}
+.badge-yellow {
+  background: #fef9c3;
+  color: #854d0e;
+}
+.badge-red {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.badge-blue {
+  background: #e3efff;
+  color: #00858a;
+}
+.badge-gray {
+  background: #f1f5f9;
+  color: #475569;
+}
+.badge-gold {
+  background: #fff6e4;
+  color: #e29624;
+}
 
 /* ==========================================================================
    5. DATA PRESENTATION (TABLES, DETAILS, TABS)
    ========================================================================== */
 
 /* Tables */
-.table-wrap { overflow-x: auto; }
+.table-wrap {
+  overflow-x: auto;
+}
 
 table {
   width: 100%;
@@ -362,8 +407,12 @@ tbody td {
   font-size: 14px;
 }
 
-tbody tr:hover td { background: #f8fafc; }
-tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td {
+  background: #f8fafc;
+}
+tbody tr:last-child td {
+  border-bottom: none;
+}
 
 /* Patient / Detail Items */
 .detail-grid {
@@ -437,7 +486,9 @@ tbody tr:last-child td { border-bottom: none; }
   outline: none;
 }
 
-.search-input-wrap input:focus { border-color: var(--primary); }
+.search-input-wrap input:focus {
+  border-color: var(--primary);
+}
 
 .search-icon {
   position: absolute;
@@ -467,7 +518,9 @@ tbody tr:last-child td { border-bottom: none; }
   gap: 14px;
 }
 
-.form-full { grid-column: 1 / -1; }
+.form-full {
+  grid-column: 1 / -1;
+}
 
 .form-group {
   display: flex;
@@ -553,7 +606,9 @@ tbody tr:last-child td { border-bottom: none; }
   line-height: 1;
 }
 
-.modal-body { padding: 20px 24px 24px; }
+.modal-body {
+  padding: 20px 24px 24px;
+}
 
 .modal-footer {
   padding: 16px 24px;
@@ -624,11 +679,19 @@ tbody tr:last-child td { border-bottom: none; }
   opacity: 0.4;
 }
 
-.empty-state p { font-size: 14px; }
+.empty-state p {
+  font-size: 14px;
+}
 
 /* Page States */
-.page { display: none; }
-.page.active { display: block; }
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
 
 /* Responsive adjustments */
-.actions-cell { white-space: nowrap; }
+.actions-cell {
+  white-space: nowrap;
+}

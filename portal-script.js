@@ -1,3 +1,4 @@
+//portal-script.js
 /**
  * PORTAL AUTHENTICATION SCRIPT
  * Handles patient login, registration, and view toggling.
@@ -8,8 +9,12 @@
 // ==========================================
 
 const DB = {
-    get(key) { return JSON.parse(localStorage.getItem('hms_' + key) || '[]'); },
-    set(key, data) { localStorage.setItem('hms_' + key, JSON.stringify(data)); }
+  get(key) {
+    return JSON.parse(localStorage.getItem("hms_" + key) || "[]");
+  },
+  set(key, data) {
+    localStorage.setItem("hms_" + key, JSON.stringify(data));
+  },
 };
 
 // ==========================================
@@ -17,46 +22,50 @@ const DB = {
 // ==========================================
 
 /**
- * Switches from the main portal landing to the auth view
+ * Switches from the main portal landing to the doctor auth view
  */
-function showPatientAuth() {
-    document.getElementById('portal-main-view').style.display = 'none';
-    document.getElementById('patient-auth-view').style.display = 'block';
+function showDoctorAuth() {
+  document.getElementById("portal-main-view").style.display = "none";
+  document.getElementById("doctor-auth-view").style.display = "block";
 }
 
-/**
- * Returns to the main portal selection
- */
+function showPatientAuth() {
+  document.getElementById("portal-main-view").style.display = "none";
+  document.getElementById("patient-auth-view").style.display = "block";
+}
+
 function backToPortal() {
-    document.getElementById('portal-main-view').style.display = 'block';
-    document.getElementById('patient-auth-view').style.display = 'none';
-    document.getElementById('auth-error').style.display = 'none';
+  document.getElementById("portal-main-view").style.display = "block";
+  document.getElementById("patient-auth-view").style.display = "none";
+  document.getElementById("doctor-auth-view").style.display = "none";
+  document.getElementById("auth-error").style.display = "none";
+  document.getElementById("doctor-auth-error").style.display = "none";
 }
 
 /**
  * Toggles between the Login and Signup forms
- * @param {boolean} isSignup 
+ * @param {boolean} isSignup
  */
 function toggleAuth(isSignup) {
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const title = document.getElementById('auth-title');
-    const subtitle = document.getElementById('auth-subtitle');
+  const loginForm = document.getElementById("login-form");
+  const signupForm = document.getElementById("signup-form");
+  const title = document.getElementById("auth-title");
+  const subtitle = document.getElementById("auth-subtitle");
 
-    if (isSignup) {
-        loginForm.style.display = 'none';
-        signupForm.style.display = 'block';
-        title.innerText = "Create Account";
-        subtitle.innerText = "Join our clinic to manage your dental health.";
-    } else {
-        loginForm.style.display = 'block';
-        signupForm.style.display = 'none';
-        title.innerText = "Patient Sign In";
-        subtitle.innerText = "Access your dental records and appointments.";
-    }
-    
-    // Clear any lingering errors when switching modes
-    document.getElementById('auth-error').style.display = 'none';
+  if (isSignup) {
+    loginForm.style.display = "none";
+    signupForm.style.display = "block";
+    title.innerText = "Create Account";
+    subtitle.innerText = "Join our clinic to manage your dental health.";
+  } else {
+    loginForm.style.display = "block";
+    signupForm.style.display = "none";
+    title.innerText = "Patient Sign In";
+    subtitle.innerText = "Access your dental records and appointments.";
+  }
+
+  // Clear any lingering errors when switching modes
+  document.getElementById("auth-error").style.display = "none";
 }
 
 // ==========================================
@@ -67,80 +76,111 @@ function toggleAuth(isSignup) {
  * Validates name against the database and redirects to dashboard
  */
 function handleLogin() {
-    const nameInput = document.getElementById('login-name').value.trim();
-    const patients = DB.get('patients');
-    
-    // Search for existing user[cite: 3]
-    const user = patients.find(p => p.name.toLowerCase() === nameInput.toLowerCase());
+  const nameInput = document.getElementById("login-name").value.trim();
+  const patients = DB.get("patients");
 
-    if (user) {
-        localStorage.setItem('current_patient_id', user.id);
-        window.location.href = 'patient-dashboard.html';
-    } else {
-        const err = document.getElementById('auth-error');
-        err.innerText = "Account not found. Please sign up first.";
-        err.style.display = 'block';
-    }
+  // Search for existing user[cite: 3]
+  const user = patients.find(
+    (p) => p.name.toLowerCase() === nameInput.toLowerCase(),
+  );
+
+  if (user) {
+    localStorage.setItem("current_patient_id", user.id);
+    window.location.href = "patient-dashboard.html";
+  } else {
+    const err = document.getElementById("auth-error");
+    err.innerText = "Account not found. Please sign up first.";
+    err.style.display = "block";
+  }
 }
 
 /**
  * Registers a new patient record and handles UI feedback
  */
 function handleSignup() {
-    const name = document.getElementById('reg-name').value.trim();
-    const phone = document.getElementById('reg-phone').value.trim();
-    const err = document.getElementById('auth-error');
-    const success = document.getElementById('auth-success');
-    
-    // Reset feedback messages
-    err.style.display = 'none';
-    success.style.display = 'none';
+  const name = document.getElementById("reg-name").value.trim();
+  const phone = document.getElementById("reg-phone").value.trim();
+  const err = document.getElementById("auth-error");
+  const success = document.getElementById("auth-success");
 
-    // Validation
-    if (!name || !phone) {
-        err.innerText = "Please fill in all fields.";
-        err.style.display = 'block';
-        return;
-    }
+  // Reset feedback messages
+  err.style.display = "none";
+  success.style.display = "none";
 
-    let patients = DB.get('patients');
-    
-    // Duplicate check[cite: 3]
-    if (patients.find(p => p.name.toLowerCase() === name.toLowerCase())) {
-        err.innerText = "An account with this name already exists.";
-        err.style.display = 'block';
-        return;
-    }
+  // Validation
+  if (!name || !phone) {
+    err.innerText = "Please fill in all fields.";
+    err.style.display = "block";
+    return;
+  }
 
-    // ID Generation[cite: 3]
-    const newId = patients.length > 0 ? Math.max(...patients.map(p => p.id)) + 1 : 1;
-    
-    const newPatient = {
-        id: newId,
-        name: name,
-        phone: phone,
-        dob: '', 
-        gender: 'Not Specified',
-        status: 'Active',
-        history: ''
-    };
+  let patients = DB.get("patients");
 
-    // Save to LocalStorage[cite: 3]
-    patients.push(newPatient);
-    DB.set('patients', patients);
-    
-    // Success UX
-    success.innerText = "Account created successfully! Please sign in.";
-    success.style.display = 'block';
+  // Duplicate check[cite: 3]
+  if (patients.find((p) => p.name.toLowerCase() === name.toLowerCase())) {
+    err.innerText = "An account with this name already exists.";
+    err.style.display = "block";
+    return;
+  }
 
-    // Clear registration fields
-    document.getElementById('reg-name').value = '';
-    document.getElementById('reg-phone').value = '';
+  // ID Generation[cite: 3]
+  const newId =
+    patients.length > 0 ? Math.max(...patients.map((p) => p.id)) + 1 : 1;
 
-    // Switch to Login view automatically after 2 seconds[cite: 3]
-    setTimeout(() => {
-        toggleAuth(false); // Switch to login form
-        document.getElementById('login-name').value = name; // Auto-fill name for user convenience
-        success.style.display = 'none';
-    }, 2000);
+  const newPatient = {
+    id: newId,
+    name: name,
+    phone: phone,
+    dob: "",
+    gender: "Not Specified",
+    status: "Active",
+    history: "",
+  };
+
+  // Save to LocalStorage[cite: 3]
+  patients.push(newPatient);
+  DB.set("patients", patients);
+
+  // Success UX
+  success.innerText = "Account created successfully! Please sign in.";
+  success.style.display = "block";
+
+  // Clear registration fields
+  document.getElementById("reg-name").value = "";
+  document.getElementById("reg-phone").value = "";
+
+  // Switch to Login view automatically after 2 seconds[cite: 3]
+  setTimeout(() => {
+    toggleAuth(false); // Switch to login form
+    document.getElementById("login-name").value = name; // Auto-fill name for user convenience
+    success.style.display = "none";
+  }, 2000);
+}
+
+/**
+ * Validates doctor credentials and redirects to dashboard
+ */
+function handleDoctorLogin() {
+  const nameInput = document.getElementById("doctor-login-name").value.trim();
+  const licenseInput = document
+    .getElementById("doctor-login-license")
+    .value.trim();
+  const doctors = DB.get("doctors");
+
+  // Search for existing doctor
+  const doctor = doctors.find(
+    (d) =>
+      d.name.toLowerCase() === nameInput.toLowerCase() &&
+      d.license === licenseInput,
+  );
+
+  if (doctor) {
+    localStorage.setItem("current_doctor_id", doctor.id);
+    window.location.href = "doctor-dashboard.html";
+  } else {
+    const err = document.getElementById("doctor-auth-error");
+    err.innerText =
+      "Invalid credentials. Please check your name and license number.";
+    err.style.display = "block";
+  }
 }

@@ -1,100 +1,214 @@
-<!DOCTYPE html>
+<!--portal.html-->
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portal | Lardizabal Dental Clinic</title>
 
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="portal-styles.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="portal-styles.css" />
+  </head>
+  <body>
     <div class="portal-container">
-        <div class="portal-card">
-            
-            <!-- HEADER -->
-            <div class="portal-header">
-                <img src="images/lardizaballogo.png" alt="LDC Logo" class="portal-logo">
-                <h1>Lardizabal Dental Clinic</h1>
-                <p>Management System (LDCMS)</p>
-            </div>
-            
-            <!-- PORTAL CONTENT -->
-            <div class="portal-content">
-                
-                <!-- Main Selection View -->
-                <div id="portal-main-view">
-                    <div class="portal-welcome">
-                        <h2>Welcome</h2>
-                        <p>Select an option below to continue to the clinical management suite.</p>
-                    </div>
-                    
-                    <div class="portal-actions">
-                        <button onclick="location.href='admin-dashboard.html';" class="portal-btn primary">Admin Dashboard</button>
-                        <button onclick="location.href='doctor-dashboard.html';" class="portal-btn primary">Doctor Dashboard</button>
-                        <button onclick="showPatientAuth()" class="portal-btn primary">Patient Dashboard</button>
-                    </div>
-                </div>
+      <div class="portal-card">
+        <!-- HEADER -->
+        <div class="portal-header">
+          <img
+            src="images/lardizaballogo.png"
+            alt="LDC Logo"
+            class="portal-logo"
+          />
+          <h1>Lardizabal Dental Clinic</h1>
+          <p>Management System (LDCMS)</p>
+        </div>
 
-                <!-- Patient Authentication View (Hidden by default) -->
-                <div id="patient-auth-view" style="display: none;">
-                    <!-- Status Messages -->
-                    <div id="auth-success" class="alert alert-success" style="display:none; margin-top:10px; background:#dcfce7; color:#166534; padding:10px; border-radius:8px; font-size:13px; text-align:center;"></div>
-                    <div id="auth-error" class="alert alert-error" style="display:none; margin-top:10px;"></div>
-
-                    <div class="portal-welcome">
-                        <h2 id="auth-title">Patient Sign In</h2>
-                        <p id="auth-subtitle">Access your dental records and appointments.</p>
-                    </div>
-
-                    <!-- Login Form -->
-                    <div id="login-form">
-                        <div class="form-group form-full">
-                            <label>Full Name</label>
-                            <input type="text" id="login-name" placeholder="Enter your full name">
-                        </div>
-                        <button class="portal-btn primary" style="width:100%; margin-top:15px;" onclick="handleLogin()">Sign In</button>
-                        <p class="auth-toggle-text">
-                            Don't have an account? <a href="#" onclick="toggleAuth(true)">Sign Up</a>
-                        </p>
-                    </div>
-
-                    <!-- Signup Form -->
-                    <div id="signup-form" style="display:none;">
-                        <div class="form-group form-full">
-                            <label>Full Name</label>
-                            <input type="text" id="reg-name" placeholder="Full Name">
-                        </div>
-                        <div class="form-group form-full" style="margin-top:10px;">
-                            <label>Phone Number</label>
-                            <input type="tel" id="reg-phone" placeholder="09XX XXX XXXX">
-                        </div>
-                        <button class="portal-btn primary" style="width:100%; margin-top:15px;" onclick="handleSignup()">Create Account</button>
-                        <p class="auth-toggle-text">
-                            Already have an account? <a href="#" onclick="toggleAuth(false)">Sign In</a>
-                        </p>
-                    </div>
-                    
-                    <!-- Back Button -->
-                    <button class="btn btn-ghost" style="width: 100%; margin-top: 20px;" onclick="backToPortal()">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                </div>
-            </div> <!-- End portal-content -->
-            
-            <!-- FOOTER -->
-            <div class="portal-footer">
-                <p>&copy; 2026 Lardizabal Dental Clinic System</p>
+        <!-- PORTAL CONTENT -->
+        <div class="portal-content">
+          <!-- Main Selection View -->
+          <div id="portal-main-view">
+            <div class="portal-welcome">
+              <h2>Welcome</h2>
+              <p>
+                Select an option below to continue to the clinical management
+                suite.
+              </p>
             </div>
 
-        </div> <!-- End portal-card -->
-    </div> <!-- End portal-container -->
+            <div class="portal-actions">
+              <button
+                onclick="location.href = 'admin-dashboard.html'"
+                class="portal-btn primary"
+              >
+                Admin Dashboard
+              </button>
+              <button onclick="showDoctorAuth()" class="portal-btn primary">
+                Doctor Dashboard
+              </button>
+              <button onclick="showPatientAuth()" class="portal-btn primary">
+                Patient Dashboard
+              </button>
+            </div>
+          </div>
+
+          <!-- Patient Authentication View (Hidden by default) -->
+          <div id="patient-auth-view" style="display: none">
+            <!-- Status Messages -->
+            <div
+              id="auth-success"
+              class="alert alert-success"
+              style="
+                display: none;
+                margin-top: 10px;
+                background: #dcfce7;
+                color: #166534;
+                padding: 10px;
+                border-radius: 8px;
+                font-size: 13px;
+                text-align: center;
+              "
+            ></div>
+            <div
+              id="auth-error"
+              class="alert alert-error"
+              style="display: none; margin-top: 10px"
+            ></div>
+
+            <div class="portal-welcome">
+              <h2 id="auth-title">Patient Sign In</h2>
+              <p id="auth-subtitle">
+                Access your dental records and appointments.
+              </p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form">
+              <div class="form-group form-full">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  id="login-name"
+                  placeholder="Enter your full name"
+                />
+              </div>
+              <button
+                class="portal-btn primary"
+                style="width: 100%; margin-top: 15px"
+                onclick="handleLogin()"
+              >
+                Sign In
+              </button>
+              <p class="auth-toggle-text">
+                Don't have an account?
+                <a href="#" onclick="toggleAuth(true)">Sign Up</a>
+              </p>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" style="display: none">
+              <div class="form-group form-full">
+                <label>Full Name</label>
+                <input type="text" id="reg-name" placeholder="Full Name" />
+              </div>
+              <div class="form-group form-full" style="margin-top: 10px">
+                <label>Phone Number</label>
+                <input type="tel" id="reg-phone" placeholder="09XX XXX XXXX" />
+              </div>
+              <button
+                class="portal-btn primary"
+                style="width: 100%; margin-top: 15px"
+                onclick="handleSignup()"
+              >
+                Create Account
+              </button>
+              <p class="auth-toggle-text">
+                Already have an account?
+                <a href="#" onclick="toggleAuth(false)">Sign In</a>
+              </p>
+            </div>
+
+            <!-- Back Button -->
+            <button
+              class="btn btn-ghost"
+              style="width: 100%; margin-top: 20px"
+              onclick="backToPortal()"
+            >
+              <i class="fas fa-arrow-left"></i>
+            </button>
+          </div>
+
+          <!-- Doctor Authentication View (Hidden by default) -->
+          <div id="doctor-auth-view" style="display: none">
+            <!-- Status Messages -->
+            <div
+              id="doctor-auth-error"
+              class="alert alert-error"
+              style="display: none; margin-top: 10px"
+            ></div>
+
+            <div class="portal-welcome">
+              <h2>Doctor Sign In</h2>
+              <p>Access your clinical dashboard.</p>
+            </div>
+
+            <!-- Doctor Login Form -->
+            <div id="doctor-login-form">
+              <div class="form-group form-full">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  id="doctor-login-name"
+                  placeholder="Enter your full name"
+                />
+              </div>
+              <div class="form-group form-full" style="margin-top: 10px">
+                <label>License Number</label>
+                <input
+                  type="text"
+                  id="doctor-login-license"
+                  placeholder="Enter your license number"
+                />
+              </div>
+              <button
+                class="portal-btn primary"
+                style="width: 100%; margin-top: 15px"
+                onclick="handleDoctorLogin()"
+              >
+                Sign In
+              </button>
+            </div>
+
+            <!-- Back Button -->
+            <button
+              class="btn btn-ghost"
+              style="width: 100%; margin-top: 20px"
+              onclick="backToPortal()"
+            >
+              <i class="fas fa-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+        <!-- End portal-content -->
+
+        <!-- FOOTER -->
+        <div class="portal-footer">
+          <p>&copy; 2026 Lardizabal Dental Clinic System</p>
+        </div>
+      </div>
+      <!-- End portal-card -->
+    </div>
+    <!-- End portal-container -->
 
     <script src="portal-script.js"></script>
-</body>
+  </body>
 </html>
