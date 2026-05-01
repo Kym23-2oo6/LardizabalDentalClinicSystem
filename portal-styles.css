@@ -1,16 +1,19 @@
-/*portal-styles.css*/
 /* ==========================================================================
    1. ROOT VARIABLES & GLOBAL STYLES
    ========================================================================== */
 :root {
   --primary: #014d5b;
-  --secondary: #37acbe;
+  --secondary: #389ead;
   --bg: #f4f7fa;
   --card: #ffffff;
   --text: #333333;
   --text-muted: #6c757d;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  --radius: 16px;
+  --radius: 14px; 
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body,
@@ -19,35 +22,35 @@ html {
   margin: 0;
   font-family: "DM Sans", sans-serif;
   background: var(--bg);
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
    2. PORTAL LAYOUT & CONTAINER
    ========================================================================== */
 .portal-container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 30px 20px;
 }
 
 .portal-card {
   background: var(--card);
   width: 100%;
-  max-width: 450px;
-  padding: 40px;
+  max-width: 540px; /* Perfectly balanced size */
+  padding: 35px;    
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   text-align: center;
 }
 
 .portal-logo {
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   object-fit: cover;
 }
 
@@ -55,60 +58,83 @@ html {
    3. PORTAL CONTENT (HEADERS & TEXT)
    ========================================================================== */
 .portal-header h1 {
-  font-size: 24px;
+  font-size: 22px;
   color: var(--primary);
   margin-bottom: 5px;
 }
 
 .portal-header p {
-  font-size: 12px;
+  font-size: 10.5px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.8px;
   color: var(--text-muted);
-  margin-bottom: 30px;
+  margin-bottom: 28px;
 }
 
 .portal-welcome h2 {
-  font-size: 20px;
+  font-size: 19px;
   margin-bottom: 10px;
   color: var(--text);
 }
 
 .portal-welcome p {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--text-muted);
-  margin-bottom: 30px;
+  margin-bottom: 22px;
   line-height: 1.5;
 }
 
-.form-group {
-  margin-bottom: 20px;
+/* --- FORM STYLING --- */
+
+#signup-form, #login-form, #doctor-login-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; 
   text-align: left;
+}
+
+.form-group {
+  flex: 1 1 calc(50% - 15px);
+  margin-bottom: 5px;
+}
+
+.form-full {
+  flex: 1 1 100% !important;
 }
 
 .form-group label {
   display: block;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10.5px;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--text-muted);
   margin-bottom: 5px;
   letter-spacing: 0.5px;
 }
 
-.form-group input {
-  width: 94%;
-  padding: 12px;
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 11px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  background: #1b1e1f;
+  background: #f9f9f9;
   font-family: inherit;
+  font-size: 14px;
   transition: all 0.2s;
 }
 
+input:focus, 
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(1, 77, 91, 0.1);
+}
+
 .portal-footer {
-  margin-top: 40px;
-  font-size: 11px;
+  margin-top: 35px;
+  font-size: 10.5px;
   color: var(--text-muted);
 }
 
@@ -118,53 +144,60 @@ html {
 .portal-actions {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
 .portal-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 14px;
+  width: 100%;
+  padding: 13px;
   border-radius: 8px;
-  text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.15s;
   border: none;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14.5px;
 }
 
 .portal-btn.primary {
   background: var(--primary);
   color: white;
-  font-weight: bold;
 }
 
 .portal-btn.primary:hover {
-  opacity: 0.8;
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
-.portal-btn.secondary {
-  background: #eef2f5;
-  color: var(--primary);
+.btn-ghost {
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
-.portal-btn.secondary:hover {
-  background: #e2e8ed;
+.btn-ghost:hover {
+  background: #f8f9fa;
 }
 
 /* ==========================================================================
-   5. PATIENT AUTHENTICATION VIEW
+   5. UTILITIES & ANIMATION
    ========================================================================== */
-#patient-auth-view {
-  animation: fadeIn 0.3s ease;
+#patient-auth-view, 
+#doctor-auth-view, 
+#portal-main-view {
+  animation: fadeIn 0.4s ease;
 }
 
 .auth-toggle-text {
-  font-size: 13px;
-  margin-top: 20px;
+  width: 100%;
+  font-size: 12.5px;
+  margin-top: 18px;
   text-align: center;
   color: var(--text-muted);
 }
@@ -175,39 +208,9 @@ html {
   font-weight: 600;
 }
 
-.auth-toggle-text a:hover {
-  text-decoration: underline;
-}
-
-/* Auth Form Elements */
-#patient-auth-view .form-group {
-  text-align: left;
-  margin-bottom: 15px;
-}
-
-#patient-auth-view label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 5px;
-  letter-spacing: 0.5px;
-}
-
-#patient-auth-view input {
-  width: 94%;
-  padding: 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background: #f9f9f9;
-  font-family: inherit;
-  transition: all 0.2s;
-}
-
-#patient-auth-view input:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(1, 77, 91, 0.1);
+/* Responsive: Stack columns on very small screens */
+@media (max-width: 450px) {
+  .form-group {
+    flex: 1 1 100%;
+  }
 }

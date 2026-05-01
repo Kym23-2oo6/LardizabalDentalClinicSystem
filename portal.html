@@ -1,214 +1,126 @@
-<!--portal.html-->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portal | Lardizabal Dental Clinic</title>
-
-    <!-- Fonts & Icons -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-
-    <!-- Custom Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="portal-styles.css" />
   </head>
   <body>
     <div class="portal-container">
       <div class="portal-card">
-        <!-- HEADER -->
         <div class="portal-header">
-          <img
-            src="images/lardizaballogo.png"
-            alt="LDC Logo"
-            class="portal-logo"
-          />
+          <img src="images/lardizaballogo.png" alt="LDC Logo" class="portal-logo" />
           <h1>Lardizabal Dental Clinic</h1>
           <p>Management System (LDCMS)</p>
         </div>
 
-        <!-- PORTAL CONTENT -->
         <div class="portal-content">
-          <!-- Main Selection View -->
           <div id="portal-main-view">
             <div class="portal-welcome">
               <h2>Welcome</h2>
-              <p>
-                Select an option below to continue to the clinical management
-                suite.
-              </p>
+              <p>Select an option below to continue to the clinical management suite.</p>
             </div>
-
             <div class="portal-actions">
-              <button
-                onclick="location.href = 'admin-dashboard.html'"
-                class="portal-btn primary"
-              >
-                Admin Dashboard
-              </button>
-              <button onclick="showDoctorAuth()" class="portal-btn primary">
-                Doctor Dashboard
-              </button>
-              <button onclick="showPatientAuth()" class="portal-btn primary">
-                Patient Dashboard
-              </button>
+              <button onclick="location.href = 'admin-dashboard.html'" class="portal-btn primary">Admin</button>
+              <button onclick="showDoctorAuth()" class="portal-btn primary">Doctor</button>
+              <button onclick="showPatientAuth()" class="portal-btn primary">Patient</button>
             </div>
           </div>
 
-          <!-- Patient Authentication View (Hidden by default) -->
           <div id="patient-auth-view" style="display: none">
-            <!-- Status Messages -->
-            <div
-              id="auth-success"
-              class="alert alert-success"
-              style="
-                display: none;
-                margin-top: 10px;
-                background: #dcfce7;
-                color: #166534;
-                padding: 10px;
-                border-radius: 8px;
-                font-size: 13px;
-                text-align: center;
-              "
-            ></div>
-            <div
-              id="auth-error"
-              class="alert alert-error"
-              style="display: none; margin-top: 10px"
-            ></div>
+            <div id="auth-success" class="alert alert-success" style="display: none; margin-top: 10px; background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; font-size: 13px; text-align: center;"></div>
+            <div id="auth-error" class="alert alert-error" style="display: none; margin-top: 10px; background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; font-size: 13px; text-align: center;"></div>
 
             <div class="portal-welcome">
               <h2 id="auth-title">Patient Sign In</h2>
-              <p id="auth-subtitle">
-                Access your dental records and appointments.
-              </p>
+              <p id="auth-subtitle">Access your dental records and appointments.</p>
             </div>
 
-            <!-- Login Form -->
             <div id="login-form">
               <div class="form-group form-full">
                 <label>Full Name</label>
-                <input
-                  type="text"
-                  id="login-name"
-                  placeholder="Enter your full name"
-                />
+                <input type="text" id="login-name" placeholder="Enter your full name" />
               </div>
-              <button
-                class="portal-btn primary"
-                style="width: 100%; margin-top: 15px"
-                onclick="handleLogin()"
-              >
-                Sign In
-              </button>
-              <p class="auth-toggle-text">
-                Don't have an account?
-                <a href="#" onclick="toggleAuth(true)">Sign Up</a>
-              </p>
+              <button class="portal-btn primary" style="width: 100%; margin-top: 15px" onclick="handleLogin()">Sign In</button>
+              <p class="auth-toggle-text">Don't have an account? <a href="#" onclick="toggleAuth(true)">Sign Up</a></p>
             </div>
 
-            <!-- Signup Form -->
             <div id="signup-form" style="display: none">
-              <div class="form-group form-full">
+              <div class="form-group">
+                <label for="reg-email">Email Address</label>
+                <input type="email" id="reg-email" placeholder="example@gmail.com" required>
+              </div>
+              <div class="form-group">
                 <label>Full Name</label>
-                <input type="text" id="reg-name" placeholder="Full Name" />
+                <input type="text" id="reg-name" placeholder="Full Name" required>
               </div>
-              <div class="form-group form-full" style="margin-top: 10px">
-                <label>Phone Number</label>
-                <input type="tel" id="reg-phone" placeholder="09XX XXX XXXX" />
+<div class="form-group">
+  <label>Phone Number</label>
+  <div style="display: flex; align-items: center; gap: 5px;">
+    <span style="background: #f3f4f6; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">+63</span>
+    <input 
+      type="tel" 
+      id="reg-phone" 
+      placeholder="9XX-XXX-XXXX" 
+      maxlength="12" 
+      style="flex: 1;" 
+      required
+    >
+  </div>
+</div>
+              <div class="form-group">
+                <label for="reg-dob">Date of Birth</label>
+                <input type="date" id="reg-dob" required>
               </div>
-              <button
-                class="portal-btn primary"
-                style="width: 100%; margin-top: 15px"
-                onclick="handleSignup()"
-              >
-                Create Account
-              </button>
-              <p class="auth-toggle-text">
-                Already have an account?
-                <a href="#" onclick="toggleAuth(false)">Sign In</a>
-              </p>
+              <div class="form-group form-full">
+                <label for="reg-gender">Gender</label>
+                <select id="reg-gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+              </div>
+              <button class="portal-btn primary" style="margin-top: 15px; width: 100%;" onclick="handleSignup()">Create Account</button>
+              <p class="auth-toggle-text">Already have an account? <a href="#" onclick="toggleAuth(false)">Sign In</a></p>
             </div>
 
-            <!-- Back Button -->
-            <button
-              class="btn btn-ghost"
-              style="width: 100%; margin-top: 20px"
-              onclick="backToPortal()"
-            >
+            <button class="btn btn-ghost" style="width: 100%; margin-top: 20px" onclick="backToPortal()">
               <i class="fas fa-arrow-left"></i>
             </button>
           </div>
 
-          <!-- Doctor Authentication View (Hidden by default) -->
           <div id="doctor-auth-view" style="display: none">
-            <!-- Status Messages -->
-            <div
-              id="doctor-auth-error"
-              class="alert alert-error"
-              style="display: none; margin-top: 10px"
-            ></div>
-
+            <div id="doctor-auth-error" class="alert alert-error" style="display: none; margin-top: 10px; background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; font-size: 13px; text-align: center;"></div>
             <div class="portal-welcome">
               <h2>Doctor Sign In</h2>
               <p>Access your clinical dashboard.</p>
             </div>
-
-            <!-- Doctor Login Form -->
             <div id="doctor-login-form">
               <div class="form-group form-full">
                 <label>Full Name</label>
-                <input
-                  type="text"
-                  id="doctor-login-name"
-                  placeholder="Enter your full name"
-                />
+                <input type="text" id="doctor-login-name" placeholder="Enter your full name" />
               </div>
               <div class="form-group form-full" style="margin-top: 10px">
                 <label>License Number</label>
-                <input
-                  type="text"
-                  id="doctor-login-license"
-                  placeholder="Enter your license number"
-                />
+                <input type="text" id="doctor-login-license" placeholder="Enter your license number" />
               </div>
-              <button
-                class="portal-btn primary"
-                style="width: 100%; margin-top: 15px"
-                onclick="handleDoctorLogin()"
-              >
-                Sign In
-              </button>
+              <button class="portal-btn primary" style="width: 100%; margin-top: 15px" onclick="handleDoctorLogin()">Sign In</button>
             </div>
-
-            <!-- Back Button -->
-            <button
-              class="btn btn-ghost"
-              style="width: 100%; margin-top: 20px"
-              onclick="backToPortal()"
-            >
+            <button class="btn btn-ghost" style="width: 100%; margin-top: 20px" onclick="backToPortal()">
               <i class="fas fa-arrow-left"></i>
             </button>
           </div>
         </div>
-        <!-- End portal-content -->
 
-        <!-- FOOTER -->
         <div class="portal-footer">
           <p>&copy; 2026 Lardizabal Dental Clinic System</p>
         </div>
       </div>
-      <!-- End portal-card -->
     </div>
-    <!-- End portal-container -->
-
     <script src="portal-script.js"></script>
   </body>
 </html>

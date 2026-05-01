@@ -125,6 +125,7 @@ function syncAndRenderProfile() {
   document.getElementById("prof-age").innerText = calculateAge(myData.dob);
   document.getElementById("prof-gender").innerText = myData.gender;
   document.getElementById("prof-phone").innerText = myData.phone;
+  document.getElementById("prof-blood").innerText = myData.blood || "—";
 }
 
 function loadProfileIntoForm() {
@@ -137,6 +138,10 @@ function loadProfileIntoForm() {
     document.getElementById("edit-gender").value = myData.gender || "Male";
     document.getElementById("edit-emergency").value = myData.emergency || "";
   }
+  const emailInput = document.getElementById("edit-email-view");
+if (emailInput) {
+    emailInput.value = myData.email || "";
+}
 }
 
 document
@@ -229,7 +234,7 @@ function renderPatientAppointments() {
                 </div>
                 <div style="flex:1">
                     <div style="font-size:14px; font-weight:600">${appt.reason}</div>
-                    <div style="font-size:12px; color:var(--text-muted)">Dr. ${appt.doctor} at ${appt.time}</div>
+                    <div style="font-size:12px; color:var(--text-muted)"> ${appt.doctor} at ${appt.time}</div>
                 </div>
                 <span class="badge ${appt.status === "Completed" ? "badge-green" : "badge-blue"}">${appt.status}</span>
                 

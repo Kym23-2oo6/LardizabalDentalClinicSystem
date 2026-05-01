@@ -180,6 +180,7 @@ function openModal(type, id = null) {
       document.getElementById("p-address").value = data.address;
       document.getElementById("p-history").value = data.history;
       document.getElementById("p-status").value = data.status;
+      document.getElementById("p-email").value = data.email || "";
       document.getElementById("p-emergency").value = data.emergency;
     } else if (type === "doctor") {
       document.getElementById("doctor-modal-title").textContent = "Edit Doctor";
@@ -292,6 +293,7 @@ function showErr(id, msg) {
 
 function savePatient() {
   const name = document.getElementById("p-name").value.trim();
+  const email = document.getElementById("p-email").value.trim();
   const dob = document.getElementById("p-dob").value;
   const gender = document.getElementById("p-gender").value;
   if (!name || !dob || !gender)
@@ -305,6 +307,7 @@ function savePatient() {
     gender,
     blood: document.getElementById("p-blood").value,
     phone: document.getElementById("p-phone").value,
+    email: document.getElementById("p-email").value,
     address: document.getElementById("p-address").value,
     history: document.getElementById("p-history").value,
     status: document.getElementById("p-status").value,
@@ -550,6 +553,7 @@ function renderPatients() {
       <td>${calcAge(p.dob)}</td>
       <td>${p.gender}</td>
       <td><span class="badge badge-blue">${p.blood || "—"}</span></td>
+      <td>${p.email || '—'}</td>
       <td>${p.phone}</td>
       <td>${getStatusBadge(p.status)}</td>
       <td class="actions-cell">
@@ -609,6 +613,7 @@ function renderDoctors() {
       <td style="color:var(--text-muted);font-size:12px">D-${String(d.id).padStart(3, "0")}</td>
       <td><strong>${d.name}</strong><br><span style="font-size:12px;color:var(--text-muted)">${d.license || ""}</span></td>
       <td><span class="badge badge-gold">${d.spec}</span></td>
+      <td>${d.email || '—'}</td>
       <td>${d.phone}</td>
       <td style="font-size:13px">${d.schedule}</td>
       <td>${getStatusBadge(d.status)}</td>
@@ -831,6 +836,7 @@ function seedData() {
       gender: "Male",
       blood: "--",
       phone: "09090909090",
+      email: "vetstres@gmail.com",
       address: "Taguig City, Metro Manila",
       history: "Hypertension, Penicillin allergy",
       status: "Active",
@@ -843,6 +849,7 @@ function seedData() {
       gender: "Male",
       blood: "--",
       phone: "09090909090",
+      email: "junjez@gmail.com",
       address: "Taguig City, Metro Manila",
       history: "Type 2 Diabetes",
       status: "Critical",
@@ -855,6 +862,7 @@ function seedData() {
       gender: "Male",
       blood: "--",
       phone: "09090909090",
+      email: "sao@gmail.com",
       address: "Taguig City, Metro Manila",
       history: "Ngek",
       status: "Active",
@@ -865,30 +873,30 @@ function seedData() {
   DB.set("doctors", [
     {
       id: 1,
-      name: "Dr. John Michael",
-      spec: "Cardiology",
+      name: "John Michael",
+      spec: "General Dentistry",
       phone: "09171112222",
-      email: "lreyes@hospital.com",
+      email: "jm@lardizabaldental.com",
       license: "PRC-12345",
       schedule: "Mon-Fri (Morning)",
       status: "Active",
     },
     {
       id: 2,
-      name: "Dr. Joshua",
-      spec: "General Medicine",
+      name: "Joshua",
+      spec: "Orthodontics",
       phone: "09282223333",
-      email: "rsantos@hospital.com",
+      email: "joshua@lardizabaldental.com",
       license: "PRC-23456",
       schedule: "Mon-Fri (Afternoon)",
       status: "Active",
     },
     {
       id: 3,
-      name: "Dr. Kym Brian",
-      spec: "Pediatrics",
+      name: "Kym Brian",
+      spec: "Oral & Maxillofacial Surgery",
       phone: "09453334444",
-      email: "cvillanueva@hospital.com",
+      email: "kym@lardizabaldental.com",
       license: "PRC-34567",
       schedule: "Tue-Sat",
       status: "Active",
@@ -899,7 +907,7 @@ function seedData() {
   DB.set("appointments", [
     {
       id: 1,
-      patient: "Steven Tres",
+      patient: "Vets Tres",
       doctor: "Dr. John Michael",
       date: today,
       time: "09:00",
@@ -909,7 +917,7 @@ function seedData() {
     },
     {
       id: 2,
-      patient: "Jez Jun",
+      patient: "Jun Jez",
       doctor: "Dr. Joshua",
       date: today,
       time: "10:30",
