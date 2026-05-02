@@ -77,6 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
+const emailInput = document.getElementById("reg-email");
+  if (emailInput) {
+    emailInput.addEventListener("input", (e) => {
+      // Remove all whitespace characters globally
+      e.target.value = e.target.value.replace(/\s/g, "");
+    });
+  }
+
   const phoneInput = document.getElementById("reg-phone");
   if (phoneInput) {
     phoneInput.addEventListener("input", (e) => {
@@ -91,10 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (value.length > 0) {
         formattedValue = value.substring(0, 3);
         if (value.length > 3) {
-          formattedValue += "-" + value.substring(3, 6);
+          formattedValue += " " + value.substring(3, 6);
         }
         if (value.length > 6) {
-          formattedValue += "-" + value.substring(6, 10);
+          formattedValue += " " + value.substring(6, 10);
         }
       }
       
@@ -128,9 +136,11 @@ function handleLogin() {
 function handleSignup() {
   const emailValue = document.getElementById("reg-email").value.trim();
   const nameValue = document.getElementById("reg-name").value.trim();
+  const countryCode = document.getElementById("reg-country-code").value;
   const phoneRaw = document.getElementById("reg-phone").value.trim();
   const dobValue = document.getElementById("reg-dob").value;
   const genderValue = document.getElementById("reg-gender").value;
+  const addressValue = document.getElementById("reg-address").value.trim();
   
   const err = document.getElementById("auth-error");
   const success = document.getElementById("auth-success");
@@ -139,8 +149,8 @@ function handleSignup() {
   success.style.display = "none";
 
   // 1. Check for empty fields[cite: 2]
-  if (!emailValue || !nameValue || !phoneRaw || !dobValue || !genderValue) {
-    err.innerText = "Please fill up all the fields.";
+if (!emailValue || !nameValue || !phoneRaw || !dobValue || !genderValue || !addressValue) {
+    err.innerText = "Please fill up all the fields, including your address.";
     err.style.display = "block";
     return;
   }
@@ -161,7 +171,7 @@ function handleSignup() {
     return;
   }
 
-const finalPhoneNumber = "0" + phoneRaw;
+const finalPhoneNumber = countryCode + " " + phoneRaw;
 
   let patients = DB.get("patients");
 
@@ -178,9 +188,10 @@ const finalPhoneNumber = "0" + phoneRaw;
     id: newId,
     name: nameValue,
     email: emailValue,
-    phone: finalPhoneNumber, // Stores the formatted version (e.g., 912-345-6789)
+    phone: finalPhoneNumber,
     dob: dobValue,
     gender: genderValue,
+    address: addressValue,
     status: "Active",
     history: "",
   };
@@ -197,6 +208,7 @@ const finalPhoneNumber = "0" + phoneRaw;
   document.getElementById("reg-phone").value = "";
   document.getElementById("reg-dob").value = "";
   document.getElementById("reg-gender").value = "";
+  document.getElementById("reg-address").value = "";
 
   setTimeout(() => {
     toggleAuth(false);

@@ -60,11 +60,13 @@
 <div class="form-group">
   <label>Phone Number</label>
   <div style="display: flex; align-items: center; gap: 5px;">
-    <span style="background: #f3f4f6; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">+63</span>
+      <select id="reg-country-code" style="background: #f3f4f6; padding: 10px 6px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; width: 80px;">
+        <option value="+63">🇵🇭 +63</option>
+      </select>
     <input 
       type="tel" 
       id="reg-phone" 
-      placeholder="9XX-XXX-XXXX" 
+      placeholder="9XX XXX XXXX" 
       maxlength="12" 
       style="flex: 1;" 
       required
@@ -73,7 +75,7 @@
 </div>
               <div class="form-group">
                 <label for="reg-dob">Date of Birth</label>
-                <input type="date" id="reg-dob" required>
+                <input type="date" id="reg-dob" value="2006-01-01" required>
               </div>
               <div class="form-group form-full">
                 <label for="reg-gender">Gender</label>
@@ -84,6 +86,15 @@
                     <option value="Other">Other</option>
                 </select>
               </div>
+<div class="form-group form-full">
+  <label for="reg-address">Address</label>
+  <input 
+    type="text" 
+    id="reg-address" 
+    placeholder="Enter your street, barangay, and city" 
+    required
+  >
+</div>
               <button class="portal-btn primary" style="margin-top: 15px; width: 100%;" onclick="handleSignup()">Create Account</button>
               <p class="auth-toggle-text">Already have an account? <a href="#" onclick="toggleAuth(false)">Sign In</a></p>
             </div>
