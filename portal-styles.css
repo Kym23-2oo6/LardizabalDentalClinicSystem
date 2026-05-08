@@ -50,7 +50,7 @@ html {
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  margin-bottom: 18px;
+  margin-bottom: 1px;
   object-fit: cover;
 }
 
@@ -86,8 +86,15 @@ html {
 
 /* --- FORM STYLING --- */
 
-#signup-form, #login-form, #doctor-login-form {
-  display: flex;
+#login-form {
+  text-align: left;
+}
+
+#doctor-login-form {
+  text-align: left;
+}
+
+#signup-form {
   flex-wrap: wrap;
   gap: 15px; 
   text-align: left;
@@ -99,7 +106,7 @@ html {
 }
 
 .form-full {
-  flex: 1 1 100% !important;
+  flex: 1 1 100%;
 }
 
 .form-group label {
@@ -197,7 +204,7 @@ select:focus {
 .auth-toggle-text {
   width: 100%;
   font-size: 12.5px;
-  margin-top: 18px;
+  margin-top: 10px;
   text-align: center;
   color: var(--text-muted);
 }

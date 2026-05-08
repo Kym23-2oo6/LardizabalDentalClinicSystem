@@ -30,6 +30,14 @@ function showPatientAuth() {
   document.getElementById("patient-auth-view").style.display = "block";
 }
 
+function showForgotPassword() {
+  document.getElementById("login-form").style.display = "none";
+  document.getElementById("signup-form").style.display = "none";
+  document.getElementById("forgot-password-view").style.display = "block";
+  document.getElementById("auth-title").innerText = "Reset Password";
+  document.getElementById("auth-subtitle").innerText = "Secure your account with a new password.";
+}
+
 function backToPortal() {
   document.getElementById("portal-main-view").style.display = "block";
   document.getElementById("patient-auth-view").style.display = "none";
@@ -46,7 +54,7 @@ function toggleAuth(isSignup) {
 
   if (isSignup) {
     loginForm.style.display = "none";
-    signupForm.style.display = "block";
+    signupForm.style.display = "flex";
     title.innerText = "Create Account";
     subtitle.innerText = "Join our clinic to manage your dental health.";
   } else {
@@ -77,6 +85,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
+
+  // Password Toggle Logic
+const togglePassword = document.getElementById("toggle-reg-password");
+const passwordInput = document.getElementById("reg-password");
+
+if (togglePassword && passwordInput) {
+  togglePassword.addEventListener("click", function () {
+    // Toggle the type attribute
+    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+    passwordInput.setAttribute("type", type);
+    
+    // Toggle the icon
+    this.classList.toggle("fa-eye");
+    this.classList.toggle("fa-eye-slash");
+  });
+}
+
 const emailInput = document.getElementById("reg-email");
   if (emailInput) {
     emailInput.addEventListener("input", (e) => {
@@ -116,25 +141,34 @@ const emailInput = document.getElementById("reg-email");
 // ==========================================
 
 function handleLogin() {
-  const nameInput = document.getElementById("login-name").value.trim();
+const emailInput = document.getElementById("login-email").value.trim().toLowerCase();
+  const passwordInput = document.getElementById("login-password").value;
+  const errorEl = document.getElementById("auth-error");
   const patients = DB.get("patients");
 
-  const user = patients.find(
-    (p) => p.name.toLowerCase() === nameInput.toLowerCase()
-  );
+const patient = patients.find((p) => p.email && p.email.toLowerCase() === emailInput);
 
-  if (user) {
-    localStorage.setItem("current_patient_id", user.id);
-    window.location.href = "patient-dashboard.html";
-  } else {
-    const err = document.getElementById("auth-error");
-    err.innerText = "Account not found. Please sign up first.";
-    err.style.display = "block";
+  if (!patient) {
+    errorEl.innerText = "Invalid email address";
+    errorEl.style.display = "block";
+    return;
   }
+
+  // Check password (assuming the field exists in the data)
+if (patient.password !== passwordInput) {
+    errorEl.innerText = "Incorrect password";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  // Success logic: Use 'patient' instead of 'user'
+  localStorage.setItem("current_patient_id", patient.id);
+  window.location.href = "patient-dashboard.html";
 }
 
 function handleSignup() {
   const emailValue = document.getElementById("reg-email").value.trim();
+  const passwordValue = document.getElementById("reg-password").value;
   const nameValue = document.getElementById("reg-name").value.trim();
   const countryCode = document.getElementById("reg-country-code").value;
   const phoneRaw = document.getElementById("reg-phone").value.trim();
@@ -150,7 +184,7 @@ function handleSignup() {
 
   // 1. Check for empty fields[cite: 2]
 if (!emailValue || !nameValue || !phoneRaw || !dobValue || !genderValue || !addressValue) {
-    err.innerText = "Please fill up all the fields, including your address.";
+    err.innerText = "Please fill up all the fields.";
     err.style.display = "block";
     return;
   }
@@ -162,6 +196,12 @@ if (!emailValue || !nameValue || !phoneRaw || !dobValue || !genderValue || !addr
     err.style.display = "block";
     return;
   }
+
+  if (!passwordValue) {
+    err.innerText = "Please enter a password";
+    err.style.display = "block";
+    return;
+}
 
   // 3. Phone Validation (Check for 10 digits, excluding dashes)[cite: 1]
   const digitsOnly = phoneRaw.replace(/\D/g, "");
@@ -188,6 +228,7 @@ const finalPhoneNumber = countryCode + " " + phoneRaw;
     id: newId,
     name: nameValue,
     email: emailValue,
+    password: passwordValue,
     phone: finalPhoneNumber,
     dob: dobValue,
     gender: genderValue,
@@ -204,6 +245,7 @@ const finalPhoneNumber = countryCode + " " + phoneRaw;
 
   // Clear registration fields[cite: 2]
   document.getElementById("reg-email").value = "";
+  document.getElementById("reg-password").value = "";
   document.getElementById("reg-name").value = "";
   document.getElementById("reg-phone").value = "";
   document.getElementById("reg-dob").value = "";
@@ -212,7 +254,7 @@ const finalPhoneNumber = countryCode + " " + phoneRaw;
 
   setTimeout(() => {
     toggleAuth(false);
-    document.getElementById("login-name").value = nameValue;
+    document.getElementById("login-email").value = emailValue;
     success.style.display = "none";
   }, 2000);
 }

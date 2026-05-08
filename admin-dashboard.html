@@ -131,7 +131,8 @@
               <thead>
                 <tr>
                   <th>ID</th><th>Name</th><th>Age</th><th>Gender</th>
-                  <th>Blood Type</th><th>Email</th><th>Phone</th><th>Status</th><th>Actions</th>
+                  <th>Blood Type</th><th>Email</th><th>Password</th><th>Phone</th>
+                  <th>Status</th><th>Actions</th>
                 </tr>
               </thead>
               <tbody id="patients-tbody"></tbody>
@@ -166,7 +167,7 @@
               <thead>
                 <tr>
                   <th>ID</th><th>Name</th><th>Specialization</th><th>Email</th>
-                  <th>Phone</th><th>Schedule</th><th>Status</th><th>Actions</th>
+                  <th>Password</th><th>Phone</th><th>Schedule</th><th>Status</th><th>Actions</th>
                 </tr>
               </thead>
               <tbody id="doctors-tbody"></tbody>
@@ -290,6 +291,15 @@
             <label>Email Address</label>
             <input type="email" id="p-email" placeholder="patient@email.com" />
           </div>
+<div class="form-group">
+  <label>Password</label>
+  <div style="position: relative;">
+    <input type="password" id="p-password" placeholder="patient password" style="padding-right: 60px;" />
+    <i class="fas fa-eye" id="toggle-p-password" 
+       style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);"
+       onclick="togglePasswordVisibility('p-password', this)"></i>
+  </div>
+</div>
           <div class="form-group">
             <label>Date of Birth</label>
             <input type="date" id="p-dob" />
@@ -373,6 +383,15 @@
             <label>Email</label>
             <input type="email" id="d-email" placeholder="doctor@hospital.com" />
           </div>
+<div class="form-group">
+  <label>Password</label>
+  <div style="position: relative;">
+    <input type="password" id="d-password" placeholder="Set doctor password" style="padding-right: 40px;" />
+    <i class="fas fa-eye" id="toggle-d-password" 
+       style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);"
+       onclick="togglePasswordVisibility('d-password', this)"></i>
+  </div>
+</div>
           <div class="form-group">
             <label>License Number</label>
             <input type="text" id="d-license" placeholder="PRC-XXXXX" />

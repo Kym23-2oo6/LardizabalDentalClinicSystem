@@ -167,6 +167,8 @@ function loadDoctorSession() {
 function renderDashboard() {
   if (!currentDoctorData) return;
 
+  const allAppointments = DB.get("appointments");
+
   const appointments = DB.get("appointments").filter(
     (a) => a.doctor === currentDoctorData.name,
   );

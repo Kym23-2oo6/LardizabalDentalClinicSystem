@@ -150,17 +150,26 @@ document
   .addEventListener("submit", function (e) {
     e.preventDefault();
     let patients = SharedDB.get("patients");
+    let appointments = SharedDB.get("appointments");
     const index = patients.findIndex((p) => p.id === PATIENT_ID);
 
     if (index !== -1) {
+      const oldName = patients[index].name;
+      const newName = document.getElementById("edit-name").value;
       patients[index].name = document.getElementById("edit-name").value;
       patients[index].phone = document.getElementById("edit-phone").value;
       patients[index].dob = document.getElementById("edit-dob").value;
       patients[index].gender = document.getElementById("edit-gender").value;
-      patients[index].emergency =
-        document.getElementById("edit-emergency").value;
+      patients[index].emergency = document.getElementById("edit-emergency").value;
+
+      appointments.forEach(appt => {
+        if (appt.patient === oldName) appt.patient = newName;
+      });
+
+      patients[index].name = newName;
 
       SharedDB.set("patients", patients);
+      SharedDB.set("appointments", appointments);
       syncAndRenderProfile();
       alert("Profile updated successfully!");
     }
@@ -225,7 +234,7 @@ function renderPatientAppointments() {
     .reverse()
     .map((appt) => {
       const showCancelButton =
-        appt.status !== "Completed" && appt.status !== "Cancelled";
+        appt.status !== "Completed" && appt.status !== "Cancelled" && appt.status !== "No Show";
 
       return `
             <div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border);">
