@@ -180,6 +180,8 @@ function openModal(type, id = null) {
       document.getElementById("p-address").value = data.address;
       document.getElementById("p-history").value = data.history;
       document.getElementById("p-status").value = data.status;
+      document.getElementById("p-email").value = data.email;
+      document.getElementById("p-password").value = data.password;
       document.getElementById("p-emergency").value = data.emergency;
     } else if (type === "doctor") {
       document.getElementById("doctor-modal-title").textContent = "Edit Doctor";
@@ -187,6 +189,7 @@ function openModal(type, id = null) {
       document.getElementById("d-spec").value = data.spec;
       document.getElementById("d-phone").value = data.phone;
       document.getElementById("d-email").value = data.email;
+      document.getElementById("d-password").value = data.password;
       document.getElementById("d-license").value = data.license;
       document.getElementById("d-schedule").value = data.schedule;
       document.getElementById("d-status").value = data.status;
@@ -237,6 +240,7 @@ function openModal(type, id = null) {
       "d-name",
       "d-phone",
       "d-email",
+      "d-password",
       "d-license",
       "a-reason",
       "a-notes",
@@ -262,6 +266,14 @@ function openModal(type, id = null) {
   ["patient", "doctor", "appt", "record", "billing"].forEach((t) => {
     const el = document.getElementById(t + "-err");
     if (el) el.style.display = "none";
+  });
+  ['p-password', 'd-password'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.type = 'password';
+  });
+  ['toggle-p-password', 'toggle-d-password'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.classList.replace("fa-eye-slash", "fa-eye");
   });
 }
 
@@ -292,6 +304,8 @@ function showErr(id, msg) {
 
 function savePatient() {
   const name = document.getElementById("p-name").value.trim();
+  const email = document.getElementById("p-email").value.trim();
+  const password = document.getElementById("p-password").value.trim();
   const dob = document.getElementById("p-dob").value;
   const gender = document.getElementById("p-gender").value;
   if (!name || !dob || !gender)
@@ -305,6 +319,8 @@ function savePatient() {
     gender,
     blood: document.getElementById("p-blood").value,
     phone: document.getElementById("p-phone").value,
+    email: document.getElementById("p-email").value,
+    password: document.getElementById("p-password").value,
     address: document.getElementById("p-address").value,
     history: document.getElementById("p-history").value,
     status: document.getElementById("p-status").value,
@@ -335,6 +351,7 @@ function saveDoctor() {
     spec,
     phone: document.getElementById("d-phone").value,
     email: document.getElementById("d-email").value,
+    password: document.getElementById("d-password").value,
     license: document.getElementById("d-license").value,
     schedule: document.getElementById("d-schedule").value,
     status: document.getElementById("d-status").value,
@@ -349,6 +366,17 @@ function saveDoctor() {
   DB.set("doctors", doctors);
   closeModal();
   renderDoctors();
+}
+
+function togglePasswordVisibility(inputId, icon) {
+  const input = document.getElementById(inputId);
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.replace("fa-eye", "fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.replace("fa-eye-slash", "fa-eye");
+  }
 }
 
 function saveAppointment() {
@@ -538,7 +566,7 @@ function renderPatients() {
   );
   const tbody = document.getElementById("patients-tbody");
   if (patients.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-injured"></i></span></div><p>No patients found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-injured"></i></span></div><p>No patients found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = patients
@@ -550,6 +578,8 @@ function renderPatients() {
       <td>${calcAge(p.dob)}</td>
       <td>${p.gender}</td>
       <td><span class="badge badge-blue">${p.blood || "—"}</span></td>
+      <td>${p.email || '—'}</td>
+      <td>••••••••</td>
       <td>${p.phone}</td>
       <td>${getStatusBadge(p.status)}</td>
       <td class="actions-cell">
@@ -599,7 +629,7 @@ function renderDoctors() {
   );
   const tbody = document.getElementById("doctors-tbody");
   if (doctors.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-md"></i></span></div><p>No doctors found</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-md"></i></span></div><p>No doctors found</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = doctors
@@ -609,6 +639,8 @@ function renderDoctors() {
       <td style="color:var(--text-muted);font-size:12px">D-${String(d.id).padStart(3, "0")}</td>
       <td><strong>${d.name}</strong><br><span style="font-size:12px;color:var(--text-muted)">${d.license || ""}</span></td>
       <td><span class="badge badge-gold">${d.spec}</span></td>
+      <td>${d.email || '—'}</td>
+      <td>••••••••</td>
       <td>${d.phone}</td>
       <td style="font-size:13px">${d.schedule}</td>
       <td>${getStatusBadge(d.status)}</td>
@@ -823,6 +855,7 @@ function renderDashboard() {
 function seedData() {
   if (DB.get("patients").length > 0) return;
 
+  // Seed Patients with Passwords
   DB.set("patients", [
     {
       id: 1,
@@ -830,7 +863,9 @@ function seedData() {
       dob: "2006-12-30",
       gender: "Male",
       blood: "--",
-      phone: "09090909090",
+      phone: "+63 909 090 9090",
+      email: "vetstres@gmail.com",
+      password: "tresvets", // Added password
       address: "Taguig City, Metro Manila",
       history: "Hypertension, Penicillin allergy",
       status: "Active",
@@ -842,7 +877,9 @@ function seedData() {
       dob: "2006-06-21",
       gender: "Male",
       blood: "--",
-      phone: "09090909090",
+      phone: "+63 909 090 9090",
+      email: "junjez@gmail.com",
+      password: "jezjun", // Added password
       address: "Taguig City, Metro Manila",
       history: "Type 2 Diabetes",
       status: "Critical",
@@ -854,7 +891,9 @@ function seedData() {
       dob: "2006-02-27",
       gender: "Male",
       blood: "--",
-      phone: "09090909090",
+      phone: "+63 909 090 9090",
+      email: "sao@gmail.com",
+      password: "saosao", // Added password
       address: "Taguig City, Metro Manila",
       history: "Ngek",
       status: "Active",
@@ -862,33 +901,37 @@ function seedData() {
     },
   ]);
 
+  // Seed Doctors with Passwords
   DB.set("doctors", [
     {
       id: 1,
-      name: "Dr. John Michael",
-      spec: "Cardiology",
-      phone: "09171112222",
-      email: "lreyes@hospital.com",
+      name: "John Michael",
+      spec: "General Dentistry",
+      phone: "+63 909 090 9090",
+      email: "jm@lardizabaldental.com",
+      password: "michaeljohn", // Added password
       license: "PRC-12345",
       schedule: "Mon-Fri (Morning)",
       status: "Active",
     },
     {
       id: 2,
-      name: "Dr. Joshua",
-      spec: "General Medicine",
-      phone: "09282223333",
-      email: "rsantos@hospital.com",
+      name: "Joshua",
+      spec: "Orthodontics",
+      phone: "+63 909 090 9090",
+      email: "joshua@lardizabaldental.com",
+      password: "huajos", // Added password
       license: "PRC-23456",
       schedule: "Mon-Fri (Afternoon)",
       status: "Active",
     },
     {
       id: 3,
-      name: "Dr. Kym Brian",
-      spec: "Pediatrics",
-      phone: "09453334444",
-      email: "cvillanueva@hospital.com",
+      name: "Kym Brian",
+      spec: "Oral & Maxillofacial Surgery",
+      phone: "+63 909 090 9090",
+      email: "kym@lardizabaldental.com",
+      password: "briankym", // Added password
       license: "PRC-34567",
       schedule: "Tue-Sat",
       status: "Active",
@@ -899,7 +942,7 @@ function seedData() {
   DB.set("appointments", [
     {
       id: 1,
-      patient: "Steven Tres",
+      patient: "Vets Tres",
       doctor: "Dr. John Michael",
       date: today,
       time: "09:00",
@@ -909,7 +952,7 @@ function seedData() {
     },
     {
       id: 2,
-      patient: "Jez Jun",
+      patient: "Jun Jez",
       doctor: "Dr. Joshua",
       date: today,
       time: "10:30",

@@ -2,3 +2,12 @@
 .user-avatar {
   background-color: #014d5b;
 }
+
+/* Sidebar Footer & User Profile */
+.sidebar-footer {
+  width: 100%;
+  padding: 16px;
+  border-top: 24px solid rgba(255, 255, 255, 0.07);
+  position: relative;
+  top: 35%;
+}

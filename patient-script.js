@@ -125,6 +125,8 @@ function syncAndRenderProfile() {
   document.getElementById("prof-age").innerText = calculateAge(myData.dob);
   document.getElementById("prof-gender").innerText = myData.gender;
   document.getElementById("prof-phone").innerText = myData.phone;
+  document.getElementById("prof-blood").innerText = myData.blood || "—";
+  document.getElementById("prof-address").innerText = myData.address;
 }
 
 function loadProfileIntoForm() {
@@ -137,6 +139,10 @@ function loadProfileIntoForm() {
     document.getElementById("edit-gender").value = myData.gender || "Male";
     document.getElementById("edit-emergency").value = myData.emergency || "";
   }
+  const emailInput = document.getElementById("edit-email-view");
+if (emailInput) {
+    emailInput.value = myData.email || "";
+}
 }
 
 document
@@ -144,17 +150,26 @@ document
   .addEventListener("submit", function (e) {
     e.preventDefault();
     let patients = SharedDB.get("patients");
+    let appointments = SharedDB.get("appointments");
     const index = patients.findIndex((p) => p.id === PATIENT_ID);
 
     if (index !== -1) {
+      const oldName = patients[index].name;
+      const newName = document.getElementById("edit-name").value;
       patients[index].name = document.getElementById("edit-name").value;
       patients[index].phone = document.getElementById("edit-phone").value;
       patients[index].dob = document.getElementById("edit-dob").value;
       patients[index].gender = document.getElementById("edit-gender").value;
-      patients[index].emergency =
-        document.getElementById("edit-emergency").value;
+      patients[index].emergency = document.getElementById("edit-emergency").value;
+
+      appointments.forEach(appt => {
+        if (appt.patient === oldName) appt.patient = newName;
+      });
+
+      patients[index].name = newName;
 
       SharedDB.set("patients", patients);
+      SharedDB.set("appointments", appointments);
       syncAndRenderProfile();
       alert("Profile updated successfully!");
     }
@@ -219,7 +234,7 @@ function renderPatientAppointments() {
     .reverse()
     .map((appt) => {
       const showCancelButton =
-        appt.status !== "Completed" && appt.status !== "Cancelled";
+        appt.status !== "Completed" && appt.status !== "Cancelled" && appt.status !== "No Show";
 
       return `
             <div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border);">
@@ -229,7 +244,7 @@ function renderPatientAppointments() {
                 </div>
                 <div style="flex:1">
                     <div style="font-size:14px; font-weight:600">${appt.reason}</div>
-                    <div style="font-size:12px; color:var(--text-muted)">Dr. ${appt.doctor} at ${appt.time}</div>
+                    <div style="font-size:12px; color:var(--text-muted)"> ${appt.doctor} at ${appt.time}</div>
                 </div>
                 <span class="badge ${appt.status === "Completed" ? "badge-green" : "badge-blue"}">${appt.status}</span>
                 
@@ -274,6 +289,84 @@ window.cancelAppt = function (id) {
   }
 };
 
+function isDateAllowed(dateString, scheduleString) {
+  const date = new Date(dateString);
+  const day = date.getDay(); // 0 (Sun) to 6 (Sat)
+  const schedule = scheduleString.toLowerCase();
+
+  // Mon-Fri: Allowed if day is 1, 2, 3, 4, or 5
+  if (schedule.includes("mon-fri")) {
+    return day >= 1 && day <= 5;
+  }
+  // Mon-Sat: Allowed if day is 1, 2, 3, 4, 5, or 6
+  if (schedule.includes("mon-sat")) {
+    return day >= 1 && day <= 6;
+  }
+  // Tue-Sat: Allowed if day is 2, 3, 4, 5, or 6
+  if (schedule.includes("tue-sat")) {
+    return day >= 2 && day <= 6;
+  }
+  
+  return true; // Default fallback
+}
+
+function updateAvailableTimes() {
+const doctorName = document.getElementById("a-doctor").value;
+  const dateInput = document.getElementById("a-date");
+  const selectedDate = dateInput.value;
+  const timeSelect = document.getElementById("a-time");
+
+  // Reset if no doctor or date
+  if (!doctorName || !selectedDate) {
+    timeSelect.innerHTML = '<option value="">Select Doctor & Date</option>';
+    return;
+  }
+
+  const doctors = SharedDB.get("doctors");
+  const doctor = doctors.find(d => d.name === doctorName);
+  
+if (selectedDate && !isDateAllowed(selectedDate, doctor.schedule)) {
+    alert(`${doctor.name} is not available on this day. Schedule: ${doctor.schedule}`);
+    dateInput.value = ""; // Clear invalid date
+    timeSelect.innerHTML = '<option value="">Select Doctor & Date</option>';
+    return;
+  }
+
+  if (!selectedDate) {
+    timeSelect.innerHTML = '<option value="">Select Date</option>';
+    return;
+  }
+  // Define time slots based on doctor's schedule string
+  let slots = [];
+  const schedule = doctor.schedule.toLowerCase();
+
+  if (schedule.includes("morning")) {
+    slots = ["07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
+  } else if (schedule.includes("afternoon")) {
+    slots = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
+  } else {
+    // Default full day for Tue-Sat or others[cite: 3]
+    slots = ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00"];
+  }
+
+  // Filter out already booked slots for this doctor on this date
+  const appointments = SharedDB.get("appointments");
+  const bookedTimes = appointments
+    .filter(a => a.doctor === doctorName && a.date === selectedDate && a.status !== "Cancelled")
+    .map(a => a.time);
+
+  const availableSlots = slots.filter(time => !bookedTimes.includes(time));
+
+  // Render Slots
+  if (availableSlots.length === 0) {
+    timeSelect.innerHTML = '<option value="">No slots available</option>';
+  } else {
+    timeSelect.innerHTML = availableSlots
+      .map(t => `<option value="${t}">${t}</option>`)
+      .join("");
+  }
+}
+
 // ==========================================
 // 5. INITIALIZATION
 // ==========================================
@@ -282,18 +375,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial profile sync
   syncAndRenderProfile();
 
-  // Load doctors into selection
-  const doctors = SharedDB.get("doctors");
-  document.getElementById("a-doctor").innerHTML = doctors
-    .map((d) => `<option value="${d.name}">${d.name}</option>`)
-    .join("");
+const today = new Date().toISOString().split("T")[0];
+  document.getElementById("a-date").setAttribute("min", today);
 
-  // Set display date
-  document.getElementById("current-date").textContent =
-    new Date().toLocaleDateString("en-PH", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+  // Load doctors into selection
+const doctors = SharedDB.get("doctors");
+  const doctorDropdown = document.getElementById("a-doctor");
+  doctorDropdown.innerHTML = '<option value="">Select Doctor</option>' + 
+    doctors.map((d) => `<option value="${d.name}">${d.name} (${d.spec})</option>`).join("");
+
+doctorDropdown.addEventListener("change", updateAvailableTimes);
+  document.getElementById("a-date").addEventListener("change", updateAvailableTimes);
+
+  // Set display date[cite: 1]
+  document.getElementById("current-date").textContent = new Date().toLocaleDateString("en-PH", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
+  });
 });

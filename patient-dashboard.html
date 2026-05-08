@@ -119,6 +119,14 @@
                     <div class="lbl">Phone</div>
                     <div class="val" id="prof-phone">--</div>
                   </div>
+                  <div class="detail-item">
+                    <div class="lbl">Blood Type</div>
+                    <div class="val" id="prof-blood">--</div>
+                </div>
+                <div class="detail-item">
+                  <div class="lbl">Address</div>
+                  <div class="val" id="prof-address">--</div>
+                </div>
                 </div>
               </div>
             </div>
@@ -132,28 +140,34 @@
                     <label>Doctor</label>
                     <select id="a-doctor" required></select>
                   </div>
-                  <div class="form-group form-full" style="margin-top: 10px">
-                    <label>Service</label>
-                    <select id="a-service" required>
-                      <option>Dental Checkup</option>
-                      <option>Cleaning / Prophylaxis</option>
-                      <option>Tooth Extraction</option>
-                    </select>
-                  </div>
+                    <div class="form-group form-full" style="margin-top: 10px">
+                      <label>Service</label>
+                      <select id="a-service" required>
+                        <option value="General Checkup">General Checkup</option>
+                        <option value="Cleaning / Prophylaxis">Cleaning / Prophylaxis</option>
+                        <option value="Tooth Extraction">Tooth Extraction</option>
+                        <option value="Dental Fillings">Dental Fillings</option>
+                        <option value="Root Canal Therapy">Root Canal Therapy</option>
+                        <option value="Orthodontic Consultation">Orthodontic Consultation</option>
+                        <option value="Teeth Whitening">Teeth Whitening</option>
+                      </select>
+                    </div>
                   <div class="form-grid" style="margin-top: 10px">
                     <div class="form-group">
                       <label>Date</label>
                       <input type="date" id="a-date" required />
                     </div>
-                    <div class="form-group">
-                      <label>Time</label>
-                      <input type="time" id="a-time" required />
-                    </div>
+<div class="form-group">
+  <label>Time</label>
+  <select id="a-time" style="width: 250px;" required>
+    <option value="">Select Doctor & Date</option>
+  </select>
+</div>
                   </div>
                   <button
                     type="submit"
                     class="btn btn-primary"
-                    style="margin-top: 15px; width: 100%"
+                    style="margin-top: 15px; width: 15%;"
                   >
                     Book Now
                   </button>
@@ -220,6 +234,11 @@
                   <div class="form-group">
                     <label>Phone Number</label>
                     <input type="tel" id="edit-phone" required />
+                  </div>
+                  <div class="form-group">
+                      <label>Email Address</label>
+                      <input type="email" id="edit-email-view" readonly tabindex="-1" 
+                            style="background-color: #f9f9f9; border-color: #ddd; cursor: default;">
                   </div>
                   <div class="form-group">
                     <label>Date of Birth</label>
