@@ -44,6 +44,7 @@ function backToPortal() {
   document.getElementById("doctor-auth-view").style.display = "none";
   document.getElementById("auth-error").style.display = "none";
   document.getElementById("doctor-auth-error").style.display = "none";
+  document.getElementById("forgot-password-view").style.display = "none";
 }
 
 function toggleAuth(isSignup) {
@@ -63,6 +64,21 @@ function toggleAuth(isSignup) {
     title.innerText = "Patient Sign In";
     subtitle.innerText = "Access your dental records and appointments.";
   }
+  document.getElementById("auth-error").style.display = "none";
+}
+
+function closeForgotPassword() {
+  // Hide the forgot password container
+  document.getElementById("forgot-password-view").style.display = "none";
+  
+  // Re-show the login form
+  document.getElementById("login-form").style.display = "block";
+  
+  // Reset the titles to the Sign In defaults
+  document.getElementById("auth-title").innerText = "Patient Sign In";
+  document.getElementById("auth-subtitle").innerText = "Access your dental records and appointments.";
+  
+  // Clear any residual error messages
   document.getElementById("auth-error").style.display = "none";
 }
 
@@ -164,6 +180,73 @@ if (patient.password !== passwordInput) {
   // Success logic: Use 'patient' instead of 'user'
   localStorage.setItem("current_patient_id", patient.id);
   window.location.href = "patient-dashboard.html";
+}
+
+// ==========================================
+// UPDATED FORGOT PASSWORD LOGIC
+// ==========================================
+
+function handleForgotPasswordVerify() {
+  const emailInput = document.getElementById("reset-email").value.trim().toLowerCase();
+  const errorEl = document.getElementById("auth-error");
+  const successEl = document.getElementById("auth-success");
+  
+  const patients = DB.get("patients");
+  const patient = patients.find((p) => p.email && p.email.toLowerCase() === emailInput);
+
+  if (!patient) {
+    errorEl.innerText = "No account found with that email address.";
+    errorEl.style.display = "block";
+    successEl.style.display = "none";
+    return;
+  }
+
+  // Simulate sending an email
+  errorEl.style.display = "none";
+  successEl.innerText = "A password reset link has been sent to " + emailInput + ".";
+  successEl.style.display = "block";
+
+  // In a real app, the user would click a link in their email.
+  // For this demo, we will automatically show the "New Password" fields after a short delay.
+  setTimeout(() => {
+    document.getElementById("reset-email").parentElement.style.display = "none";
+    document.getElementById("reset-new-password").parentElement.style.display = "block";
+    successEl.innerText = "Identity Verified. Enter your new password.";
+    // Change the button text or function to handle the final update
+    const actionBtn = document.querySelector("#forgot-password-view .portal-btn");
+    actionBtn.innerText = "Confirm";
+    actionBtn.onclick = handleFinalPasswordUpdate;
+  }, 3000);
+}
+
+function handleFinalPasswordUpdate() {
+  const emailInput = document.getElementById("reset-email").value.trim().toLowerCase();
+  const newPassword = document.getElementById("reset-new-password").value;
+  const errorEl = document.getElementById("auth-error");
+  const successEl = document.getElementById("auth-success");
+  
+  if (newPassword.length < 6) {
+    errorEl.innerText = "Password must be at least 6 characters.";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  const patients = DB.get("patients");
+  const patientIndex = patients.findIndex((p) => p.email && p.email.toLowerCase() === emailInput);
+
+  if (patientIndex !== -1) {
+    patients[patientIndex].password = newPassword;
+    DB.set("patients", patients);
+
+    successEl.innerText = "Password updated successfully!";
+    successEl.style.display = "block";
+    errorEl.style.display = "none";
+
+    setTimeout(() => {
+      closeForgotPassword();
+      toggleAuth(false);
+    }, 2000);
+  }
 }
 
 function handleSignup() {

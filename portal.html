@@ -50,7 +50,11 @@
   </div>
   <button class="portal-btn primary" style="width: 100%; margin-top: 15px" onclick="handleLogin()">Sign In</button>
   
-  <p class="auth-toggle-text">Don't have an account? <a href="#" onclick="toggleAuth(true)">Sign Up</a></p>
+  <p class="auth-toggle-text">Don't have an account? <a href="#" onclick="toggleAuth(true)
+  ">Sign Up</a></p>
+  <div style="text-align: right; margin-top: -10px; margin-bottom: 10px;">
+  <a href="#" onclick="showForgotPassword()" style="font-size: 11px; color: var(--secondary); text-decoration: none; font-weight: 600;">Forgot Password?</a>
+</div>
   </div>
 
             <div id="signup-form" style="display: none">
@@ -110,7 +114,26 @@
               <button class="portal-btn primary" style="margin-top: 15px; width: 100%;" onclick="handleSignup()">Create Account</button>
               <p class="auth-toggle-text">Already have an account? <a href="#" onclick="toggleAuth(false)">Sign In</a></p>
             </div>
+<div id="forgot-password-view" style="display: none; text-align: left;">
+  <div class="portal-welcome">
+    <h2>Reset Password</h2>
+    <p>Enter your details to verify your identity.</p>
+  </div>
+  
+  <div class="form-group form-full">
+    <label>Email Address</label>
+    <input type="email" id="reset-email" placeholder="Enter your registered email" />
+  </div>
 
+  <div class="form-group form-full" id="new-password-container" style="display: none;">
+    <label>New Password</label>
+    <input type="password" id="reset-new-password" placeholder="Enter new password" />
+  </div>
+
+  <button class="portal-btn primary" style="width: 100%; margin-top: 15px" onclick="handleForgotPasswordVerify()">Verify</button>
+  
+  <p class="auth-toggle-text"><a href="#" onclick="closeForgotPassword()">Back</a></p>
+</div>
             <button class="btn btn-ghost" style="width: 100%;" onclick="backToPortal()">
               <i class="fas fa-arrow-left"></i>
             </button>
