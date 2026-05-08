@@ -167,9 +167,9 @@
                   <button
                     type="submit"
                     class="btn btn-primary"
-                    style="margin-top: 15px; width: 20%;"
+                    style="margin-top: 15px;"
                   >
-                    Book Now
+                    Book
                   </button>
                 </form>
               </div>
@@ -244,6 +244,42 @@
                     <label>Date of Birth</label>
                     <input type="date" id="edit-dob" required />
                   </div>
+<div class="form-group">
+  <label>Password</label>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <input type="password" id="edit-password-view" readonly tabindex="-1" 
+           style="background-color: #f9f9f9; border-color: #ddd; cursor: default; flex: 1;">
+    <button type="button" onclick="togglePasswordRequest()" class="btn-link">Change</button>
+  </div>
+</div>
+
+<div id="password-request-area" class="card" style="display: none; grid-column: span 2; margin-top: 15px; border: 1px solid #e0e0e0; background: #fff;">
+  <div class="card-body">
+    <div id="pw-step-1">
+      <p style="font-size: 13px; margin-bottom: 10px;">Enter your email to receive a link.</p>
+      <div class="form-group">
+        <input type="email" id="req-email" placeholder="Enter registered email">
+      </div>
+      <button type="button" class="btn btn-primary" style="margin-top: 10px;" onclick="verifyEmailAndSend()">Confirm</button>
+    </div>
+
+    <div id="pw-step-2" style="display: none;">
+      <div class="form-group">
+        <label>Old Password</label>
+        <input type="password" style="margin-bottom: 10px;" id="req-old-pass" class="pass-field" placeholder="Enter old password">
+      </div>
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" style="margin-bottom: 8px;" id="req-new-pass" class="pass-field" placeholder="At least 6 characters">
+      </div>
+      <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+        <input type="checkbox" id="toggle-pass-visibility" onclick="togglePassDisplay()">
+        <label for="toggle-pass-visibility" style="font-size: 12px; cursor: pointer;">Show</label>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="submitPasswordChange()">Update</button>
+    </div>
+  </div>
+</div>
                   <div class="form-group">
                     <label>Gender</label>
                     <select id="edit-gender">
@@ -262,7 +298,7 @@
                   </div>
                   <div class="form-full" style="margin-top: 20px">
                     <button type="submit" class="btn btn-primary">
-                      Save Changes
+                      Save
                     </button>
                   </div>
                 </form>

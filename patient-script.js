@@ -143,6 +143,10 @@ function loadProfileIntoForm() {
 if (emailInput) {
     emailInput.value = myData.email || "";
 }
+  const passwordInput = document.getElementById("edit-password-view");
+if (passwordInput) {
+  passwordInput.value = myData.password || "";
+}
 }
 
 document
@@ -381,7 +385,7 @@ const today = new Date().toISOString().split("T")[0];
   // Load doctors into selection
 const doctors = SharedDB.get("doctors");
   const doctorDropdown = document.getElementById("a-doctor");
-  doctorDropdown.innerHTML = '<option value="">Select Doctor</option>' + 
+  doctorDropdown.innerHTML = '<option value="">Doctor</option>' + 
     doctors.map((d) => `<option value="${d.name}">${d.name} (${d.spec})</option>`).join("");
 
 doctorDropdown.addEventListener("change", updateAvailableTimes);
@@ -392,3 +396,76 @@ doctorDropdown.addEventListener("change", updateAvailableTimes);
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
 });
+/**
+ * Toggles the visibility of the password request container
+ */
+function togglePasswordRequest() {
+  const area = document.getElementById("password-request-area");
+  const step1 = document.getElementById("pw-step-1");
+  const step2 = document.getElementById("pw-step-2");
+  
+  const isHidden = area.style.display === "none";
+  area.style.display = isHidden ? "block" : "none";
+  
+  if (isHidden) {
+    step1.style.display = "block";
+    step2.style.display = "none";
+  }
+}
+
+/**
+ * Step 1: Validates email and simulates sending a link
+ */
+function verifyEmailAndSend() {
+  const patients = SharedDB.get("patients");
+  const myData = patients.find((p) => p.id === PATIENT_ID);
+  const inputEmail = document.getElementById("req-email").value;
+
+  if (inputEmail !== myData.email) {
+    alert("This email does not match our records.");
+    return;
+  }
+
+  alert("A link has been sent to " + inputEmail + ". You may now enter your new credentials.");
+  
+  document.getElementById("pw-step-1").style.display = "none";
+  document.getElementById("pw-step-2").style.display = "block";
+}
+
+/**
+ * Toggles password visibility
+ */
+function togglePassDisplay() {
+  const fields = document.querySelectorAll(".pass-field");
+  const isChecked = document.getElementById("toggle-pass-visibility").checked;
+  fields.forEach(f => f.type = isChecked ? "text" : "password");
+}
+
+/**
+ * Step 2: Final validation and update
+ */
+function submitPasswordChange() {
+  let patients = SharedDB.get("patients");
+  const index = patients.findIndex((p) => p.id === PATIENT_ID);
+  const myData = patients[index];
+  
+  const oldPass = document.getElementById("req-old-pass").value;
+  const newPass = document.getElementById("req-new-pass").value;
+
+  if (oldPass !== myData.password) {
+    alert("Incorrect old password.");
+    return;
+  }
+
+  if (newPass.length < 6) {
+    alert("New password must be at least 6 characters.");
+    return;
+  }
+
+  patients[index].password = newPass;
+  SharedDB.set("patients", patients);
+  
+  alert("Password updated successfully!");
+  togglePasswordRequest(); // Close area
+  syncAndRenderProfile(); // Refresh UI
+}

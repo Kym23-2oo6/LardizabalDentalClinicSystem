@@ -11,3 +11,27 @@
   position: relative;
   top: 35%;
 }
+/* Make the button look like a text link */
+.btn-link {
+  background: none;
+  border: none;
+  color: #014d5b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.btn-link:hover {
+  color: #026b7d;
+}
+
+#password-request-area {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
