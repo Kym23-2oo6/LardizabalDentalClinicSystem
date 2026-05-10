@@ -345,12 +345,12 @@ if (selectedDate && !isDateAllowed(selectedDate, doctor.schedule)) {
   const schedule = doctor.schedule.toLowerCase();
 
   if (schedule.includes("morning")) {
-    slots = ["07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
+    slots = ["07:30 (AM)", "08:00 (AM)", "08:30 (AM)", "09:00 (AM)", "09:30 (AM)", "10:00 (AM)", "10:30 (AM)", "11:00 (AM)", "11:30 (AM)"];
   } else if (schedule.includes("afternoon")) {
-    slots = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
+    slots = ["13:00 (1:00 PM)", "13:30 (1:30 PM)", "14:00 (2:00 PM)", "14:30 (2:30 PM)", "15:00 (3:00 PM)", "15:30 (3:30 PM)", "16:00 (4:00 PM)", "16:30 (4:30 PM)", "17:00 (5:00 PM)", "17:30 (5:30 PM)"];
   } else {
     // Default full day for Tue-Sat or others[cite: 3]
-    slots = ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00"];
+    slots = ["09:00 (AM)", "10:00 (AM)", "11:00 (AM)", "13:00 (1:00 PM)", "14:00 (2:00 PM)", "15:00 (3:00 PM)"];
   }
 
   // Filter out already booked slots for this doctor on this date
@@ -468,4 +468,9 @@ function submitPasswordChange() {
   alert("Password updated successfully!");
   togglePasswordRequest(); // Close area
   syncAndRenderProfile(); // Refresh UI
+}
+
+function handleSignOut() {
+    localStorage.removeItem("current_patient_id");
+    window.location.href = "portal.html";
 }
