@@ -1,223 +1,588 @@
-/* ==========================================================================
-   1. ROOT VARIABLES & GLOBAL STYLES
-   ========================================================================== */
+/* ==========================================
+   LARDIZABAL DENTAL — PORTAL STYLES
+   Aligned with index.css design language
+========================================== */
+
 :root {
-  --primary: #014d5b;
-  --secondary: #389ead;
-  --bg: #f4f7fa;
-  --card: #ffffff;
-  --text: #333333;
-  --text-muted: #6c757d;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  --radius: 14px; 
+  --ink: #0a1628;
+  --ink-light: #2d3f5c;
+  --teal: #0d6e7a;
+  --teal-mid: #1a8a98;
+  --teal-bright: #22b5c8;
+  --gold: #c9a96e;
+  --cream: #faf8f4;
+  --paper: #f2ede6;
+  --mist: #e8f4f6;
+  --white: #ffffff;
+  --text-muted: #6b7a91;
+  --border: #e2e8f0;
+  --shadow: 0 20px 60px rgba(10, 22, 40, 0.14);
+  --radius: 16px;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
-}
-
-body,
-html {
-  height: 100%;
   margin: 0;
-  font-family: "DM Sans", sans-serif;
-  background: var(--bg);
-  overflow-x: hidden;
+  padding: 0;
 }
 
-/* ==========================================================================
-   2. PORTAL LAYOUT & CONTAINER
-   ========================================================================== */
-.portal-container {
+body {
+  font-family: 'Inter', sans-serif;
   min-height: 100vh;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.95) 0%, rgba(13, 110, 122, 0.25) 100%);
+  background-size: cover;
+  background-position: center;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 30px 20px;
+  align-items: center;
+  padding: 40px 20px;
+  color: var(--ink);
+  position: relative;
+}
+
+/* Subtle radial glow to mimic index hero decor */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px;
+  right: -200px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(34, 181, 200, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -100px;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(201, 169, 110, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ==========================================
+   PORTAL CARD (Two-panel layout)
+========================================== */
+
+.portal-container {
+  width: 100%;
+  max-width: 1060px;
+  position: relative;
+  z-index: 1;
 }
 
 .portal-card {
-  background: var(--card);
-  width: 100%;
-  max-width: 540px; /* Perfectly balanced size */
-  padding: 35px;    
+  display: grid;
+  grid-template-columns: 420px 1fr;
   border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--white);
   box-shadow: var(--shadow);
-  text-align: center;
+  min-height: 680px;
+  animation: fadeUp 0.7s 0.1s ease both;
+}
+
+/* ==========================================
+   LEFT PANEL — Brand Header
+========================================== */
+
+.portal-header {
+  background: var(--teal);
+  color: var(--white);
+  padding: 60px 48px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+/* Decorative orbs matching index hero */
+.portal-header::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(34, 181, 200, 0.10), transparent 70%);
+  border-radius: 50%;
+}
+
+.portal-header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -60px;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(201, 169, 110, 0.08), transparent 70%);
+  border-radius: 50%;
+}
+
+/* Gold rule line — matches index eyebrow-line */
+.portal-header-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.portal-header-eyebrow-line {
+  width: 32px;
+  height: 1.5px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.portal-header-eyebrow-text {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
 }
 
 .portal-logo {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  margin-bottom: 1px;
-  object-fit: cover;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 7px;
+  border-radius: 50px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ==========================================================================
-   3. PORTAL CONTENT (HEADERS & TEXT)
-   ========================================================================== */
 .portal-header h1 {
-  font-size: 22px;
-  color: var(--primary);
-  margin-bottom: 5px;
+  font-family: 'Inter', serif;
+  font-size: 2.4rem;
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
 }
 
-.portal-header p {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 1.8px;
-  color: var(--text-muted);
+.portal-header h1 em {
+  font-style: italic;
+  color: var(--teal-bright);
+}
+
+.portal-header > p {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.7;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0;
+}
+
+/* Feature pills at the bottom of left panel */
+.portal-header-features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.portal-feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 300;
+}
+
+.portal-feature-pill i {
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  color: var(--teal-bright);
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   RIGHT PANEL — Content
+========================================== */
+
+.portal-content {
+  padding: 56px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--white) 0%, var(--cream) 100%);
+  position: relative;
+}
+
+/* Faint vertical separator line — like index hero */
+.portal-content::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10%;
+  height: 80%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(13, 110, 122, 0.1), transparent);
+}
+
+/* ==========================================
+   WELCOME TEXT
+========================================== */
+
+.portal-welcome {
   margin-bottom: 28px;
 }
 
+.portal-welcome-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.portal-welcome-eyebrow-line {
+  width: 28px;
+  height: 1.5px;
+  background: var(--gold);
+}
+
+.portal-welcome-eyebrow-text {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
 .portal-welcome h2 {
-  font-size: 19px;
+  font-family: 'Inter', serif;
+  font-size: 2.1rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   margin-bottom: 10px;
-  color: var(--text);
+}
+
+.portal-welcome h2 em {
+  font-style: italic;
+  color: var(--teal);
 }
 
 .portal-welcome p {
-  font-size: 13.5px;
   color: var(--text-muted);
-  margin-bottom: 22px;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  font-weight: 300;
 }
 
-/* --- FORM STYLING --- */
+/* ==========================================
+   ROLE SELECTION BUTTONS
+========================================== */
 
-#login-form {
-  text-align: left;
+.portal-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
 }
 
-#doctor-login-form {
-  text-align: left;
+.portal-btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.25s ease;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
+
+.portal-btn.primary {
+  background: var(--teal);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.portal-btn.primary::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  transition: left 0.5s;
+}
+
+.portal-btn.primary:hover {
+  background: var(--teal-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(13, 110, 122, 0.25);
+}
+
+.portal-btn.primary:hover::before {
+  left: 100%;
+}
+
+/* ==========================================
+   BACK / GHOST BUTTON
+========================================== */
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 14px;
+}
+
+.btn-ghost:hover {
+  background: var(--mist);
+  color: var(--ink);
+  border-color: var(--teal-bright);
+}
+
+/* ==========================================
+   HOME BUTTON
+========================================== */
+
+#home-button {
+  width: fit-content !important;
+  padding: 11px 20px;
+  margin-top: 18px !important;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================
+   FORMS
+========================================== */
 
 #signup-form {
-  flex-wrap: wrap;
-  gap: 15px; 
-  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
 
 .form-group {
-  flex: 1 1 calc(50% - 15px);
-  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-full {
-  flex: 1 1 100%;
+  grid-column: span 2;
 }
 
 .form-group label {
-  display: block;
-  font-size: 10.5px;
-  font-weight: 700;
+  margin-bottom: 7px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 5px;
-  letter-spacing: 0.5px;
+  color: var(--ink-light);
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 11px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background: #f9f9f9;
-  font-family: inherit;
-  font-size: 14px;
-  transition: all 0.2s;
+  border: 1px solid var(--border);
+  background: var(--white);
+  border-radius: 10px;
+  padding: 13px 14px;
+  font-size: 0.92rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+  transition: all 0.2s ease;
 }
 
-input:focus, 
-select:focus {
+.form-group input::placeholder {
+  color: #b0bac9;
+  font-weight: 300;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(13, 110, 122, 0.10);
   outline: none;
-  border-color: var(--primary);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(1, 77, 91, 0.1);
-}
-
-.portal-footer {
-  margin-top: 35px;
-  font-size: 10.5px;
-  color: var(--text-muted);
-}
-
-/* ==========================================================================
-   4. BUTTONS & ACTIONS
-   ========================================================================== */
-.portal-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.portal-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 13px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.15s;
-  border: none;
-  cursor: pointer;
-  font-size: 14.5px;
-}
-
-.portal-btn.primary {
-  background: var(--primary);
-  color: white;
-}
-
-.portal-btn.primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-.btn-ghost {
-  background: transparent;
-  border: 1px solid #e0e0e0;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.btn-ghost:hover {
-  background: #f8f9fa;
-}
-
-/* ==========================================================================
-   5. UTILITIES & ANIMATION
-   ========================================================================== */
-#patient-auth-view, 
-#doctor-auth-view, 
-#portal-main-view {
-  animation: fadeIn 0.4s ease;
+  background: var(--white);
 }
 
 .auth-toggle-text {
-  width: 100%;
-  font-size: 12.5px;
-  margin-top: 10px;
   text-align: center;
+  margin-top: 16px;
   color: var(--text-muted);
+  font-size: 0.87rem;
 }
 
 .auth-toggle-text a {
-  color: var(--secondary);
+  color: var(--teal);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
+  transition: color 0.2s;
 }
 
-/* Responsive: Stack columns on very small screens */
-@media (max-width: 450px) {
-  .form-group {
-    flex: 1 1 100%;
+.auth-toggle-text a:hover {
+  color: var(--teal-mid);
+  text-decoration: underline;
+}
+
+/* ==========================================
+   ALERTS
+========================================== */
+
+.alert {
+  margin-bottom: 18px;
+  border-radius: 10px !important;
+  font-weight: 500;
+  font-size: 0.88rem;
+}
+
+.alert-success {
+  background: rgba(13, 110, 122, 0.08) !important;
+  color: var(--teal) !important;
+  border: 1px solid rgba(13, 110, 122, 0.2);
+}
+
+.alert-error {
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+  border: 1px solid #fecaca;
+}
+
+/* ==========================================
+   PORTAL FOOTER
+========================================== */
+
+.portal-footer {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(13, 110, 122, 0.3);
+  border-radius: 20px;
+}
+
+/* ==========================================
+   ANIMATIONS — same as index.css
+========================================== */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 900px) {
+  .portal-card {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-header {
+    padding: 44px 36px;
+  }
+
+  .portal-header-features {
+    display: none;
+  }
+
+  .portal-content {
+    padding: 40px 30px;
+  }
+
+  .portal-footer {
+    position: static;
+    color: var(--text-muted);
+    padding: 20px 0 10px;
+    pointer-events: all;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .portal-card {
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .portal-content {
+    padding: 32px 22px;
+  }
+
+  #signup-form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-full {
+    grid-column: span 1;
+  }
+
+  .portal-welcome h2 {
+    font-size: 1.7rem;
+  }
+
+  .portal-header h1 {
+    font-size: 1.9rem;
   }
 }

@@ -23,19 +23,24 @@ const DB = {
 function showDoctorAuth() {
   document.getElementById("portal-main-view").style.display = "none";
   document.getElementById("doctor-auth-view").style.display = "block";
+  document.getElementById("home-button").style.display = "none";  
 }
 
 function showPatientAuth() {
   document.getElementById("portal-main-view").style.display = "none";
   document.getElementById("patient-auth-view").style.display = "block";
+  document.getElementById("home-button").style.display = "none";  
 }
 
 function showForgotPassword() {
   document.getElementById("login-form").style.display = "none";
   document.getElementById("signup-form").style.display = "none";
   document.getElementById("forgot-password-view").style.display = "block";
-  document.getElementById("auth-title").innerText = "Reset Password";
-  document.getElementById("auth-subtitle").innerText = "Secure your account with a new password.";
+  document.getElementById("auth-eyebrow").style.display = "none";
+  document.getElementById("auth-eyebrow-line").style.display = "none";
+  document.getElementById("auth-title").style.display = "none";
+  document.getElementById("auth-subtitle").style.display = "none";
+
 }
 
 function backToPortal() {
@@ -45,6 +50,12 @@ function backToPortal() {
   document.getElementById("auth-error").style.display = "none";
   document.getElementById("doctor-auth-error").style.display = "none";
   document.getElementById("forgot-password-view").style.display = "none";
+  document.getElementById("signup-form").style.display = "none";
+  document.getElementById("login-form").style.display = "block"
+  document.getElementById("home-button").style.display = "inline";  
+
+  document.getElementById("auth-title").style.display = "block";
+  document.getElementById("auth-subtitle").style.display = "block";
 }
 
 function toggleAuth(isSignup) {
@@ -54,15 +65,21 @@ function toggleAuth(isSignup) {
   const subtitle = document.getElementById("auth-subtitle");
 
   if (isSignup) {
+    document.getElementById("signup-header").style.display = "block";
     loginForm.style.display = "none";
-    signupForm.style.display = "flex";
-    title.innerText = "Create Account";
-    subtitle.innerText = "Join our clinic to manage your dental health.";
+    document.getElementById("auth-eyebrow").style.display = "none";
+    document.getElementById("auth-eyebrow-line").style.display = "none";
+    document.getElementById("auth-title").style.display = "none";
+    document.getElementById("auth-subtitle").style.display = "none";
+    signupForm.style.display = "grid";
   } else {
     loginForm.style.display = "block";
     signupForm.style.display = "none";
-    title.innerText = "Patient Sign In";
-    subtitle.innerText = "Access your dental records and appointments.";
+    document.getElementById("signup-header").style.display = "none";
+    document.getElementById("auth-eyebrow").style.display = "block";
+    document.getElementById("auth-eyebrow-line").style.display = "block";
+    document.getElementById("auth-title").style.display = "block";
+    document.getElementById("auth-subtitle").style.display = "block";
   }
   document.getElementById("auth-error").style.display = "none";
 }
@@ -75,8 +92,10 @@ function closeForgotPassword() {
   document.getElementById("login-form").style.display = "block";
   
   // Reset the titles to the Sign In defaults
-  document.getElementById("auth-title").innerText = "Patient Sign In";
-  document.getElementById("auth-subtitle").innerText = "Access your dental records and appointments.";
+  document.getElementById("auth-eyebrow").style.display = "block";
+  document.getElementById("auth-eyebrow-line").style.display = "block";
+  document.getElementById("auth-title").style.display = "block";
+  document.getElementById("auth-subtitle").style.display = "block";
   
   // Clear any residual error messages
   document.getElementById("auth-error").style.display = "none";
@@ -89,7 +108,7 @@ function closeForgotPassword() {
 // Add event listener to format phone number as user types[cite: 1]
 document.addEventListener("DOMContentLoaded", () => {
 
-  const nameFields = ["login-name", "reg-name", "doctor-login-name"];
+  const nameFields = ["reg-name", "doctor-login-name"];
   
   nameFields.forEach(id => {
     const el = document.getElementById(id);
@@ -179,7 +198,7 @@ if (patient.password !== passwordInput) {
 
   // Success logic: Use 'patient' instead of 'user'
   localStorage.setItem("current_patient_id", patient.id);
-  window.location.href = "patient-dashboard.html";
+  window.location.href = "index.html";
 }
 
 // ==========================================
@@ -252,6 +271,7 @@ function handleFinalPasswordUpdate() {
 function handleSignup() {
   const emailValue = document.getElementById("reg-email").value.trim();
   const passwordValue = document.getElementById("reg-password").value;
+  const confirmPassword = document.getElementById("reg-password-confirm").value;
   const nameValue = document.getElementById("reg-name").value.trim();
   const countryCode = document.getElementById("reg-country-code").value;
   const phoneRaw = document.getElementById("reg-phone").value.trim();
@@ -280,11 +300,17 @@ if (!emailValue || !nameValue || !phoneRaw || !dobValue || !genderValue || !addr
     return;
   }
 
-  if (!passwordValue) {
-    err.innerText = "Please enter a password";
+if (passwordValue !== confirmPassword) {
+    err.innerText = "Passwords do not match.";
     err.style.display = "block";
     return;
-}
+  }
+
+  if (passwordValue.length < 6) {
+    err.innerText = "Password must be at least 6 characters.";
+    err.style.display = "block";
+    return;
+  }
 
   // 3. Phone Validation (Check for 10 digits, excluding dashes)[cite: 1]
   const digitsOnly = phoneRaw.replace(/\D/g, "");
@@ -362,3 +388,36 @@ function handleDoctorLogin() {
     err.style.display = "block";
   }
 }
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    // 1. Get the parameters from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+
+    // 2. If the action is 'login', trigger the view change
+    if (action === 'login') {
+      // Hide the main portal view
+      document.getElementById('portal-main-view').style.display = 'none';
+      
+      // Show the patient auth view
+      const patientAuthView = document.getElementById('patient-auth-view');
+      if (patientAuthView) {
+        patientAuthView.style.display = 'block';
+        document.getElementById("home-button").style.display = "none";
+        
+        // Find the back button inside the patient view
+        // This targets the specific ghost button with the arrow icon
+        const backBtn = patientAuthView.querySelector('.btn-ghost i.fa-arrow-left')?.parentElement;
+        
+        if (backBtn) {
+            // Change the function: redirect to landing page instead of backToPortal()
+            backBtn.onclick = () => window.location.href = 'index.html';
+            
+            // Optional: Change the icon to a home icon to better reflect the new destination
+            backBtn.querySelector('i').className = 'fas fa-home';
+        }
+
+        toggleAuth(false);
+      }
+    }
+});

@@ -4,30 +4,64 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portal | Lardizabal Dental Clinic</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="portal-styles.css" />
-  </head>
+  </head>   
   <body>
     <div class="portal-container">
       <div class="portal-card">
         <div class="portal-header">
-          <img src="images/lardizaballogo.png" alt="LDC Logo" class="portal-logo" />
-          <h1>Lardizabal Dental Clinic</h1>
-          <p>Management System (LDCMS)</p>
+          <div>
+            <div class="portal-header-eyebrow">
+              <div class="portal-header-eyebrow-line"></div>
+              <span class="portal-header-eyebrow-text">Management System</span>
+            </div>
+            <img src="images/lardizaballogo.png" alt="LDC Logo" class="portal-logo" />
+            <h1>Lardizabal<br><em>Dental</em> Clinic</h1>
+            <p style="margin-top: 14px;">Advanced oral healthcare, now at your fingertips.</p>
+          </div>
+          <div class="portal-header-features">
+            <div class="portal-feature-pill">
+              <i class="fas fa-lock"></i>
+              End-to-End Secure Portal
+            </div>
+            <div class="portal-feature-pill">
+              <i class="fas fa-cube"></i>
+              3D Scan &amp; Record Access
+            </div>
+            <div class="portal-feature-pill">
+              <i class="fas fa-chart-line"></i>
+              Treatment Progress Tracking
+            </div>
+            <div class="portal-feature-pill">
+              <i class="fas fa-credit-card"></i>
+              Instant Billing &amp; Payments
+            </div>
+          </div>
         </div>
 
         <div class="portal-content">
           <div id="portal-main-view">
             <div class="portal-welcome">
-              <h2>Welcome</h2>
-              <p>Select an option below to continue to the clinical management suite.</p>
+              <div class="portal-welcome-eyebrow">
+                <div class="portal-welcome-eyebrow-line"></div>
+                <span class="portal-welcome-eyebrow-text">LDCMS Portal</span>
+              </div>
+              <h2>Welcome<br><em>back.</em></h2>
+              <p>Select your role to continue to the clinical management suite.</p>
             </div>
-            <div class="portal-actions">
-              <button onclick="location.href = 'admin-dashboard.html'" class="portal-btn primary">Admin</button>
-              <button onclick="showDoctorAuth()" class="portal-btn primary">Doctor</button>
-              <button onclick="showPatientAuth()" class="portal-btn primary">Patient</button>
-            </div>
+<div class="portal-actions">
+  <button onclick="location.href = 'admin-dashboard.html'" class="portal-btn primary">
+    <i class="fas fa-user-shield" style="margin-right: 10px;"></i> Administrator
+  </button>
+  <button onclick="showDoctorAuth()" class="portal-btn primary">
+    <i class="fas fa-user-md" style="margin-right: 10px;"></i> Doctor
+  </button>
+  <button onclick="showPatientAuth()" class="portal-btn primary">
+    <i class="fas fa-user-injured" style="margin-right: 10px;"></i> Patient
+  </button>
+</div>
           </div>
 
           <div id="patient-auth-view" style="display: none">
@@ -35,12 +69,16 @@
             <div id="auth-error" class="alert alert-error" style="display: none; margin-top: 10px; background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; font-size: 13px; text-align: center;"></div>
 
             <div class="portal-welcome">
-              <h2 id="auth-title">Patient Sign In</h2>
+              <div class="portal-welcome-eyebrow">
+                <div class="portal-welcome-eyebrow-line" id="auth-eyebrow-line"></div>
+                <span class="portal-welcome-eyebrow-text" id="auth-eyebrow">Patient Portal</span>
+              </div>
+              <h2 id="auth-title">Sign <em>In</em></h2>
               <p id="auth-subtitle">Access your dental records and appointments.</p>
             </div>
 
 <div id="login-form">
-  <div class="form-group form-full">
+  <div class="form-group form-full" style="margin-bottom: 10px;">
     <label>Email Address</label>
     <input type="email" id="login-email" placeholder="Enter your email" />
   </div>
@@ -56,7 +94,14 @@
   <a href="#" onclick="showForgotPassword()" style="font-size: 11px; color: var(--secondary); text-decoration: none; font-weight: 600;">Forgot Password?</a>
 </div>
   </div>
-
+            <div class="portal-welcome" id="signup-header" style="display: none">
+              <div class="portal-welcome-eyebrow">
+                <div class="portal-welcome-eyebrow-line" id="auth-eyebrow-line"></div>
+                <span class="portal-welcome-eyebrow-text" id="auth-eyebrow">Account Creation</span>
+              </div>
+              <h2 id="auth-title">Create <em>Account</em></h2>
+              <p id="auth-subtitle">Join our clinic to manage your dental health.</p>
+            </div>
             <div id="signup-form" style="display: none">
               <div class="form-group">
                 <label for="reg-email">Email Address</label>
@@ -73,6 +118,10 @@
                 <label>Full Name</label>
                 <input type="text" id="reg-name" placeholder="Full Name" required>
               </div>
+              <div class="form-group">
+  <label>Confirm Password</label>
+  <input type="password" id="reg-password-confirm" placeholder="Confirm password" required>
+</div>
 <div class="form-group">
   <label>Phone Number</label>
   <div style="display: flex; align-items: center; gap: 5px;">
@@ -116,7 +165,11 @@
             </div>
 <div id="forgot-password-view" style="display: none; text-align: left;">
   <div class="portal-welcome">
-    <h2>Reset Password</h2>
+    <div class="portal-welcome-eyebrow">
+      <div class="portal-welcome-eyebrow-line"></div>
+      <span class="portal-welcome-eyebrow-text">Account Recovery</span>
+    </div>
+    <h2>Reset <em>Password</em></h2>
     <p>Enter your details to verify your identity.</p>
   </div>
   
@@ -142,7 +195,11 @@
           <div id="doctor-auth-view" style="display: none">
             <div id="doctor-auth-error" class="alert alert-error" style="display: none; margin-top: 10px; background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; font-size: 13px; text-align: center;"></div>
             <div class="portal-welcome">
-              <h2>Doctor Sign In</h2>
+              <div class="portal-welcome-eyebrow">
+                <div class="portal-welcome-eyebrow-line"></div>
+                <span class="portal-welcome-eyebrow-text">Clinician Access</span>
+              </div>
+              <h2>Doctor <em>Sign In</em></h2>
               <p>Access your clinical dashboard.</p>
             </div>
             <div id="doctor-login-form">
@@ -156,10 +213,13 @@
               </div>
               <button class="portal-btn primary" style="width: 100%; margin-top: 15px" onclick="handleDoctorLogin()">Sign In</button>
             </div>
-            <button class="btn btn-ghost" style="width: 100%;" onclick="backToPortal()">
-              <i class="fas fa-arrow-left"></i>
-            </button>
+<button id="patient-back-btn" class="btn btn-ghost" style="width: 100%;" onclick="backToPortal()">
+  <i class="fas fa-arrow-left"></i>
+</button>
           </div>
+                      <button class="btn btn-ghost" id="home-button" style="width: 22%; margin-top: 20px;" onclick="location.href='index.html'">
+    <i class="fas fa-home"></i> Home
+</button>
         </div>
 
         <div class="portal-footer">
