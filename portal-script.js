@@ -27,9 +27,14 @@ function showDoctorAuth() {
 }
 
 function showPatientAuth() {
+  document.getElementById("signup-header").style.display = "none";
+  document.getElementById("auth-eyebrow").style.display = "block";
+  document.getElementById("auth-eyebrow-line").style.display = "block";
+  document.getElementById("auth-title").style.display = "block";
+  document.getElementById("auth-subtitle").style.display = "block";
   document.getElementById("portal-main-view").style.display = "none";
   document.getElementById("patient-auth-view").style.display = "block";
-  document.getElementById("home-button").style.display = "none";  
+  document.getElementById("home-button").style.display = "none";
 }
 
 function showForgotPassword() {
@@ -80,8 +85,8 @@ function toggleAuth(isSignup) {
     document.getElementById("auth-eyebrow-line").style.display = "block";
     document.getElementById("auth-title").style.display = "block";
     document.getElementById("auth-subtitle").style.display = "block";
+    document.getElementById("auth-error").style.display = "none";
   }
-  document.getElementById("auth-error").style.display = "none";
 }
 
 function closeForgotPassword() {
@@ -108,6 +113,18 @@ function closeForgotPassword() {
 // Add event listener to format phone number as user types[cite: 1]
 document.addEventListener("DOMContentLoaded", () => {
 
+  const toggleDoctorPass = document.getElementById("toggle-doctor-password");
+const licenseInput = document.getElementById("doctor-login-license");
+
+if (toggleDoctorPass && licenseInput) {
+  toggleDoctorPass.addEventListener("click", function () {
+    const type = licenseInput.getAttribute("type") === "password" ? "text" : "password";
+    licenseInput.setAttribute("type", type);
+    this.classList.toggle("fa-eye");
+    this.classList.toggle("fa-eye-slash");
+  });
+}
+
   const nameFields = ["reg-name", "doctor-login-name"];
   
   nameFields.forEach(id => {
@@ -119,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+  
   
 
   // Password Toggle Logic
@@ -369,13 +387,14 @@ const finalPhoneNumber = countryCode + " " + phoneRaw;
 }
 
 function handleDoctorLogin() {
-  const nameInput = document.getElementById("doctor-login-name").value.trim();
+  const emailInput = document.getElementById("doctor-login-email").value.trim().toLowerCase();
   const licenseInput = document.getElementById("doctor-login-license").value.trim();
   const doctors = DB.get("doctors");
 
+  // Finding doctor by email and license number
   const doctor = doctors.find(
     (d) =>
-      d.name.toLowerCase() === nameInput.toLowerCase() &&
+      d.email.toLowerCase() === emailInput &&
       d.license === licenseInput
   );
 
@@ -384,7 +403,7 @@ function handleDoctorLogin() {
     window.location.href = "doctor-dashboard.html";
   } else {
     const err = document.getElementById("doctor-auth-error");
-    err.innerText = "Invalid credentials. Please check your name and license number.";
+    err.innerText = "Invalid credentials. Please check your email and license number.";
     err.style.display = "block";
   }
 }
@@ -421,3 +440,42 @@ window.addEventListener('DOMContentLoaded', (event) => {
       }
     }
 });
+
+function openAdminModal() {
+  document.getElementById("admin-modal").style.display = "flex";
+  document.getElementById("admin-security-code").focus();
+}
+
+function closeAdminModal() {
+  document.getElementById("admin-modal").style.display = "none";
+  document.getElementById("admin-modal-error").style.display = "none";
+  document.getElementById("admin-security-code").value = "";
+}
+
+function validateAdminCode() {
+  const codeInput = document.getElementById("admin-security-code").value;
+  const errorEl = document.getElementById("admin-modal-error");
+  
+  // Replace 'LDC-2026-ADMIN' with your desired hardcoded key or check against DB
+  const secureKey = "333333"; 
+
+  if (codeInput === secureKey) {
+    window.location.href = "admin-dashboard.html";
+  } else {
+    errorEl.innerText = "Invalid security key. Access denied.";
+    errorEl.style.display = "block";
+    
+    // Shake effect for feedback
+    const modal = document.querySelector(".modal-card");
+    modal.style.animation = "none";
+    setTimeout(() => modal.style.animation = "shake 0.4s", 10);
+  }
+}
+
+// Close modal if user clicks outside of the modal box
+window.onclick = function(event) {
+  const modal = document.getElementById("admin-modal");
+  if (event.target == modal) {
+    closeAdminModal();
+  }
+}
