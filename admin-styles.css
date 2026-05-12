@@ -1,7 +1,18 @@
-/*admin-styles.css*/
 /* ==========================================================================
-   1. ROOT VARIABLES & GLOBAL STYLES
+   ADMIN DASHBOARD STYLESHEET
+   1. CORE CONFIGURATION (Variables, Reset, Base)
+   2. LAYOUT WRAPPERS (Sidebar, Main Content, Topbar)
+   3. ATOMIC COMPONENTS (Buttons, Badges, Icons)
+   4. DATA CONTAINERS (Cards, Tables, Grids)
+   5. INTERACTIVE UI (Forms, Modals, Tabs, Search)
+   6. UTILITIES & FEEDBACK (Alerts, Empty States, Page States)
    ========================================================================== */
+
+/* ==========================================================================
+   1. CORE CONFIGURATION
+   ========================================================================== */
+
+/* Global color palette, spacing, and reusable design variables */
 :root {
   --primary: #014d5b;
   --secondary: #37acbe;
@@ -20,12 +31,14 @@
   --radius: 8px;
 }
 
+/* Reset default browser spacing and use border-box sizing */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Main page layout and typography */
 body {
   font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg);
@@ -36,8 +49,10 @@ body {
 }
 
 /* ==========================================================================
-   2. SIDEBAR NAVIGATION
+   2. LAYOUT WRAPPERS
    ========================================================================== */
+
+/* --- Sidebar Navigation --- */
 #sidebar {
   width: 260px;
   background: var(--sidebar-bg);
@@ -47,6 +62,12 @@ body {
   flex-direction: column;
 }
 
+.sidebar-logo {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 25px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .lardizabal-logo {
   width: 100px;
   border-radius: 50px;
@@ -54,12 +75,6 @@ body {
   margin-left: 60px;
   margin-bottom: 25px;
   cursor: pointer;
-}
-
-.sidebar-logo {
-  background: rgba(0, 0, 0, 0.1);
-  padding: 25px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-logo h1 {
@@ -129,7 +144,7 @@ body {
   color: var(--sidebar-active);
 }
 
-/* Sidebar Footer & User Profile */
+/* --- Sidebar Footer & User Profile --- */
 .sidebar-footer {
   width: 100%;
   padding: 16px;
@@ -167,9 +182,7 @@ body {
   color: var(--sidebar-text);
 }
 
-/* ==========================================================================
-   3. MAIN CONTENT AREA & TOPBAR
-   ========================================================================== */
+/* --- Main Content Structure --- */
 #main {
   flex: 1;
   display: flex;
@@ -210,10 +223,10 @@ body {
 }
 
 /* ==========================================================================
-   4. UI COMPONENTS (BUTTONS, CARDS, BADGES)
+   3. ATOMIC COMPONENTS
    ========================================================================== */
 
-/* Buttons */
+/* --- Buttons --- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -231,6 +244,7 @@ body {
   background: var(--primary);
   color: #fff;
 }
+
 .btn-primary:hover {
   opacity: 0.8;
 }
@@ -241,6 +255,7 @@ body {
   color: var(--text-muted);
   border: 1px solid var(--border);
 }
+
 .btn-ghost:hover {
   background: var(--bg);
 }
@@ -249,6 +264,7 @@ body {
   background: var(--danger);
   color: #fff;
 }
+
 .btn-danger:hover {
   background: #dc2626;
 }
@@ -263,13 +279,42 @@ body {
   font-size: 12px;
 }
 
-/* Cards & Dashboards */
+/* --- Badges --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-yellow { background: #fef9c3; color: #854d0e; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-blue { background: #e3efff; color: #00858a; }
+.badge-gray { background: #f1f5f9; color: #475569; }
+.badge-gold { background: #fff6e4; color: #e29624; }
+
+/* ==========================================================================
+   4. DATA CONTAINERS
+   ========================================================================== */
+
+/* --- Grids --- */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* --- Cards --- */
 .card {
   background: var(--card);
   border: none;
@@ -294,14 +339,6 @@ body {
 
 .card-body {
   padding: 20px;
-}
-
-/* Stats */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
 }
 
 .stat-card {
@@ -339,46 +376,7 @@ body {
   margin-top: 2px;
 }
 
-/* Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.badge-green {
-  background: #dcfce7;
-  color: #166534;
-}
-.badge-yellow {
-  background: #fef9c3;
-  color: #854d0e;
-}
-.badge-red {
-  background: #fee2e2;
-  color: #991b1b;
-}
-.badge-blue {
-  background: #e3efff;
-  color: #00858a;
-}
-.badge-gray {
-  background: #f1f5f9;
-  color: #475569;
-}
-.badge-gold {
-  background: #fff6e4;
-  color: #e29624;
-}
-
-/* ==========================================================================
-   5. DATA PRESENTATION (TABLES, DETAILS, TABS)
-   ========================================================================== */
-
-/* Tables */
+/* --- Tables --- */
 .table-wrap {
   overflow-x: auto;
 }
@@ -411,11 +409,16 @@ tbody td {
 tbody tr:hover td {
   background: #f8fafc;
 }
+
 tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Patient / Detail Items */
+.actions-cell {
+  white-space: nowrap;
+}
+
+/* --- Detail Items --- */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -435,7 +438,11 @@ tbody tr:last-child td {
   font-weight: 500;
 }
 
-/* Tabs */
+/* ==========================================================================
+   5. INTERACTIVE UI
+   ========================================================================== */
+
+/* --- Tabs --- */
 .tabs {
   display: flex;
   gap: 0;
@@ -458,11 +465,7 @@ tbody tr:last-child td {
   border-bottom-color: var(--primary);
 }
 
-/* ==========================================================================
-   6. FORMS, MODALS & SEARCH
-   ========================================================================== */
-
-/* Search Bar */
+/* --- Search Bar --- */
 .search-bar {
   display: flex;
   align-items: center;
@@ -512,7 +515,7 @@ tbody tr:last-child td {
   cursor: pointer;
 }
 
-/* Forms */
+/* --- Forms --- */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -563,7 +566,7 @@ tbody tr:last-child td {
   min-height: 80px;
 }
 
-/* Modal */
+/* --- Modals --- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -620,10 +623,10 @@ tbody tr:last-child td {
 }
 
 /* ==========================================================================
-   7. UTILITIES & MISC
+   6. UTILITIES & FEEDBACK
    ========================================================================== */
 
-/* Appointment Pill */
+/* --- Appointment Pills --- */
 .appt-date {
   display: flex;
   flex-direction: column;
@@ -647,7 +650,7 @@ tbody tr:last-child td {
   letter-spacing: 0.5px;
 }
 
-/* Alerts */
+/* --- Alerts --- */
 .alert {
   padding: 12px 16px;
   border-radius: 8px;
@@ -667,7 +670,7 @@ tbody tr:last-child td {
   border: 1px solid #fecaca;
 }
 
-/* Empty State */
+/* --- Empty States --- */
 .empty-state {
   text-align: center;
   padding: 48px 20px;
@@ -684,15 +687,20 @@ tbody tr:last-child td {
   font-size: 14px;
 }
 
-/* Page States */
+/* --- Page & Visibility States --- */
 .page {
   display: none;
 }
+
 .page.active {
   display: block;
+<<<<<<< HEAD
 }
 
 /* Responsive adjustments */
 .actions-cell {
   white-space: nowrap;
 }
+=======
+}
+>>>>>>> main

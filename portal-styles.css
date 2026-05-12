@@ -1,7 +1,18 @@
-/* ==========================================
-   LARDIZABAL DENTAL — PORTAL STYLES
-   Aligned with index.css design language
-========================================== */
+/* ==========================================================================
+   LARDIZABAL DENTAL — PORTAL STYLESHEET
+   1. CORE CONFIGURATION (Variables, Reset, Base)
+   2. GLOBAL DECORATION (Body Glows, Scrollbar)
+   3. LAYOUT STRUCTURE (Portal Container & Card)
+   4. BRAND PANEL (Left Panel — Brand Header)
+   5. CONTENT PANEL (Right Panel — Content & Welcome)
+   6. ATOMIC COMPONENTS (Buttons, Action Pills)
+   7. INTERACTIVE UI (Forms, Modals, Alerts)
+   8. ANIMATIONS & RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* ==========================================================================
+   1. CORE CONFIGURATION
+   ========================================================================== */
 
 :root {
   --ink: #0a1628;
@@ -20,7 +31,9 @@
   --radius: 16px;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -29,8 +42,7 @@
 body {
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
-  background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.95) 0%, rgba(13, 110, 122, 0.25) 100%);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.95) 0%, rgba(13, 110, 122, 0.25) 100%);
   background-size: cover;
   background-position: center;
   display: flex;
@@ -40,6 +52,10 @@ body {
   color: var(--ink);
   position: relative;
 }
+
+/* ==========================================================================
+   2. GLOBAL DECORATION
+   ========================================================================== */
 
 /* Subtle radial glow to mimic index hero decor */
 body::before {
@@ -66,9 +82,19 @@ body::after {
   pointer-events: none;
 }
 
-/* ==========================================
-   PORTAL CARD (Two-panel layout)
-========================================== */
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(13, 110, 122, 0.3);
+  border-radius: 20px;
+}
+
+/* ==========================================================================
+   3. LAYOUT STRUCTURE
+   ========================================================================== */
 
 .portal-container {
   width: 100%;
@@ -88,9 +114,20 @@ body::after {
   animation: fadeUp 0.7s 0.1s ease both;
 }
 
-/* ==========================================
-   LEFT PANEL — Brand Header
-========================================== */
+.portal-footer {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   4. BRAND PANEL (Left Panel)
+   ========================================================================== */
 
 .portal-header {
   background: var(--teal);
@@ -224,9 +261,9 @@ body::after {
   flex-shrink: 0;
 }
 
-/* ==========================================
-   RIGHT PANEL — Content
-========================================== */
+/* ==========================================================================
+   5. CONTENT PANEL (Right Panel)
+   ========================================================================== */
 
 .portal-content {
   padding: 56px 50px;
@@ -248,10 +285,7 @@ body::after {
   background: linear-gradient(to bottom, transparent, rgba(13, 110, 122, 0.1), transparent);
 }
 
-/* ==========================================
-   WELCOME TEXT
-========================================== */
-
+/* Welcome Text & Headers */
 .portal-welcome {
   margin-bottom: 28px;
 }
@@ -299,9 +333,9 @@ body::after {
   font-weight: 300;
 }
 
-/* ==========================================
-   ROLE SELECTION BUTTONS
-========================================== */
+/* ==========================================================================
+   6. ATOMIC COMPONENTS (Buttons)
+   ========================================================================== */
 
 .portal-actions {
   display: grid;
@@ -335,9 +369,11 @@ body::after {
 .portal-btn.primary::before {
   content: '';
   position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
   transition: left 0.5s;
 }
 
@@ -350,10 +386,6 @@ body::after {
 .portal-btn.primary:hover::before {
   left: 100%;
 }
-
-/* ==========================================
-   BACK / GHOST BUTTON
-========================================== */
 
 .btn-ghost {
   display: inline-flex;
@@ -370,7 +402,7 @@ body::after {
   padding: 12px 18px;
   cursor: pointer;
   transition: all 0.25s ease;
-  margin-top: 14px;
+  margin-top: 30px;
 }
 
 .btn-ghost:hover {
@@ -378,10 +410,6 @@ body::after {
   color: var(--ink);
   border-color: var(--teal-bright);
 }
-
-/* ==========================================
-   HOME BUTTON
-========================================== */
 
 #home-button {
   width: fit-content !important;
@@ -391,10 +419,11 @@ body::after {
   letter-spacing: 0.02em;
 }
 
-/* ==========================================
-   FORMS
-========================================== */
+/* ==========================================================================
+   7. INTERACTIVE UI (Forms, Modals, Alerts)
+   ========================================================================== */
 
+/* Forms */
 #signup-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -464,15 +493,55 @@ body::after {
   text-decoration: underline;
 }
 
-/* ==========================================
-   ALERTS
-========================================== */
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 22, 40, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
 
+.modal-card {
+  background: var(--white);
+  padding: 40px;
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: var(--teal);
+}
+
+/* Alerts */
 .alert {
   margin-bottom: 18px;
   border-radius: 10px !important;
   font-weight: 500;
   font-size: 0.88rem;
+  transition: opacity 0.5s ease;
+  opacity: 1;
 }
 
 .alert-success {
@@ -487,48 +556,29 @@ body::after {
   border: 1px solid #fecaca;
 }
 
-/* ==========================================
-   PORTAL FOOTER
-========================================== */
-
-.portal-footer {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.25);
-  pointer-events: none;
-}
-
-/* ==========================================
-   SCROLLBAR
-========================================== */
-
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb {
-  background: rgba(13, 110, 122, 0.3);
-  border-radius: 20px;
-}
-
-/* ==========================================
-   ANIMATIONS — same as index.css
-========================================== */
+/* ==========================================================================
+   8. ANIMATIONS & RESPONSIVE DESIGN
+   ========================================================================== */
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
 
 @media (max-width: 900px) {
   .portal-card {
