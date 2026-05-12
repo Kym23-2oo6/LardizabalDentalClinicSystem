@@ -48,7 +48,7 @@ function navigate(page) {
 
   // Update Headers
   const titles = {
-    dashboard: ["Welcome!", "Manage your health profile and dental visits."],
+    dashboard: ["Dashboard", "Manage your health profile and dental visits."],
     records: [
       "My Records",
       "Review your appointment history and medical notes.",
