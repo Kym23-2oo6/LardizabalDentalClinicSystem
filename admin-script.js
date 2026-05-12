@@ -782,7 +782,8 @@ function seedData() {
   DB.set("patients", [
     { id: 1, name: "Vets Tres", dob: "2006-12-30", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "vetstres@gmail.com", password: "tresvets", address: "Taguig City, Metro Manila", history: "Ngak", status: "Active", emergency: "09171234568" },
     { id: 2, name: "Jun Jez", dob: "2006-06-21", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "junjez@gmail.com", password: "jezjun", address: "Taguig City, Metro Manila", history: "Ngik", status: "Critical", emergency: "Liberty" },
-    { id: 3, name: "Sao", dob: "2006-02-27", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "sao@gmail.com", password: "saosao", address: "Taguig City, Metro Manila", history: "Ngek", status: "Active", emergency: "" }
+    { id: 3, name: "Sao", dob: "2006-02-27", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "sao@gmail.com", password: "saosao", address: "Taguig City, Metro Manila", history: "Ngek", status: "Active", emergency: "" },
+    { id: 4, name: "Michele", dob: "2006-01-06", gender: "Female", blood: "AB+", phone: "+63 909 090 9090", email: "michele@gmail.com", password: "gengen", address: "Taguig City, Metro Manila", history: "Wengk", status: "Active", emergency: "09111134568" }
   ]);
 
   // Seed Doctors
