@@ -780,8 +780,8 @@ function seedData() {
 
   // Seed Patients
   DB.set("patients", [
-    { id: 1, name: "Vets Tres", dob: "2006-12-30", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "vetstres@gmail.com", password: "tresvets", address: "Taguig City, Metro Manila", history: "Hypertension, Penicillin allergy", status: "Active", emergency: "09171234568" },
-    { id: 2, name: "Jun Jez", dob: "2006-06-21", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "junjez@gmail.com", password: "jezjun", address: "Taguig City, Metro Manila", history: "Type 2 Diabetes", status: "Critical", emergency: "Liberty" },
+    { id: 1, name: "Vets Tres", dob: "2006-12-30", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "vetstres@gmail.com", password: "tresvets", address: "Taguig City, Metro Manila", history: "Ngak", status: "Active", emergency: "09171234568" },
+    { id: 2, name: "Jun Jez", dob: "2006-06-21", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "junjez@gmail.com", password: "jezjun", address: "Taguig City, Metro Manila", history: "Ngik", status: "Critical", emergency: "Liberty" },
     { id: 3, name: "Sao", dob: "2006-02-27", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "sao@gmail.com", password: "saosao", address: "Taguig City, Metro Manila", history: "Ngek", status: "Active", emergency: "" }
   ]);
 
@@ -796,20 +796,20 @@ function seedData() {
   
   // Seed Appointments
   DB.set("appointments", [
-    { id: 1, patient: "Vets Tres", doctor: "Dr. John Michael", date: today, time: "09:00", reason: "Routine checkup", status: "Scheduled", notes: "" },
-    { id: 2, patient: "Jun Jez", doctor: "Dr. Joshua", date: today, time: "10:30", reason: "Fever and cough", status: "Completed", notes: "Prescribed Amoxicillin" }
+    { id: 1, patient: "Vets Tres", doctor: "John Michael", date: today, time: "09:00 (AM)", reason: "General Checkup", status: "Scheduled", notes: "" },
+    { id: 2, patient: "Jun Jez", doctor: "Joshua", date: today, time: "10:30 (AM)", reason: "Orthodontic Consultation", status: "Completed", notes: "" }
   ]);
 
   // Seed Records
   DB.set("records", [
-    { id: 1, patient: "Steven Tres", doctor: "Dr. John Michael", diagnosis: "Hypertension Stage 1", prescription: "Amlodipine 5mg daily", notes: "Monitor BP weekly", date: today, type: "Consultation" },
-    { id: 2, patient: "Jez Jun", doctor: "Dr. Joshua", diagnosis: "Acute Upper Respiratory Infection", prescription: "Amoxicillin 500mg TID x 7 days, Paracetamol PRN", notes: "Rest and hydration", date: today, type: "Consultation" }
+    { id: 1, patient: "Vets Tres", doctor: "John Michael", diagnosis: "Diagnosis", prescription: "Amlodipine", notes: "", date: today, type: "Consultation" },
+    { id: 2, patient: "Jun Jez", doctor: "Joshua", diagnosis: "Diagnosis", prescription: "Paracetamol PRN", notes: "", date: today, type: "Consultation" }
   ]);
 
   // Seed Billing
   DB.set("billing", [
-    { id: 1, patient: "Steven Tres", service: "Consultation – Cardiology", amount: 1500, date: today, status: "Paid", method: "Cash" },
-    { id: 3, patient: "Jez Jun", service: "Diabetes Monitoring Package", amount: 2200, date: today, status: "Pending", method: "PhilHealth" }
+    { id: 1, patient: "Vets Tres", service: "Tooth Extraction", amount: 1500, date: today, status: "Paid", method: "Cash" },
+    { id: 3, patient: "Jun Jez", service: "Root Canal Therapy", amount: 2200, date: today, status: "Pending", method: "PhilHealth" }
   ]);
 }
 
