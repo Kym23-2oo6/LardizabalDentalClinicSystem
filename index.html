@@ -168,7 +168,6 @@
             </div>
             <div class="cta-actions">
                 <button class="btn-white" onclick="handleBookingAction()">Book Appointment</button>
-                <button class="btn-outline-white" onclick="handleAuthAction()">Sign In</button>
             </div>
         </div>
 
@@ -271,6 +270,7 @@
             const patientId = localStorage.getItem("current_patient_id");
             const authBtn = document.getElementById("auth-btn");
             const navActions = document.getElementById("nav-actions");
+            const portalBtn = document.querySelector(".footer-portal-btn");
 
             if (patientId && patientId !== "0") {
                 authBtn.innerText = "Sign Out";
@@ -282,6 +282,10 @@
                 dashBtn.className = "nav-cta";
                 dashBtn.onclick = () => window.location.href = 'patient-dashboard.html';
                 navActions.insertBefore(dashBtn, authBtn);
+
+                if (portalBtn) {
+                portalBtn.style.display = "none";
+                }
             }
         });
 

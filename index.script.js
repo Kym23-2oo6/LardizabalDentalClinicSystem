@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const patientId = localStorage.getItem("current_patient_id");
     const authBtn = document.getElementById("auth-btn");
     const navActions = document.getElementById("nav-actions");
+    const portalBtn = document.querySelector(".footer-portal-btn");
 
     // Check if a valid patient session exists
     if (patientId && patientId !== "0") {
@@ -69,6 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
         dashBtn.onclick = () => window.location.href = 'patient-dashboard.html';
         
         navActions.insertBefore(dashBtn, authBtn);
+
+        // HIDE THE PORTAL BUTTON:
+        // This ensures signed-in patients don't see the staff/admin entry point.
+        if (portalBtn) {
+            portalBtn.style.display = "none";
+        }
     }
 });
 
