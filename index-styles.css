@@ -16,6 +16,7 @@
    ========================================================================== */
 
 :root {
+    --navy: #0a1628;
     --ink: #0a1628;
     --ink-light: #2d3f5c;
     --teal: #0d6e7a;
@@ -27,6 +28,7 @@
     --mist: #e8f4f6;
     --white: #ffffff;
     --text-muted: #6b7a91;
+    --transition-speed: 0.3s;
 }
 
 *,
@@ -849,7 +851,7 @@ nav.scrolled {
    ========================================================================== */
 
 footer {
-    background: var(--ink);
+    background: var(--navy);
     color: white;
     padding: 80px 7% 40px;
 }
@@ -1042,6 +1044,112 @@ footer {
 .reveal.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Dark Mode Color Overrides */
+[data-theme="dark"] {
+    --navy: #020617;       /* Retain for consistency */
+    --white: #0f172a;       /* Deep blue-black */
+    --cream: #020617;       /* Darker background for sections */
+    --paper: #1e293b;       /* Lighter shade for inner cards */
+    --mist: #334155;        /* Used for icons/accent backgrounds */
+    --teal : #1791a1;       /* Keep teal vibrant for accents */
+    --ink: #f8fafc;         /* High contrast white */
+    --ink-light: #cbd5e1;   /* Secondary light gray */
+    --text-muted: #94a3b8;  /* Muted text for readability */
+    background-color: var(--white);
+    --card-bg: #1e293b;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] body {
+    background-color: var(--white);
+}
+
+[data-theme="dark"] nav {
+    background: rgba(15, 23, 42, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .service-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .experience-section {
+    background-color: var(--white);
+}
+
+[data-theme="dark"] .stat-card, 
+[data-theme="dark"] .exp-badge {
+    background-color: #1e293b;
+    color: var(--ink);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .service-num {
+    color: rgba(255, 255, 255, 0.03); /* Keep them very subtle */
+}
+
+[data-theme="dark"] .trust-bar {
+    background: #020617;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .partner-logo {
+    filter: brightness(0) invert(1); /* Makes logos white */
+    opacity: 0.6;
+}
+
+/* Footer Fixes */
+[data-theme="dark"] .site-footer {
+    background: #020617;
+    border-top: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .footer-col h4 {
+    color: var(--gold); /* Gold stands out beautifully in dark mode */
+}
+
+[data-theme="dark"] .footer-contact-item i {
+    color: var(--teal-bright);
+}
+
+[data-theme="dark"] .hero-image-overlay {
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.8) 0%, transparent 50%);
+}
+
+[data-theme="dark"] .services-grid {
+    background: var(--border-color); /* Grid gap color */
+}
+
+/* Dark Mode Toggle Button Styling */
+.theme-toggle {
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  color: var(--ink-light);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.theme-toggle:hover {
+    color: var(--teal);
+    transition: color 0.3s ease;
+}
+
+body, nav, section, .service-card, .exp-badge, .site-footer {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
 }
 
 /* ==========================================================================

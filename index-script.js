@@ -51,6 +51,7 @@ reveals.forEach(el => observer.observe(el));
  * Adjusts navigation elements based on the current user session.
  */
 document.addEventListener("DOMContentLoaded", () => {
+    initTheme();
     const patientId = localStorage.getItem("current_patient_id");
     const authBtn = document.getElementById("auth-btn");
     const navActions = document.getElementById("nav-actions");
@@ -159,4 +160,34 @@ function seedData() {
     { id: 1, patient: "Vets Tres", service: "Tooth Extraction", amount: 1500, date: today, status: "Paid", method: "Cash" },
     { id: 3, patient: "Jun Jez", service: "Root Canal Therapy", amount: 2200, date: today, status: "Pending", method: "PhilHealth" }
   ]);
+}
+
+/**
+ * Refined Dark Mode Toggle
+ */
+function initTheme() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const storedTheme = localStorage.getItem('theme') || 'light';
+    
+    // Set initial state
+    document.documentElement.setAttribute('data-theme', storedTheme);
+    updateIcon(storedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateIcon(newTheme);
+    });
+}
+
+function updateIcon(theme) {
+    const icon = document.querySelector('#theme-toggle i');
+    if (theme === 'dark') {
+        icon.className = 'fas fa-sun'; // Single source of truth for the icon class
+    } else {
+        icon.className = 'fas fa-moon';
+    }
 }
