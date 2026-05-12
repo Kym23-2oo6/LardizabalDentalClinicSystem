@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="index-styles.css" />
 </head>
 
 <body>
@@ -244,71 +244,7 @@
         </div>
     </footer>
 
-    <script>
-        // 1. Scroll-shrink Navigation Header
-        const nav = document.getElementById('main-nav');
-        window.addEventListener('scroll', () => {
-            nav.classList.toggle('scrolled', window.pageYOffset > 60);
-        });
-
-        // 2. Reveal Elements on Scroll
-        const reveals = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('visible'), i * 80);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.12
-        });
-        reveals.forEach(el => observer.observe(el));
-
-        // 3. Authentication & UI Persistence
-        document.addEventListener("DOMContentLoaded", () => {
-            const patientId = localStorage.getItem("current_patient_id");
-            const authBtn = document.getElementById("auth-btn");
-            const navActions = document.getElementById("nav-actions");
-            const portalBtn = document.querySelector(".footer-portal-btn");
-
-            if (patientId && patientId !== "0") {
-                authBtn.innerText = "Sign Out";
-                authBtn.style.background = "#e2e8f0";
-                authBtn.style.color = "#4a5568";
-
-                const dashBtn = document.createElement("button");
-                dashBtn.innerText = "Dashboard";
-                dashBtn.className = "nav-cta";
-                dashBtn.onclick = () => window.location.href = 'patient-dashboard.html';
-                navActions.insertBefore(dashBtn, authBtn);
-
-                if (portalBtn) {
-                portalBtn.style.display = "none";
-                }
-            }
-        });
-
-        // 4. Action Handlers
-        function handleAuthAction() {
-            const patientId = localStorage.getItem("current_patient_id");
-            if (patientId && patientId !== "0") {
-                localStorage.removeItem("current_patient_id");
-                window.location.reload();
-            } else {
-                window.location.href = 'portal.html?action=login';
-            }
-        }
-
-        function handleBookingAction() {
-            const patientId = localStorage.getItem("current_patient_id");
-            if (patientId && patientId !== "0") {
-                window.location.href = 'patient-dashboard.html';
-            } else {
-                window.location.href = 'portal.html?action=login';
-            }
-        }
-    </script>
+    <script src="index-script.js"></script>
 
 </body>
 
