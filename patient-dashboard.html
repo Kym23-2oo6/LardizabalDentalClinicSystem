@@ -1,4 +1,3 @@
-<!--patient-dashboard.html-->
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lardizabal Dental Clinic - Patient Portal</title>
 
-    <!-- Fonts & Icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap"
       rel="stylesheet"
@@ -16,12 +14,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="admin-styles.css" />
     <link rel="stylesheet" href="patient-styles.css" />
   </head>
   <body>
-    <!-- SIDEBAR -->
     <div id="sidebar">
       <div class="sidebar-logo">
         <img
@@ -61,9 +56,7 @@
       </div>
     </div>
 
-    <!-- MAIN WRAPPER -->
     <div id="main" style="margin-left: 0; width: 100%">
-      <!-- TOPBAR -->
       <div id="topbar">
         <div class="topbar-left">
           <h2 id="page-title">Dashboard</h2>
@@ -76,17 +69,16 @@
             id="current-date"
             style="font-size: 13px; color: var(--text-muted)"
           ></span>
-          <a href="index.html" class="btn btn-ghost"><i class="fas fa-home"></i> Home</a>
+          <a href="index.html" class="btn btn-ghost"
+            ><i class="fas fa-home"></i> Home</a
+          >
           <a href="portal.html" class="btn btn-ghost">Sign out</a>
         </div>
       </div>
 
-      <!-- CONTENT AREA -->
       <div id="content">
-        <!-- PAGE: DASHBOARD -->
         <div id="page-dashboard" class="page active">
           <div class="dashboard-grid">
-            <!-- Profile Card -->
             <div class="card">
               <div class="card-header"><h3>Profile</h3></div>
               <div class="card-body">
@@ -123,16 +115,15 @@
                   <div class="detail-item">
                     <div class="lbl">Blood Type</div>
                     <div class="val" id="prof-blood">--</div>
-                </div>
-                <div class="detail-item">
-                  <div class="lbl">Address</div>
-                  <div class="val" id="prof-address">--</div>
-                </div>
+                  </div>
+                  <div class="detail-item">
+                    <div class="lbl">Address</div>
+                    <div class="val" id="prof-address">--</div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Appointment Booking Card -->
             <div class="card">
               <div class="card-header"><h3>Book Appointment</h3></div>
               <div class="card-body">
@@ -141,34 +132,40 @@
                     <label>Doctor</label>
                     <select id="a-doctor" required></select>
                   </div>
-                    <div class="form-group form-full" style="margin-top: 10px">
-                      <label>Service</label>
-                      <select id="a-service" required>
-                        <option value="General Checkup">General Checkup</option>
-                        <option value="Cleaning / Prophylaxis">Cleaning / Prophylaxis</option>
-                        <option value="Tooth Extraction">Tooth Extraction</option>
-                        <option value="Dental Fillings">Dental Fillings</option>
-                        <option value="Root Canal Therapy">Root Canal Therapy</option>
-                        <option value="Orthodontic Consultation">Orthodontic Consultation</option>
-                        <option value="Teeth Whitening">Teeth Whitening</option>
-                      </select>
-                    </div>
+                  <div class="form-group form-full" style="margin-top: 10px">
+                    <label>Service</label>
+                    <select id="a-service" required>
+                      <option value="General Checkup">General Checkup</option>
+                      <option value="Cleaning / Prophylaxis">
+                        Cleaning / Prophylaxis
+                      </option>
+                      <option value="Tooth Extraction">Tooth Extraction</option>
+                      <option value="Dental Fillings">Dental Fillings</option>
+                      <option value="Root Canal Therapy">
+                        Root Canal Therapy
+                      </option>
+                      <option value="Orthodontic Consultation">
+                        Orthodontic Consultation
+                      </option>
+                      <option value="Teeth Whitening">Teeth Whitening</option>
+                    </select>
+                  </div>
                   <div class="form-grid" style="margin-top: 10px">
                     <div class="form-group">
                       <label>Date</label>
                       <input type="date" id="a-date" required />
                     </div>
-<div class="form-group">
-  <label>Time</label>
-  <select id="a-time" style="width: 250px;" required>
-    <option value="">Select Doctor & Date</option>
-  </select>
-</div>
+                    <div class="form-group">
+                      <label>Time</label>
+                      <select id="a-time" style="width: 250px" required>
+                        <option value="">Select Doctor & Date</option>
+                      </select>
+                    </div>
                   </div>
                   <button
                     type="submit"
                     class="btn btn-primary"
-                    style="margin-top: 15px;"
+                    style="margin-top: 15px"
                   >
                     Book
                   </button>
@@ -178,7 +175,6 @@
           </div>
         </div>
 
-        <!-- PAGE: RECORDS -->
         <div id="page-records" class="page" style="display: none">
           <div class="card">
             <div class="card-header">
@@ -207,12 +203,10 @@
               </div>
             </div>
             <div class="card-body">
-              <!-- Appointments Tab -->
               <div id="content-appointments" class="tab-pane active">
                 <div id="patient-appointments-list"></div>
               </div>
 
-              <!-- Medical History Tab -->
               <div id="content-medical" class="tab-pane" style="display: none">
                 <p
                   style="
@@ -225,7 +219,6 @@
                 </p>
               </div>
 
-              <!-- Edit Profile Tab -->
               <div id="content-profile" class="tab-pane" style="display: none">
                 <form id="profile-update-form" class="form-grid">
                   <div class="form-group form-full">
@@ -237,50 +230,131 @@
                     <input type="tel" id="edit-phone" required />
                   </div>
                   <div class="form-group">
-                      <label>Email Address</label>
-                      <input type="email" id="edit-email-view" readonly tabindex="-1" 
-                            style="background-color: #f9f9f9; border-color: #ddd; cursor: default;">
+                    <label>Email Address</label>
+                    <input
+                      type="email"
+                      id="edit-email-view"
+                      readonly
+                      tabindex="-1"
+                      style="
+                        background-color: #f9f9f9;
+                        border-color: #ddd;
+                        cursor: default;
+                      "
+                    />
                   </div>
                   <div class="form-group">
                     <label>Date of Birth</label>
                     <input type="date" id="edit-dob" required />
                   </div>
-<div class="form-group">
-  <label>Password</label>
-  <div style="display: flex; align-items: center; gap: 10px;">
-    <input type="password" id="edit-password-view" readonly tabindex="-1" 
-           style="background-color: #f9f9f9; border-color: #ddd; cursor: default; flex: 1;">
-    <button type="button" onclick="togglePasswordRequest()" class="btn-link">Change</button>
-  </div>
-</div>
+                  <div class="form-group">
+                    <label>Password</label>
+                    <div style="display: flex; align-items: center; gap: 10px">
+                      <input
+                        type="password"
+                        id="edit-password-view"
+                        readonly
+                        tabindex="-1"
+                        style="
+                          background-color: #f9f9f9;
+                          border-color: #ddd;
+                          cursor: default;
+                          flex: 1;
+                        "
+                      />
+                      <button
+                        type="button"
+                        onclick="togglePasswordRequest()"
+                        class="btn-link"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  </div>
 
-<div id="password-request-area" class="card" style="display: none; grid-column: span 2; margin-top: 15px; border: 1px solid #e0e0e0; background: #fff;">
-  <div class="card-body">
-    <div id="pw-step-1">
-      <p style="font-size: 13px; margin-bottom: 10px;">Enter your email to receive a link.</p>
-      <div class="form-group">
-        <input type="email" id="req-email" placeholder="Enter registered email">
-      </div>
-      <button type="button" class="btn btn-primary" style="margin-top: 10px;" onclick="verifyEmailAndSend()">Confirm</button>
-    </div>
+                  <div
+                    id="password-request-area"
+                    class="card"
+                    style="
+                      display: none;
+                      grid-column: span 2;
+                      margin-top: 15px;
+                      border: 1px solid #e0e0e0;
+                      background: #fff;
+                    "
+                  >
+                    <div class="card-body">
+                      <div id="pw-step-1">
+                        <p style="font-size: 13px; margin-bottom: 10px">
+                          Enter your email to receive a link.
+                        </p>
+                        <div class="form-group">
+                          <input
+                            type="email"
+                            id="req-email"
+                            placeholder="Enter registered email"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          style="margin-top: 10px"
+                          onclick="verifyEmailAndSend()"
+                        >
+                          Confirm
+                        </button>
+                      </div>
 
-    <div id="pw-step-2" style="display: none;">
-      <div class="form-group">
-        <label>Old Password</label>
-        <input type="password" style="margin-bottom: 10px;" id="req-old-pass" class="pass-field" placeholder="Enter old password">
-      </div>
-      <div class="form-group">
-        <label>New Password</label>
-        <input type="password" style="margin-bottom: 8px;" id="req-new-pass" class="pass-field" placeholder="At least 6 characters">
-      </div>
-      <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-        <input type="checkbox" id="toggle-pass-visibility" onclick="togglePassDisplay()">
-        <label for="toggle-pass-visibility" style="font-size: 12px; cursor: pointer;">Show</label>
-      </div>
-      <button type="button" class="btn btn-primary" onclick="submitPasswordChange()">Update</button>
-    </div>
-  </div>
-</div>
+                      <div id="pw-step-2" style="display: none">
+                        <div class="form-group">
+                          <label>Old Password</label>
+                          <input
+                            type="password"
+                            style="margin-bottom: 10px"
+                            id="req-old-pass"
+                            class="pass-field"
+                            placeholder="Enter old password"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label>New Password</label>
+                          <input
+                            type="password"
+                            style="margin-bottom: 8px"
+                            id="req-new-pass"
+                            class="pass-field"
+                            placeholder="At least 6 characters"
+                          />
+                        </div>
+                        <div
+                          style="
+                            margin-bottom: 10px;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                          "
+                        >
+                          <input
+                            type="checkbox"
+                            id="toggle-pass-visibility"
+                            onclick="togglePassDisplay()"
+                          />
+                          <label
+                            for="toggle-pass-visibility"
+                            style="font-size: 12px; cursor: pointer"
+                            >Show</label
+                          >
+                        </div>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          onclick="submitPasswordChange()"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                   <div class="form-group">
                     <label>Gender</label>
                     <select id="edit-gender">
@@ -298,9 +372,7 @@
                     />
                   </div>
                   <div class="form-full" style="margin-top: 20px">
-                    <button type="submit" class="btn btn-primary">
-                      Save
-                    </button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                   </div>
                 </form>
               </div>
@@ -308,10 +380,7 @@
           </div>
         </div>
       </div>
-      <!-- End content -->
-    </div>
-    <!-- End main -->
-
+      </div>
     <script src="patient-script.js"></script>
   </body>
 </html>

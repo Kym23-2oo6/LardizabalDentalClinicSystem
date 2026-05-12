@@ -4,7 +4,7 @@
  */
 
 // ==========================================
-// 1. DATABASE & CONFIGURATION[cite: 2]
+// 1. DATABASE & CONFIGURATION
 // ==========================================
 
 const DB = {
@@ -17,13 +17,13 @@ const DB = {
 };
 
 // ==========================================
-// 2. VIEW MANAGEMENT (DOM TOGGLING)[cite: 2]
+// 2. VIEW MANAGEMENT (DOM TOGGLING)
 // ==========================================
 
 function showDoctorAuth() {
   document.getElementById("portal-main-view").style.display = "none";
   document.getElementById("doctor-auth-view").style.display = "block";
-  document.getElementById("home-button").style.display = "none";  
+  document.getElementById("home-button").style.display = "none";
 }
 
 function showPatientAuth() {
@@ -45,7 +45,6 @@ function showForgotPassword() {
   document.getElementById("auth-eyebrow-line").style.display = "none";
   document.getElementById("auth-title").style.display = "none";
   document.getElementById("auth-subtitle").style.display = "none";
-
 }
 
 function backToPortal() {
@@ -56,18 +55,46 @@ function backToPortal() {
   document.getElementById("doctor-auth-error").style.display = "none";
   document.getElementById("forgot-password-view").style.display = "none";
   document.getElementById("signup-form").style.display = "none";
-  document.getElementById("login-form").style.display = "block"
-  document.getElementById("home-button").style.display = "inline";  
+  document.getElementById("login-form").style.display = "block";
+  document.getElementById("home-button").style.display = "inline";
 
   document.getElementById("auth-title").style.display = "block";
   document.getElementById("auth-subtitle").style.display = "block";
+
+  // Reset Logic: Clear all input fields
+  const inputs = document.querySelectorAll(".portal-content input");
+  inputs.forEach((input) => {
+    input.value = "";
+  });
+
+  // Reset Dropdowns
+  const selects = document.querySelectorAll(".portal-content select");
+  selects.forEach((select) => {
+    select.selectedIndex = 0;
+  });
+
+  // Reset Forgot Password View state
+  const resetEmailParent = document.getElementById("reset-email").parentElement;
+  const newPassParent = document.getElementById("reset-new-password")?.parentElement;
+
+  if (resetEmailParent) resetEmailParent.style.display = "block";
+  if (newPassParent) newPassParent.style.display = "none";
+
+  // Reset the action button in Forgot Password
+  const actionBtn = document.querySelector("#forgot-password-view .portal-btn");
+  if (actionBtn) {
+    actionBtn.innerText = "Verify";
+    actionBtn.onclick = handleForgotPasswordVerify;
+  }
+
+  // Clear any success messages
+  const successEl = document.getElementById("auth-success");
+  if (successEl) successEl.style.display = "none";
 }
 
 function toggleAuth(isSignup) {
   const loginForm = document.getElementById("login-form");
   const signupForm = document.getElementById("signup-form");
-  const title = document.getElementById("auth-title");
-  const subtitle = document.getElementById("auth-subtitle");
 
   if (isSignup) {
     document.getElementById("signup-header").style.display = "block";
@@ -90,75 +117,89 @@ function toggleAuth(isSignup) {
 }
 
 function closeForgotPassword() {
-  // Hide the forgot password container
   document.getElementById("forgot-password-view").style.display = "none";
-  
-  // Re-show the login form
   document.getElementById("login-form").style.display = "block";
-  
-  // Reset the titles to the Sign In defaults
   document.getElementById("auth-eyebrow").style.display = "block";
   document.getElementById("auth-eyebrow-line").style.display = "block";
   document.getElementById("auth-title").style.display = "block";
   document.getElementById("auth-subtitle").style.display = "block";
-  
-  // Clear any residual error messages
   document.getElementById("auth-error").style.display = "none";
+
+  const inputs = document.querySelectorAll(".portal-content input");
+  inputs.forEach((input) => {
+    input.value = "";
+  });
+
+  const selects = document.querySelectorAll(".portal-content select");
+  selects.forEach((select) => {
+    select.selectedIndex = 0;
+  });
+
+  const resetEmailParent = document.getElementById("reset-email").parentElement;
+  const newPassParent = document.getElementById("reset-new-password")?.parentElement;
+
+  if (resetEmailParent) resetEmailParent.style.display = "block";
+  if (newPassParent) newPassParent.style.display = "none";
+
+  const actionBtn = document.querySelector("#forgot-password-view .portal-btn");
+  if (actionBtn) {
+    actionBtn.innerText = "Verify";
+    actionBtn.onclick = handleForgotPasswordVerify;
+  }
 }
 
 // ==========================================
 // 3. AUTO-FORMATTING LOGIC
 // ==========================================
 
-// Add event listener to format phone number as user types[cite: 1]
 document.addEventListener("DOMContentLoaded", () => {
-
   const toggleDoctorPass = document.getElementById("toggle-doctor-password");
-const licenseInput = document.getElementById("doctor-login-license");
+  const licenseInput = document.getElementById("doctor-login-license");
 
-if (toggleDoctorPass && licenseInput) {
-  toggleDoctorPass.addEventListener("click", function () {
-    const type = licenseInput.getAttribute("type") === "password" ? "text" : "password";
-    licenseInput.setAttribute("type", type);
-    this.classList.toggle("fa-eye");
-    this.classList.toggle("fa-eye-slash");
-  });
-}
+  if (licenseInput) {
+    licenseInput.addEventListener("input", (e) => {
+      let value = e.target.value.toUpperCase();
+      value = value.replace(/-/g, "");
+      if (value.length > 3) {
+        value = value.substring(0, 3) + "-" + value.substring(3);
+      }
+      e.target.value = value;
+    });
+  }
+
+  if (toggleDoctorPass && licenseInput) {
+    toggleDoctorPass.addEventListener("click", function () {
+      const type = licenseInput.getAttribute("type") === "password" ? "text" : "password";
+      licenseInput.setAttribute("type", type);
+      this.classList.toggle("fa-eye");
+      this.classList.toggle("fa-eye-slash");
+    });
+  }
 
   const nameFields = ["reg-name", "doctor-login-name"];
-  
-  nameFields.forEach(id => {
+  nameFields.forEach((id) => {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener("input", (e) => {
-        // Remove everything except letters and spaces
         e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
       });
     }
   });
-  
-  
 
-  // Password Toggle Logic
-const togglePassword = document.getElementById("toggle-reg-password");
-const passwordInput = document.getElementById("reg-password");
+  const togglePassword = document.getElementById("toggle-reg-password");
+  const passwordInput = document.getElementById("reg-password");
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener("click", function () {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      this.classList.toggle("fa-eye");
+      this.classList.toggle("fa-eye-slash");
+    });
+  }
 
-if (togglePassword && passwordInput) {
-  togglePassword.addEventListener("click", function () {
-    // Toggle the type attribute
-    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-    passwordInput.setAttribute("type", type);
-    
-    // Toggle the icon
-    this.classList.toggle("fa-eye");
-    this.classList.toggle("fa-eye-slash");
-  });
-}
-
-const emailInput = document.getElementById("reg-email");
+  const emailInput = document.getElementById("reg-email");
   if (emailInput) {
     emailInput.addEventListener("input", (e) => {
-      // Remove all whitespace characters globally
       e.target.value = e.target.value.replace(/\s/g, "");
     });
   }
@@ -166,13 +207,8 @@ const emailInput = document.getElementById("reg-email");
   const phoneInput = document.getElementById("reg-phone");
   if (phoneInput) {
     phoneInput.addEventListener("input", (e) => {
-      // Remove all non-digits
       let value = e.target.value.replace(/\D/g, "");
-      
-      // Limit to 10 digits
       value = value.substring(0, 10);
-      
-      // Apply dash formatting: XXX-XXX-XXXX
       let formattedValue = "";
       if (value.length > 0) {
         formattedValue = value.substring(0, 3);
@@ -183,38 +219,39 @@ const emailInput = document.getElementById("reg-email");
           formattedValue += " " + value.substring(6, 10);
         }
       }
-      
       e.target.value = formattedValue;
     });
   }
 });
 
 // ==========================================
-// 4. AUTHENTICATION LOGIC[cite: 2]
+// 4. AUTHENTICATION LOGIC
 // ==========================================
 
 function handleLogin() {
-const emailInput = document.getElementById("login-email").value.trim().toLowerCase();
+  const emailInput = document.getElementById("login-email").value.trim().toLowerCase();
   const passwordInput = document.getElementById("login-password").value;
   const errorEl = document.getElementById("auth-error");
   const patients = DB.get("patients");
 
-const patient = patients.find((p) => p.email && p.email.toLowerCase() === emailInput);
+  const patient = patients.find((p) => p.email && p.email.toLowerCase() === emailInput);
 
   if (!patient) {
     errorEl.innerText = "Invalid email address";
     errorEl.style.display = "block";
+    errorEl.style.opacity = "1";
+    clearAlerts();
     return;
   }
 
-  // Check password (assuming the field exists in the data)
-if (patient.password !== passwordInput) {
+  if (patient.password !== passwordInput) {
     errorEl.innerText = "Incorrect password";
     errorEl.style.display = "block";
+    errorEl.style.opacity = "1";
+    clearAlerts();
     return;
   }
 
-  // Success logic: Use 'patient' instead of 'user'
   localStorage.setItem("current_patient_id", patient.id);
   window.location.href = "index.html";
 }
@@ -227,32 +264,34 @@ function handleForgotPasswordVerify() {
   const emailInput = document.getElementById("reset-email").value.trim().toLowerCase();
   const errorEl = document.getElementById("auth-error");
   const successEl = document.getElementById("auth-success");
-  
+
   const patients = DB.get("patients");
   const patient = patients.find((p) => p.email && p.email.toLowerCase() === emailInput);
 
   if (!patient) {
     errorEl.innerText = "No account found with that email address.";
     errorEl.style.display = "block";
+    errorEl.style.opacity = "1";
     successEl.style.display = "none";
+    clearAlerts();
     return;
   }
 
-  // Simulate sending an email
   errorEl.style.display = "none";
+  errorEl.style.opacity = "1";
   successEl.innerText = "A password reset link has been sent to " + emailInput + ".";
   successEl.style.display = "block";
+  successEl.style.opacity = "1";
+  clearAlerts();
 
-  // In a real app, the user would click a link in their email.
-  // For this demo, we will automatically show the "New Password" fields after a short delay.
   setTimeout(() => {
     document.getElementById("reset-email").parentElement.style.display = "none";
     document.getElementById("reset-new-password").parentElement.style.display = "block";
-    successEl.innerText = "Identity Verified. Enter your new password.";
-    // Change the button text or function to handle the final update
+    successEl.innerText = "Identity verified. Enter your new password.";
     const actionBtn = document.querySelector("#forgot-password-view .portal-btn");
     actionBtn.innerText = "Confirm";
     actionBtn.onclick = handleFinalPasswordUpdate;
+    clearAlerts();
   }, 3000);
 }
 
@@ -261,10 +300,12 @@ function handleFinalPasswordUpdate() {
   const newPassword = document.getElementById("reset-new-password").value;
   const errorEl = document.getElementById("auth-error");
   const successEl = document.getElementById("auth-success");
-  
+
   if (newPassword.length < 6) {
     errorEl.innerText = "Password must be at least 6 characters.";
     errorEl.style.display = "block";
+    clearAlerts();
+    errorEl.style.opacity = "1";
     return;
   }
 
@@ -277,6 +318,7 @@ function handleFinalPasswordUpdate() {
 
     successEl.innerText = "Password updated successfully!";
     successEl.style.display = "block";
+    successEl.style.opacity = "1";
     errorEl.style.display = "none";
 
     setTimeout(() => {
@@ -296,61 +338,68 @@ function handleSignup() {
   const dobValue = document.getElementById("reg-dob").value;
   const genderValue = document.getElementById("reg-gender").value;
   const addressValue = document.getElementById("reg-address").value.trim();
-  
+
   const err = document.getElementById("auth-error");
   const success = document.getElementById("auth-success");
 
   err.style.display = "none";
+  err.style.opacity = "1";
   success.style.display = "none";
+  success.style.opacity = "1";
 
-  // 1. Check for empty fields[cite: 2]
-if (!emailValue || !nameValue || !phoneRaw || !dobValue || !genderValue || !addressValue) {
+  if (!emailValue || !nameValue || !phoneRaw || !dobValue || !genderValue || !addressValue) {
     err.innerText = "Please fill up all the fields.";
     err.style.display = "block";
+    clearAlerts();
     return;
   }
 
-  // 2. Email Validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(emailValue)) {
     err.innerText = "Please enter a valid email address.";
     err.style.display = "block";
+    err.style.opacity = "1";
+    clearAlerts();
     return;
   }
 
-if (passwordValue !== confirmPassword) {
+  if (passwordValue !== confirmPassword) {
     err.innerText = "Passwords do not match.";
     err.style.display = "block";
+    err.style.opacity = "1";
+    clearAlerts();
     return;
   }
 
   if (passwordValue.length < 6) {
     err.innerText = "Password must be at least 6 characters.";
     err.style.display = "block";
+    err.style.opacity = "1";
+    clearAlerts();  
     return;
   }
 
-  // 3. Phone Validation (Check for 10 digits, excluding dashes)[cite: 1]
   const digitsOnly = phoneRaw.replace(/\D/g, "");
   if (digitsOnly.length !== 10) {
     err.innerText = "Phone number must be exactly 10 digits.";
     err.style.display = "block";
+    err.style.opacity = "1";
+    clearAlerts();
     return;
   }
 
-const finalPhoneNumber = countryCode + " " + phoneRaw;
-
+  const finalPhoneNumber = countryCode + " " + phoneRaw;
   let patients = DB.get("patients");
 
-  // Duplicate check[cite: 2]
   if (patients.find((p) => p.name.toLowerCase() === nameValue.toLowerCase())) {
     err.innerText = "An account with this name already exists.";
     err.style.display = "block";
+    err.style.opacity = "1";
+    clearAlerts();
     return;
   }
 
   const newId = patients.length > 0 ? Math.max(...patients.map((p) => p.id)) + 1 : 1;
-
   const newPatient = {
     id: newId,
     name: nameValue,
@@ -370,7 +419,6 @@ const finalPhoneNumber = countryCode + " " + phoneRaw;
   success.innerText = "Account created successfully! Please sign in.";
   success.style.display = "block";
 
-  // Clear registration fields[cite: 2]
   document.getElementById("reg-email").value = "";
   document.getElementById("reg-password").value = "";
   document.getElementById("reg-name").value = "";
@@ -391,11 +439,8 @@ function handleDoctorLogin() {
   const licenseInput = document.getElementById("doctor-login-license").value.trim();
   const doctors = DB.get("doctors");
 
-  // Finding doctor by email and license number
   const doctor = doctors.find(
-    (d) =>
-      d.email.toLowerCase() === emailInput &&
-      d.license === licenseInput
+    (d) => d.email.toLowerCase() === emailInput && d.license === licenseInput
   );
 
   if (doctor) {
@@ -405,40 +450,29 @@ function handleDoctorLogin() {
     const err = document.getElementById("doctor-auth-error");
     err.innerText = "Invalid credentials. Please check your email and license number.";
     err.style.display = "block";
+    err.style.opacity = "1";
+    clearAlerts();
   }
 }
 
-window.addEventListener('DOMContentLoaded', (event) => {
-    // 1. Get the parameters from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const action = urlParams.get('action');
+window.addEventListener("DOMContentLoaded", (event) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const action = urlParams.get("action");
 
-    // 2. If the action is 'login', trigger the view change
-    if (action === 'login') {
-      // Hide the main portal view
-      document.getElementById('portal-main-view').style.display = 'none';
-      
-      // Show the patient auth view
-      const patientAuthView = document.getElementById('patient-auth-view');
-      if (patientAuthView) {
-        patientAuthView.style.display = 'block';
-        document.getElementById("home-button").style.display = "none";
-        
-        // Find the back button inside the patient view
-        // This targets the specific ghost button with the arrow icon
-        const backBtn = patientAuthView.querySelector('.btn-ghost i.fa-arrow-left')?.parentElement;
-        
-        if (backBtn) {
-            // Change the function: redirect to landing page instead of backToPortal()
-            backBtn.onclick = () => window.location.href = 'index.html';
-            
-            // Optional: Change the icon to a home icon to better reflect the new destination
-            backBtn.querySelector('i').className = 'fas fa-home';
-        }
-
-        toggleAuth(false);
+  if (action === "login") {
+    document.getElementById("portal-main-view").style.display = "none";
+    const patientAuthView = document.getElementById("patient-auth-view");
+    if (patientAuthView) {
+      patientAuthView.style.display = "block";
+      document.getElementById("home-button").style.display = "none";
+      const backBtn = patientAuthView.querySelector(".btn-ghost i.fa-arrow-left")?.parentElement;
+      if (backBtn) {
+        backBtn.onclick = () => (window.location.href = "index.html");
+        backBtn.querySelector("i").className = "fas fa-home";
       }
+      toggleAuth(false);
     }
+  }
 });
 
 function openAdminModal() {
@@ -455,27 +489,37 @@ function closeAdminModal() {
 function validateAdminCode() {
   const codeInput = document.getElementById("admin-security-code").value;
   const errorEl = document.getElementById("admin-modal-error");
-  
-  // Replace 'LDC-2026-ADMIN' with your desired hardcoded key or check against DB
-  const secureKey = "333333"; 
+  const secureKey = "333333";
 
   if (codeInput === secureKey) {
     window.location.href = "admin-dashboard.html";
   } else {
     errorEl.innerText = "Invalid security key. Access denied.";
     errorEl.style.display = "block";
-    
-    // Shake effect for feedback
+    errorEl.style.opacity = "1";
+    clearAlerts();
     const modal = document.querySelector(".modal-card");
     modal.style.animation = "none";
-    setTimeout(() => modal.style.animation = "shake 0.4s", 10);
+    setTimeout(() => (modal.style.animation = "shake 0.4s"), 10);
   }
 }
 
-// Close modal if user clicks outside of the modal box
-window.onclick = function(event) {
+window.onclick = function (event) {
   const modal = document.getElementById("admin-modal");
   if (event.target == modal) {
     closeAdminModal();
   }
+};
+
+function clearAlerts(delay = 3500) {
+  if (window.alertTimer) clearTimeout(window.alertTimer);
+  window.alertTimer = setTimeout(() => {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach((alert) => {
+      alert.style.opacity = "0";
+      setTimeout(() => {
+        alert.style.display = "none";
+      }, 500);
+    });
+  }, delay);
 }

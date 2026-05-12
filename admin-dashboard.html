@@ -1,6 +1,6 @@
-<!--admin-dashboard.html-->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,9 +8,9 @@
 
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  
   <link rel="stylesheet" href="admin-styles.css" />
 </head>
+
 <body>
 
   <div id="sidebar">
@@ -48,7 +48,9 @@
 
     <div class="sidebar-footer">
       <div class="sidebar-user">
-        <div class="user-avatar"><span class="icon"><i class="fas fa-user-cog"></i></span></div>
+        <div class="user-avatar">
+          <span class="icon"><i class="fas fa-user-cog"></i></span>
+        </div>
         <div class="user-info">
           <p>Admin</p>
           <span>Administrator</span>
@@ -57,9 +59,7 @@
     </div>
   </div>
 
-  <!-- MAIN WRAPPER -->
   <div id="main">
-    <!-- TOPBAR -->
     <div id="topbar">
       <div class="topbar-left">
         <h2 id="page-title">Dashboard</h2>
@@ -68,12 +68,11 @@
 
       <div class="topbar-right">
         <span id="current-date" style="font-size: 13px; color: var(--text-muted)"></span>
-        
+
         <div class="notification-wrapper" style="position: relative; margin-right: 15px; cursor: pointer;" onclick="toggleNotifications()">
           <i class="fas fa-bell" style="font-size: 18px; color: var(--primary);"></i>
           <span id="notification-count" class="badge badge-red" style="position: absolute; top: -8px; right: -8px; padding: 2px 6px; font-size: 10px; display: none;">0</span>
 
-          <!-- Notification Dropdown -->
           <div id="notification-dropdown" class="card" style="position: absolute; top: 35px; right: 0; width: 300px; z-index: 1000; display: none; padding: 0; border: 1px solid var(--border);">
             <div class="card-header" style="padding: 10px 15px;">
               <h3 style="margin:0; font-size: 14px;">Notifications</h3>
@@ -82,30 +81,31 @@
             <div id="notification-list" style="max-height: 300px; overflow-y: auto;"></div>
           </div>
         </div>
-        
+
         <a href="portal.html" class="btn btn-ghost">Sign out</a>
       </div>
     </div>
 
-    <!-- CONTENT AREA -->
     <div id="content">
-      
-      <!-- PAGE: DASHBOARD -->
+
       <div id="page-dashboard" class="page active">
         <div class="stats-grid" id="stats-grid"></div>
         <div class="dashboard-grid">
           <div class="card">
-            <div class="card-header"><h3>Recent Appointments</h3></div>
+            <div class="card-header">
+              <h3>Recent Appointments</h3>
+            </div>
             <div class="card-body" id="dash-appointments"></div>
           </div>
           <div class="card">
-            <div class="card-header"><h3>Recent Patients</h3></div>
+            <div class="card-header">
+              <h3>Recent Patients</h3>
+            </div>
             <div class="card-body" id="dash-patients"></div>
           </div>
         </div>
       </div>
 
-      <!-- PAGE: PATIENTS -->
       <div id="page-patients" class="page">
         <div class="search-bar">
           <div class="search-input-wrap">
@@ -141,7 +141,6 @@
         </div>
       </div>
 
-      <!-- PAGE: DOCTORS -->
       <div id="page-doctors" class="page">
         <div class="search-bar">
           <div class="search-input-wrap">
@@ -176,7 +175,6 @@
         </div>
       </div>
 
-      <!-- PAGE: APPOINTMENTS -->
       <div id="page-appointments" class="page">
         <div class="search-bar">
           <div class="search-input-wrap">
@@ -209,7 +207,6 @@
         </div>
       </div>
 
-      <!-- PAGE: MEDICAL RECORDS -->
       <div id="page-records" class="page">
         <div class="search-bar">
           <div class="search-input-wrap">
@@ -237,7 +234,6 @@
         </div>
       </div>
 
-      <!-- PAGE: BILLING -->
       <div id="page-billing" class="page">
         <div class="search-bar">
           <div class="search-input-wrap">
@@ -269,13 +265,8 @@
         </div>
       </div>
 
-    </div> <!-- End content -->
-  </div> <!-- End main -->
+    </div> </div> <div id="modal-overlay" class="modal-overlay" style="display: none" onclick="closeModalOverlay(event)">
 
-  <!-- MODAL OVERLAY WRAPPER -->
-  <div id="modal-overlay" class="modal-overlay" style="display: none" onclick="closeModalOverlay(event)">
-    
-    <!-- Patient Modal -->
     <div class="modal" id="modal-patient" style="display: none">
       <div class="modal-header">
         <h3 id="patient-modal-title">Add Patient</h3>
@@ -291,15 +282,13 @@
             <label>Email Address</label>
             <input type="email" id="p-email" placeholder="patient@email.com" />
           </div>
-<div class="form-group">
-  <label>Password</label>
-  <div style="position: relative;">
-    <input type="password" id="p-password" placeholder="patient password" style="padding-right: 60px;" />
-    <i class="fas fa-eye" id="toggle-p-password" 
-       style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);"
-       onclick="togglePasswordVisibility('p-password', this)"></i>
-  </div>
-</div>
+          <div class="form-group">
+            <label>Password</label>
+            <div style="position: relative;">
+              <input type="password" id="p-password" placeholder="patient password" style="padding-right: 60px;" />
+              <i class="fas fa-eye" id="toggle-p-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);" onclick="togglePasswordVisibility('p-password', this)"></i>
+            </div>
+          </div>
           <div class="form-group">
             <label>Date of Birth</label>
             <input type="date" id="p-dob" />
@@ -308,7 +297,9 @@
             <label>Gender</label>
             <select id="p-gender">
               <option value="">Select...</option>
-              <option>Male</option><option>Female</option><option>Other</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
             </select>
           </div>
           <div class="form-group">
@@ -328,8 +319,8 @@
             <input type="text" id="p-address" placeholder="Street, City, Province" />
           </div>
           <div class="form-group form-full">
-            <label>Medical History / Allergies</label>
-            <textarea id="p-history" placeholder="List known conditions, allergies..."></textarea>
+            <label>Medical History</label>
+            <textarea id="p-history" placeholder="List known conditions..."></textarea>
           </div>
           <div class="form-group">
             <label>Status</label>
@@ -350,7 +341,6 @@
       </div>
     </div>
 
-    <!-- Doctor Modal -->
     <div class="modal" id="modal-doctor" style="display: none">
       <div class="modal-header">
         <h3 id="doctor-modal-title">Add Doctor</h3>
@@ -383,15 +373,13 @@
             <label>Email</label>
             <input type="email" id="d-email" placeholder="doctor@hospital.com" />
           </div>
-<div class="form-group">
-  <label>Password</label>
-  <div style="position: relative;">
-    <input type="password" id="d-password" placeholder="Set doctor password" style="padding-right: 40px;" />
-    <i class="fas fa-eye" id="toggle-d-password" 
-       style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);"
-       onclick="togglePasswordVisibility('d-password', this)"></i>
-  </div>
-</div>
+          <div class="form-group">
+            <label>Password</label>
+            <div style="position: relative;">
+              <input type="password" id="d-password" placeholder="Set doctor password" style="padding-right: 40px;" />
+              <i class="fas fa-eye" id="toggle-d-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);" onclick="togglePasswordVisibility('d-password', this)"></i>
+            </div>
+          </div>
           <div class="form-group">
             <label>License Number</label>
             <input type="text" id="d-license" placeholder="PRC-XXXXX" />
@@ -399,9 +387,12 @@
           <div class="form-group">
             <label>Schedule</label>
             <select id="d-schedule">
-              <option>Mon-Fri (Morning)</option><option>Mon-Fri (Afternoon)</option>
-              <option>Mon-Sat (Morning)</option><option>Mon-Sat (Afternoon)</option>
-              <option>Tue-Sat</option><option>On-Call</option>
+              <option>Mon-Fri (Morning)</option>
+              <option>Mon-Fri (Afternoon)</option>
+              <option>Mon-Sat (Morning)</option>
+              <option>Mon-Sat (Afternoon)</option>
+              <option>Tue-Sat</option>
+              <option>On-Call</option>
             </select>
           </div>
           <div class="form-group">
@@ -419,7 +410,6 @@
       </div>
     </div>
 
-    <!-- Appointment Modal -->
     <div class="modal" id="modal-appointment" style="display: none">
       <div class="modal-header">
         <h3 id="appt-modal-title">New Appointment</h3>
@@ -467,7 +457,6 @@
       </div>
     </div>
 
-    <!-- Medical Record Modal -->
     <div class="modal" id="modal-record" style="display: none">
       <div class="modal-header">
         <h3 id="record-modal-title">Add Medical Record</h3>
@@ -515,7 +504,6 @@
       </div>
     </div>
 
-    <!-- Billing Modal -->
     <div class="modal" id="modal-billing" style="display: none">
       <div class="modal-header">
         <h3 id="billing-modal-title">Add Bill</h3>
@@ -562,7 +550,6 @@
     </div>
   </div>
 
-  <!-- View Patient Details Modal -->
   <div id="modal-view-overlay" class="modal-overlay" style="display: none" onclick="closeViewModal(event)">
     <div class="modal" style="width: 580px">
       <div class="modal-header">
@@ -575,4 +562,5 @@
 
   <script src="admin-script.js"></script>
 </body>
+
 </html>

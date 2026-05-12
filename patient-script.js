@@ -140,13 +140,13 @@ function loadProfileIntoForm() {
     document.getElementById("edit-emergency").value = myData.emergency || "";
   }
   const emailInput = document.getElementById("edit-email-view");
-if (emailInput) {
+  if (emailInput) {
     emailInput.value = myData.email || "";
-}
+  }
   const passwordInput = document.getElementById("edit-password-view");
-if (passwordInput) {
-  passwordInput.value = myData.password || "";
-}
+  if (passwordInput) {
+    passwordInput.value = myData.password || "";
+  }
 }
 
 document
@@ -166,7 +166,7 @@ document
       patients[index].gender = document.getElementById("edit-gender").value;
       patients[index].emergency = document.getElementById("edit-emergency").value;
 
-      appointments.forEach(appt => {
+      appointments.forEach((appt) => {
         if (appt.patient === oldName) appt.patient = newName;
       });
 
@@ -238,19 +238,30 @@ function renderPatientAppointments() {
     .reverse()
     .map((appt) => {
       const showCancelButton =
-        appt.status !== "Completed" && appt.status !== "Cancelled" && appt.status !== "No Show";
+        appt.status !== "Completed" &&
+        appt.status !== "Cancelled" &&
+        appt.status !== "No Show";
 
       return `
             <div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border);">
                 <div class="appt-date">
                     <div class="day">${new Date(appt.date).getDate()}</div>
-                    <div class="month">${new Date(appt.date).toLocaleString("default", { month: "short" })}</div>
+                    <div class="month">${new Date(appt.date).toLocaleString(
+                      "default",
+                      { month: "short" },
+                    )}</div>
                 </div>
                 <div style="flex:1">
-                    <div style="font-size:14px; font-weight:600">${appt.reason}</div>
-                    <div style="font-size:12px; color:var(--text-muted)"> ${appt.doctor} at ${appt.time}</div>
+                    <div style="font-size:14px; font-weight:600">${
+                      appt.reason
+                    }</div>
+                    <div style="font-size:12px; color:var(--text-muted)"> ${
+                      appt.doctor
+                    } at ${appt.time}</div>
                 </div>
-                <span class="badge ${appt.status === "Completed" ? "badge-green" : "badge-blue"}">${appt.status}</span>
+                <span class="badge ${
+                  appt.status === "Completed" ? "badge-green" : "badge-blue"
+                }">${appt.status}</span>
                 
                 ${
                   showCancelButton
@@ -310,12 +321,12 @@ function isDateAllowed(dateString, scheduleString) {
   if (schedule.includes("tue-sat")) {
     return day >= 2 && day <= 6;
   }
-  
+
   return true; // Default fallback
 }
 
 function updateAvailableTimes() {
-const doctorName = document.getElementById("a-doctor").value;
+  const doctorName = document.getElementById("a-doctor").value;
   const dateInput = document.getElementById("a-date");
   const selectedDate = dateInput.value;
   const timeSelect = document.getElementById("a-time");
@@ -327,10 +338,12 @@ const doctorName = document.getElementById("a-doctor").value;
   }
 
   const doctors = SharedDB.get("doctors");
-  const doctor = doctors.find(d => d.name === doctorName);
-  
-if (selectedDate && !isDateAllowed(selectedDate, doctor.schedule)) {
-    alert(`${doctor.name} is not available on this day. Schedule: ${doctor.schedule}`);
+  const doctor = doctors.find((d) => d.name === doctorName);
+
+  if (selectedDate && !isDateAllowed(selectedDate, doctor.schedule)) {
+    alert(
+      `${doctor.name} is not available on this day. Schedule: ${doctor.schedule}`,
+    );
     dateInput.value = ""; // Clear invalid date
     timeSelect.innerHTML = '<option value="">Select Doctor & Date</option>';
     return;
@@ -345,28 +358,61 @@ if (selectedDate && !isDateAllowed(selectedDate, doctor.schedule)) {
   const schedule = doctor.schedule.toLowerCase();
 
   if (schedule.includes("morning")) {
-    slots = ["07:30 (AM)", "08:00 (AM)", "08:30 (AM)", "09:00 (AM)", "09:30 (AM)", "10:00 (AM)", "10:30 (AM)", "11:00 (AM)", "11:30 (AM)"];
+    slots = [
+      "07:30 (AM)",
+      "08:00 (AM)",
+      "08:30 (AM)",
+      "09:00 (AM)",
+      "09:30 (AM)",
+      "10:00 (AM)",
+      "10:30 (AM)",
+      "11:00 (AM)",
+      "11:30 (AM)",
+    ];
   } else if (schedule.includes("afternoon")) {
-    slots = ["13:00 (1:00 PM)", "13:30 (1:30 PM)", "14:00 (2:00 PM)", "14:30 (2:30 PM)", "15:00 (3:00 PM)", "15:30 (3:30 PM)", "16:00 (4:00 PM)", "16:30 (4:30 PM)", "17:00 (5:00 PM)", "17:30 (5:30 PM)"];
+    slots = [
+      "13:00 (1:00 PM)",
+      "13:30 (1:30 PM)",
+      "14:00 (2:00 PM)",
+      "14:30 (2:30 PM)",
+      "15:00 (3:00 PM)",
+      "15:30 (3:30 PM)",
+      "16:00 (4:00 PM)",
+      "16:30 (4:30 PM)",
+      "17:00 (5:00 PM)",
+      "17:30 (5:30 PM)",
+    ];
   } else {
-    // Default full day for Tue-Sat or others[cite: 3]
-    slots = ["09:00 (AM)", "10:00 (AM)", "11:00 (AM)", "13:00 (1:00 PM)", "14:00 (2:00 PM)", "15:00 (3:00 PM)"];
+    // Default full day for Tue-Sat or others
+    slots = [
+      "09:00 (AM)",
+      "10:00 (AM)",
+      "11:00 (AM)",
+      "13:00 (1:00 PM)",
+      "14:00 (2:00 PM)",
+      "15:00 (3:00 PM)",
+    ];
   }
 
   // Filter out already booked slots for this doctor on this date
   const appointments = SharedDB.get("appointments");
   const bookedTimes = appointments
-    .filter(a => a.doctor === doctorName && a.date === selectedDate && a.status !== "Cancelled")
-    .map(a => a.time);
+    .filter(
+      (a) =>
+        a.doctor === doctorName &&
+        a.date === selectedDate &&
+        a.status !== "Cancelled",
+    )
+    .map((a) => a.time);
 
-  const availableSlots = slots.filter(time => !bookedTimes.includes(time));
+  const availableSlots = slots.filter((time) => !bookedTimes.includes(time));
 
   // Render Slots
   if (availableSlots.length === 0) {
     timeSelect.innerHTML = '<option value="">No slots available</option>';
   } else {
     timeSelect.innerHTML = availableSlots
-      .map(t => `<option value="${t}">${t}</option>`)
+      .map((t) => `<option value="${t}">${t}</option>`)
       .join("");
   }
 }
@@ -379,22 +425,31 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial profile sync
   syncAndRenderProfile();
 
-const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split("T")[0];
   document.getElementById("a-date").setAttribute("min", today);
 
   // Load doctors into selection
-const doctors = SharedDB.get("doctors");
+  const doctors = SharedDB.get("doctors");
   const doctorDropdown = document.getElementById("a-doctor");
-  doctorDropdown.innerHTML = '<option value="">Doctor</option>' + 
-    doctors.map((d) => `<option value="${d.name}">${d.name} (${d.spec})</option>`).join("");
+  doctorDropdown.innerHTML =
+    '<option value="">Doctor</option>' +
+    doctors
+      .map((d) => `<option value="${d.name}">${d.name} (${d.spec})</option>`)
+      .join("");
 
-doctorDropdown.addEventListener("change", updateAvailableTimes);
-  document.getElementById("a-date").addEventListener("change", updateAvailableTimes);
+  doctorDropdown.addEventListener("change", updateAvailableTimes);
+  document
+    .getElementById("a-date")
+    .addEventListener("change", updateAvailableTimes);
 
-  // Set display date[cite: 1]
-  document.getElementById("current-date").textContent = new Date().toLocaleDateString("en-PH", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric",
-  });
+  // Set display date
+  document.getElementById("current-date").textContent =
+    new Date().toLocaleDateString("en-PH", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 });
 /**
  * Toggles the visibility of the password request container
@@ -403,10 +458,10 @@ function togglePasswordRequest() {
   const area = document.getElementById("password-request-area");
   const step1 = document.getElementById("pw-step-1");
   const step2 = document.getElementById("pw-step-2");
-  
+
   const isHidden = area.style.display === "none";
   area.style.display = isHidden ? "block" : "none";
-  
+
   if (isHidden) {
     step1.style.display = "block";
     step2.style.display = "none";
@@ -426,8 +481,12 @@ function verifyEmailAndSend() {
     return;
   }
 
-  alert("A link has been sent to " + inputEmail + ". You may now enter your new credentials.");
-  
+  alert(
+    "A link has been sent to " +
+      inputEmail +
+      ". You may now enter your new credentials.",
+  );
+
   document.getElementById("pw-step-1").style.display = "none";
   document.getElementById("pw-step-2").style.display = "block";
 }
@@ -438,7 +497,7 @@ function verifyEmailAndSend() {
 function togglePassDisplay() {
   const fields = document.querySelectorAll(".pass-field");
   const isChecked = document.getElementById("toggle-pass-visibility").checked;
-  fields.forEach(f => f.type = isChecked ? "text" : "password");
+  fields.forEach((f) => (f.type = isChecked ? "text" : "password"));
 }
 
 /**
@@ -448,7 +507,7 @@ function submitPasswordChange() {
   let patients = SharedDB.get("patients");
   const index = patients.findIndex((p) => p.id === PATIENT_ID);
   const myData = patients[index];
-  
+
   const oldPass = document.getElementById("req-old-pass").value;
   const newPass = document.getElementById("req-new-pass").value;
 
@@ -464,13 +523,13 @@ function submitPasswordChange() {
 
   patients[index].password = newPass;
   SharedDB.set("patients", patients);
-  
+
   alert("Password updated successfully!");
   togglePasswordRequest(); // Close area
   syncAndRenderProfile(); // Refresh UI
 }
 
 function handleSignOut() {
-    localStorage.removeItem("current_patient_id");
-    window.location.href = "portal.html";
+  localStorage.removeItem("current_patient_id");
+  window.location.href = "portal.html";
 }

@@ -148,7 +148,10 @@ function openModal(type, id = null) {
 
   if (["appointment", "record"].includes(type)) {
     const doctors = DB.get("doctors");
-    const selectors = { appointment: "a-doctor", record: "r-doctor" };
+    const selectors = {
+      appointment: "a-doctor",
+      record: "r-doctor"
+    };
     const sel = document.getElementById(selectors[type]);
     sel.innerHTML =
       '<option value="">Select Doctor...</option>' +
@@ -160,18 +163,17 @@ function openModal(type, id = null) {
   if (id !== null) {
     // Populate Edit Mode
     const key =
-      type === "billing"
-        ? "billing"
-        : type === "record"
-          ? "records"
-          : type === "appointment"
-            ? "appointments"
-            : type + "s";
+      type === "billing" ?
+      "billing" :
+      type === "record" ?
+      "records" :
+      type === "appointment" ?
+      "appointments" :
+      type + "s";
     const data = DB.get(key).find((i) => i.id === id);
 
     if (type === "patient") {
-      document.getElementById("patient-modal-title").textContent =
-        "Edit Patient";
+      document.getElementById("patient-modal-title").textContent = "Edit Patient";
       document.getElementById("p-name").value = data.name;
       document.getElementById("p-dob").value = data.dob;
       document.getElementById("p-gender").value = data.gender;
@@ -194,8 +196,7 @@ function openModal(type, id = null) {
       document.getElementById("d-schedule").value = data.schedule;
       document.getElementById("d-status").value = data.status;
     } else if (type === "appointment") {
-      document.getElementById("appt-modal-title").textContent =
-        "Edit Appointment";
+      document.getElementById("appt-modal-title").textContent = "Edit Appointment";
       document.getElementById("a-patient").value = data.patient;
       document.getElementById("a-doctor").value = data.doctor;
       document.getElementById("a-date").value = data.date;
@@ -226,29 +227,14 @@ function openModal(type, id = null) {
     document.getElementById("patient-modal-title").textContent = "Add Patient";
     document.getElementById("doctor-modal-title").textContent = "Add Doctor";
     document.getElementById("appt-modal-title").textContent = "New Appointment";
-    document.getElementById("record-modal-title").textContent =
-      "Add Medical Record";
+    document.getElementById("record-modal-title").textContent = "Add Medical Record";
     document.getElementById("billing-modal-title").textContent = "Add Bill";
 
     [
-      "p-name",
-      "p-dob",
-      "p-phone",
-      "p-address",
-      "p-history",
-      "p-emergency",
-      "d-name",
-      "d-phone",
-      "d-email",
-      "d-password",
-      "d-license",
-      "a-reason",
-      "a-notes",
-      "r-diagnosis",
-      "r-prescription",
-      "r-notes",
-      "b-service",
-      "b-amount",
+      "p-name", "p-dob", "p-phone", "p-address", "p-history", "p-emergency",
+      "d-name", "d-phone", "d-email", "d-password", "d-license",
+      "a-reason", "a-notes", "r-diagnosis", "r-prescription", "r-notes",
+      "b-service", "b-amount"
     ].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.value = "";
@@ -267,13 +253,15 @@ function openModal(type, id = null) {
     const el = document.getElementById(t + "-err");
     if (el) el.style.display = "none";
   });
+
   ['p-password', 'd-password'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.type = 'password';
+    const el = document.getElementById(id);
+    if (el) el.type = 'password';
   });
+
   ['toggle-p-password', 'toggle-d-password'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.classList.replace("fa-eye-slash", "fa-eye");
+    const el = document.getElementById(id);
+    if (el) el.classList.replace("fa-eye-slash", "fa-eye");
   });
 }
 
@@ -509,11 +497,11 @@ function checkNotifications() {
       .reverse()
       .map((n) => {
         const bgColor =
-          n.type === "cancellation"
-            ? "#fff1f2"
-            : n.read
-              ? "transparent"
-              : "#f0f9ff";
+          n.type === "cancellation" ?
+          "#fff1f2" :
+          n.read ?
+          "transparent" :
+          "#f0f9ff";
         const iconColor =
           n.type === "cancellation" ? "var(--danger)" : "var(--primary)";
 
@@ -561,8 +549,8 @@ function renderPatients() {
   const f = document.getElementById("patient-filter").value;
   let patients = DB.get("patients").filter(
     (p) =>
-      (!q || p.name.toLowerCase().includes(q) || p.phone.includes(q)) &&
-      (!f || p.blood === f),
+    (!q || p.name.toLowerCase().includes(q) || p.phone.includes(q)) &&
+    (!f || p.blood === f),
   );
   const tbody = document.getElementById("patients-tbody");
   if (patients.length === 0) {
@@ -622,10 +610,10 @@ function renderDoctors() {
   const f = document.getElementById("doctor-filter").value;
   let doctors = DB.get("doctors").filter(
     (d) =>
-      (!q ||
-        d.name.toLowerCase().includes(q) ||
-        d.spec.toLowerCase().includes(q)) &&
-      (!f || d.spec === f),
+    (!q ||
+      d.name.toLowerCase().includes(q) ||
+      d.spec.toLowerCase().includes(q)) &&
+    (!f || d.spec === f),
   );
   const tbody = document.getElementById("doctors-tbody");
   if (doctors.length === 0) {
@@ -659,11 +647,11 @@ function renderAppointments() {
   let appts = DB.get("appointments")
     .filter(
       (a) =>
-        (!q ||
-          a.patient.toLowerCase().includes(q) ||
-          a.doctor.toLowerCase().includes(q) ||
-          a.reason.toLowerCase().includes(q)) &&
-        (!f || a.status === f),
+      (!q ||
+        a.patient.toLowerCase().includes(q) ||
+        a.doctor.toLowerCase().includes(q) ||
+        a.reason.toLowerCase().includes(q)) &&
+      (!f || a.status === f),
     )
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -696,10 +684,10 @@ function renderRecords() {
   let records = DB.get("records")
     .filter(
       (r) =>
-        !q ||
-        r.patient.toLowerCase().includes(q) ||
-        r.diagnosis.toLowerCase().includes(q) ||
-        r.doctor.toLowerCase().includes(q),
+      !q ||
+      r.patient.toLowerCase().includes(q) ||
+      r.diagnosis.toLowerCase().includes(q) ||
+      r.doctor.toLowerCase().includes(q),
     )
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -733,10 +721,10 @@ function renderBilling() {
   let bills = DB.get("billing")
     .filter(
       (b) =>
-        (!q ||
-          b.patient.toLowerCase().includes(q) ||
-          b.service.toLowerCase().includes(q)) &&
-        (!f || b.status === f),
+      (!q ||
+        b.patient.toLowerCase().includes(q) ||
+        b.service.toLowerCase().includes(q)) &&
+      (!f || b.status === f),
     )
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -773,8 +761,8 @@ function renderDashboard() {
   const today = new Date().toISOString().split("T")[0];
   const todayAppts = appointments.filter(
     (a) =>
-      a.date === today &&
-      !["Completed", "Cancelled", "No Show"].includes(a.status),
+    a.date === today &&
+    !["Completed", "Cancelled", "No Show"].includes(a.status),
   ).length;
   const totalRevenue = billing
     .filter((b) => b.status === "Paid")
@@ -804,10 +792,10 @@ function renderDashboard() {
 
   // Recent appointments list
   const recentAppts = appointments.slice(-5).reverse();
-  document.getElementById("dash-appointments").innerHTML = recentAppts.length
-    ? recentAppts
-        .map(
-          (a) => `
+  document.getElementById("dash-appointments").innerHTML = recentAppts.length ?
+    recentAppts
+    .map(
+      (a) => `
       <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
         <div class="appt-date">
           <div class="day">${new Date(a.date + "T00:00:00").getDate()}</div>
@@ -819,16 +807,16 @@ function renderDashboard() {
         </div>
         ${getStatusBadge(a.status)}
       </div>`,
-        )
-        .join("")
-    : '<div class="empty-state"><p>No appointments yet</p></div>';
+    )
+    .join("") :
+    '<div class="empty-state"><p>No appointments yet</p></div>';
 
   // Recent patients list
   const recentPatients = patients.slice(-5).reverse();
-  document.getElementById("dash-patients").innerHTML = recentPatients.length
-    ? recentPatients
-        .map(
-          (p) => `
+  document.getElementById("dash-patients").innerHTML = recentPatients.length ?
+    recentPatients
+    .map(
+      (p) => `
       <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
         <div style="width:38px;height:38px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;flex-shrink:0">
           ${p.name
@@ -843,9 +831,9 @@ function renderDashboard() {
         </div>
         ${getStatusBadge(p.status)}
       </div>`,
-        )
-        .join("")
-    : '<div class="empty-state"><p>No patients yet</p></div>';
+    )
+    .join("") :
+    '<div class="empty-state"><p>No patients yet</p></div>';
 }
 
 // ==========================================
@@ -856,8 +844,7 @@ function seedData() {
   if (DB.get("patients").length > 0) return;
 
   // Seed Patients with Passwords
-  DB.set("patients", [
-    {
+  DB.set("patients", [{
       id: 1,
       name: "Vets Tres",
       dob: "2006-12-30",
@@ -902,8 +889,7 @@ function seedData() {
   ]);
 
   // Seed Doctors with Passwords
-  DB.set("doctors", [
-    {
+  DB.set("doctors", [{
       id: 1,
       name: "John Michael",
       spec: "General Dentistry",
@@ -939,8 +925,7 @@ function seedData() {
   ]);
 
   const today = new Date().toISOString().split("T")[0];
-  DB.set("appointments", [
-    {
+  DB.set("appointments", [{
       id: 1,
       patient: "Vets Tres",
       doctor: "Dr. John Michael",
@@ -962,8 +947,7 @@ function seedData() {
     },
   ]);
 
-  DB.set("records", [
-    {
+  DB.set("records", [{
       id: 1,
       patient: "Steven Tres",
       doctor: "Dr. John Michael",
@@ -985,8 +969,7 @@ function seedData() {
     },
   ]);
 
-  DB.set("billing", [
-    {
+  DB.set("billing", [{
       id: 1,
       patient: "Steven Tres",
       service: "Consultation – Cardiology",

@@ -1,4 +1,3 @@
-<!--doctor-dashboard.html-->
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lardizabal Dental Clinic - Doctor Portal</title>
 
-    <!-- Fonts & Icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap"
       rel="stylesheet"
@@ -16,12 +14,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
 
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="admin-styles.css" />
     <link rel="stylesheet" href="doctor-styles.css" />
   </head>
   <body>
-    <!-- SIDEBAR -->
     <div id="sidebar">
       <div class="sidebar-logo">
         <img
@@ -75,9 +70,7 @@
       </div>
     </div>
 
-    <!-- MAIN WRAPPER -->
     <div id="main">
-      <!-- TOPBAR -->
       <div id="topbar">
         <div class="topbar-left">
           <h2 id="page-title">Dashboard</h2>
@@ -120,9 +113,7 @@
         </div>
       </div>
 
-      <!-- CONTENT AREA -->
       <div id="content">
-        <!-- PAGE: DASHBOARD -->
         <div id="page-dashboard" class="page active">
           <div class="stats-grid" id="stats-grid"></div>
 
@@ -170,7 +161,6 @@
           </div>
         </div>
 
-        <!-- PAGE: APPOINTMENTS -->
         <div id="page-appointments" class="page">
           <div class="search-bar">
             <div class="search-input-wrap">
@@ -212,7 +202,6 @@
           </div>
         </div>
 
-        <!-- PAGE: PATIENTS -->
         <div id="page-patients" class="page">
           <div class="search-bar">
             <div class="search-input-wrap">
@@ -246,7 +235,6 @@
           </div>
         </div>
 
-        <!-- PAGE: MEDICAL RECORDS -->
         <div id="page-records" class="page">
           <div class="search-bar">
             <div class="search-input-wrap">
@@ -284,7 +272,6 @@
           </div>
         </div>
 
-        <!-- PAGE: SCHEDULE -->
         <div id="page-schedule" class="page">
           <div class="card">
             <div class="card-header">
@@ -316,7 +303,6 @@
           </div>
         </div>
 
-        <!-- PAGE: PROFILE -->
         <div id="page-profile" class="page">
           <div class="card">
             <div class="card-header">
@@ -361,11 +347,8 @@
           </div>
         </div>
       </div>
-      <!-- End content -->
     </div>
-    <!-- End main -->
 
-    <!-- MODAL: ADD MEDICAL RECORD -->
     <div
       id="modal-overlay"
       class="modal-overlay"
@@ -436,7 +419,6 @@
       </div>
     </div>
 
-    <!-- VIEW PATIENT DETAILS MODAL -->
     <div
       id="modal-view-overlay"
       class="modal-overlay"
@@ -448,10 +430,7 @@
           <h3 id="view-modal-title">Patient Details</h3>
           <button
             class="modal-close"
-            onclick="
-              document.getElementById('modal-view-overlay').style.display =
-                'none'
-            "
+            onclick="document.getElementById('modal-view-overlay').style.display = 'none'"
           >
             ✕
           </button>
@@ -460,7 +439,6 @@
       </div>
     </div>
 
-    <!-- UPDATE APPOINTMENT STATUS MODAL -->
     <div
       id="modal-status-overlay"
       class="modal-overlay"
@@ -472,10 +450,7 @@
           <h3>Update Appointment Status</h3>
           <button
             class="modal-close"
-            onclick="
-              document.getElementById('modal-status-overlay').style.display =
-                'none'
-            "
+            onclick="document.getElementById('modal-status-overlay').style.display = 'none'"
           >
             ✕
           </button>
@@ -494,10 +469,7 @@
         <div class="modal-footer">
           <button
             class="btn btn-ghost"
-            onclick="
-              document.getElementById('modal-status-overlay').style.display =
-                'none'
-            "
+            onclick="document.getElementById('modal-status-overlay').style.display = 'none'"
           >
             Cancel
           </button>

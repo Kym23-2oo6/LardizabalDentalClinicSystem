@@ -1,4 +1,3 @@
-//doctor-script.js
 /**
  * DOCTOR PORTAL - CORE SCRIPT
  * File: doctor-script.js
