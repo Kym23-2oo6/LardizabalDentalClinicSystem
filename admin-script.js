@@ -1,10 +1,12 @@
-//admin-script.js
 /**
  * HOSPITAL MANAGEMENT SYSTEM - CORE SCRIPT
+ * Version: 1.0.0
+ * Description: Handles UI navigation, CRUD operations, and data persistence 
+ * for the Dental Clinic Administrative Dashboard.
  */
 
 // ==========================================
-// 1. UTILITIES & CONFIGURATION
+// 1. CONFIGURATION & GLOBAL STATE
 // ==========================================
 
 const DB = {
@@ -20,6 +22,17 @@ const DB = {
   },
 };
 
+let currentPage = "dashboard";
+let editingId = null;
+let currentModal = null;
+
+// ==========================================
+// 2. UTILITY HELPERS
+// ==========================================
+
+/**
+ * Date and Calculation Utilities
+ */
 function getTodayDateString() {
   const now = new Date();
   const year = now.getFullYear();
@@ -51,6 +64,9 @@ function calcAge(dob) {
   return age;
 }
 
+/**
+ * UI Component Helpers
+ */
 function getStatusBadge(status) {
   const map = {
     Active: "badge-green",
@@ -72,26 +88,39 @@ function getStatusBadge(status) {
   return `<span class="badge ${map[status] || "badge-gray"}">${status}</span>`;
 }
 
-// ==========================================
-// 2. NAVIGATION & PAGE CONTROL
-// ==========================================
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = "block";
+}
 
-let currentPage = "dashboard";
-let editingId = null;
+function togglePasswordVisibility(inputId, icon) {
+  const input = document.getElementById(inputId);
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.replace("fa-eye", "fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.replace("fa-eye-slash", "fa-eye");
+  }
+}
+
+// ==========================================
+// 3. NAVIGATION & ROUTING
+// ==========================================
 
 function navigate(page) {
-  document
-    .querySelectorAll(".nav-item")
-    .forEach((n) => n.classList.remove("active"));
-  document
-    .querySelectorAll(".page")
-    .forEach((p) => p.classList.remove("active"));
+  // Update UI active states
+  document.querySelectorAll(".nav-item").forEach((n) => n.classList.remove("active"));
+  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
 
   const nav = document.querySelector(`[onclick="navigate('${page}')"]`);
   if (nav) nav.classList.add("active");
   document.getElementById("page-" + page).classList.add("active");
+  
   currentPage = page;
 
+  // Header Title mapping
   const titles = {
     dashboard: ["Dashboard", "Overview of hospital operations"],
     patients: ["Patients", "Manage patient records"],
@@ -100,10 +129,11 @@ function navigate(page) {
     records: ["Medical Records", "Clinical notes and diagnoses"],
     billing: ["Billing", "Manage invoices and payments"],
   };
+  
   document.getElementById("page-title").textContent = titles[page][0];
   document.getElementById("page-subtitle").textContent = titles[page][1];
 
-  // Render specific page content
+  // Execute Page Renderer
   const renderers = {
     dashboard: renderDashboard,
     patients: renderPatients,
@@ -116,60 +146,42 @@ function navigate(page) {
 }
 
 // ==========================================
-// 3. MODAL MANAGEMENT (ADD/EDIT/VIEW)
+// 4. MODAL & VIEW CONTROLLERS
 // ==========================================
-
-let currentModal = null;
 
 function openModal(type, id = null) {
   editingId = id;
-  document.getElementById("modal-overlay").style.display = "flex";
   currentModal = type;
+  document.getElementById("modal-overlay").style.display = "flex";
 
-  // Hide all modals first
+  // Modal Switching Logic
   ["patient", "doctor", "appointment", "record", "billing"].forEach(
-    (t) => (document.getElementById("modal-" + t).style.display = "none"),
+    (t) => (document.getElementById("modal-" + t).style.display = "none")
   );
   document.getElementById("modal-" + type).style.display = "block";
 
-  // Populate dynamic dropdowns
+  // Dropdown Injection
   if (["appointment", "record", "billing"].includes(type)) {
     const patients = DB.get("patients");
-    const selectors = {
-      appointment: "a-patient",
-      record: "r-patient",
-      billing: "b-patient",
-    };
+    const selectors = { appointment: "a-patient", record: "r-patient", billing: "b-patient" };
     const sel = document.getElementById(selectors[type]);
-    sel.innerHTML =
-      '<option value="">Select Patient...</option>' +
+    sel.innerHTML = '<option value="">Select Patient...</option>' +
       patients.map((p) => `<option>${p.name}</option>`).join("");
   }
 
   if (["appointment", "record"].includes(type)) {
     const doctors = DB.get("doctors");
-    const selectors = {
-      appointment: "a-doctor",
-      record: "r-doctor"
-    };
+    const selectors = { appointment: "a-doctor", record: "r-doctor" };
     const sel = document.getElementById(selectors[type]);
-    sel.innerHTML =
-      '<option value="">Select Doctor...</option>' +
+    sel.innerHTML = '<option value="">Select Doctor...</option>' +
       doctors.map((d) => `<option>${d.name}</option>`).join("");
   }
 
   const today = new Date().toISOString().split("T")[0];
 
+  // Populate or Reset form based on mode (Edit vs Add)
   if (id !== null) {
-    // Populate Edit Mode
-    const key =
-      type === "billing" ?
-      "billing" :
-      type === "record" ?
-      "records" :
-      type === "appointment" ?
-      "appointments" :
-      type + "s";
+    const key = type === "billing" ? "billing" : type === "record" ? "records" : type === "appointment" ? "appointments" : type + "s";
     const data = DB.get(key).find((i) => i.id === id);
 
     if (type === "patient") {
@@ -223,7 +235,7 @@ function openModal(type, id = null) {
       document.getElementById("b-method").value = data.method;
     }
   } else {
-    // Reset for Add Mode
+    // Add Mode - Reset Titles and Fields
     document.getElementById("patient-modal-title").textContent = "Add Patient";
     document.getElementById("doctor-modal-title").textContent = "Add Doctor";
     document.getElementById("appt-modal-title").textContent = "New Appointment";
@@ -244,11 +256,12 @@ function openModal(type, id = null) {
       const el = document.getElementById(id);
       if (el) el.value = today;
     });
+
     const atime = document.getElementById("a-time");
     if (atime) atime.value = "09:00";
   }
 
-  // Hide error messages
+  // Cleanup UI States (Errors and Password toggles)
   ["patient", "doctor", "appt", "record", "billing"].forEach((t) => {
     const el = document.getElementById(t + "-err");
     if (el) el.style.display = "none";
@@ -280,31 +293,20 @@ function closeViewModal(e) {
     document.getElementById("modal-view-overlay").style.display = "none";
 }
 
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.style.display = "block";
-}
-
 // ==========================================
-// 4. DATA PERSISTENCE (SAVE / DELETE)
+// 5. DATA OPERATIONS (CRUD)
 // ==========================================
 
 function savePatient() {
   const name = document.getElementById("p-name").value.trim();
-  const email = document.getElementById("p-email").value.trim();
-  const password = document.getElementById("p-password").value.trim();
   const dob = document.getElementById("p-dob").value;
   const gender = document.getElementById("p-gender").value;
-  if (!name || !dob || !gender)
-    return showErr("patient-err", "Please fill in all required fields.");
+  if (!name || !dob || !gender) return showErr("patient-err", "Please fill in all required fields.");
 
   const patients = DB.get("patients");
   const record = {
     id: editingId || DB.nextId("patients"),
-    name,
-    dob,
-    gender,
+    name, dob, gender,
     blood: document.getElementById("p-blood").value,
     phone: document.getElementById("p-phone").value,
     email: document.getElementById("p-email").value,
@@ -329,14 +331,12 @@ function savePatient() {
 function saveDoctor() {
   const name = document.getElementById("d-name").value.trim();
   const spec = document.getElementById("d-spec").value;
-  if (!name || !spec)
-    return showErr("doctor-err", "Please fill in all required fields.");
+  if (!name || !spec) return showErr("doctor-err", "Please fill in all required fields.");
 
   const doctors = DB.get("doctors");
   const record = {
     id: editingId || DB.nextId("doctors"),
-    name,
-    spec,
+    name, spec,
     phone: document.getElementById("d-phone").value,
     email: document.getElementById("d-email").value,
     password: document.getElementById("d-password").value,
@@ -356,30 +356,16 @@ function saveDoctor() {
   renderDoctors();
 }
 
-function togglePasswordVisibility(inputId, icon) {
-  const input = document.getElementById(inputId);
-  if (input.type === "password") {
-    input.type = "text";
-    icon.classList.replace("fa-eye", "fa-eye-slash");
-  } else {
-    input.type = "password";
-    icon.classList.replace("fa-eye-slash", "fa-eye");
-  }
-}
-
 function saveAppointment() {
   const patient = document.getElementById("a-patient").value;
   const doctor = document.getElementById("a-doctor").value;
   const date = document.getElementById("a-date").value;
-  if (!patient || !doctor || !date)
-    return showErr("appt-err", "Please fill in all required fields.");
+  if (!patient || !doctor || !date) return showErr("appt-err", "Please fill in all required fields.");
 
   const appointments = DB.get("appointments");
   const record = {
     id: editingId || DB.nextId("appointments"),
-    patient,
-    doctor,
-    date,
+    patient, doctor, date,
     time: document.getElementById("a-time").value,
     reason: document.getElementById("a-reason").value,
     status: document.getElementById("a-status").value,
@@ -401,15 +387,12 @@ function saveRecord() {
   const patient = document.getElementById("r-patient").value;
   const doctor = document.getElementById("r-doctor").value;
   const diagnosis = document.getElementById("r-diagnosis").value.trim();
-  if (!patient || !doctor || !diagnosis)
-    return showErr("record-err", "Please fill in all required fields.");
+  if (!patient || !doctor || !diagnosis) return showErr("record-err", "Please fill in all required fields.");
 
   const records = DB.get("records");
   const record = {
     id: editingId || DB.nextId("records"),
-    patient,
-    doctor,
-    diagnosis,
+    patient, doctor, diagnosis,
     prescription: document.getElementById("r-prescription").value,
     notes: document.getElementById("r-notes").value,
     date: document.getElementById("r-date").value,
@@ -431,14 +414,12 @@ function saveBilling() {
   const patient = document.getElementById("b-patient").value;
   const service = document.getElementById("b-service").value.trim();
   const amount = document.getElementById("b-amount").value;
-  if (!patient || !service || !amount)
-    return showErr("billing-err", "Please fill in all required fields.");
+  if (!patient || !service || !amount) return showErr("billing-err", "Please fill in all required fields.");
 
   const billing = DB.get("billing");
   const record = {
     id: editingId || DB.nextId("billing"),
-    patient,
-    service,
+    patient, service,
     amount: parseFloat(amount),
     date: document.getElementById("b-date").value,
     status: document.getElementById("b-status").value,
@@ -458,100 +439,33 @@ function saveBilling() {
 
 function deleteItem(type, id) {
   if (!confirm("Are you sure you want to delete this record?")) return;
-  const key =
-    type === "billing" ? "billing" : type === "record" ? "records" : type + "s";
+  const key = type === "billing" ? "billing" : type === "record" ? "records" : type + "s";
   const data = DB.get(key).filter((i) => i.id !== id);
   DB.set(key, data);
 
-  // Refresh current view
-  if (type === "patient") renderPatients();
-  if (type === "doctor") renderDoctors();
-  if (type === "appointment") renderAppointments();
-  if (type === "record") renderRecords();
-  if (type === "billing") renderBilling();
+  // Refresh current view based on type
+  const refreshMap = { 
+    patient: renderPatients, 
+    doctor: renderDoctors, 
+    appointment: renderAppointments, 
+    record: renderRecords, 
+    billing: renderBilling 
+  };
+  if (refreshMap[type]) refreshMap[type]();
   if (currentPage === "dashboard") renderDashboard();
 }
 
 // ==========================================
-// 5. NOTIFICATION SYSTEM
-// ==========================================
-
-function checkNotifications() {
-  const notifications = DB.get("notifications") || [];
-  const unread = notifications.filter((n) => !n.read);
-  const countEl = document.getElementById("notification-count");
-  const listEl = document.getElementById("notification-list");
-
-  if (unread.length > 0) {
-    countEl.innerText = unread.length;
-    countEl.style.display = "block";
-  } else {
-    countEl.style.display = "none";
-  }
-
-  if (notifications.length === 0) {
-    listEl.innerHTML =
-      '<div style="padding:15px; text-align:center; color:var(--text-muted); font-size:13px;">No new notifications</div>';
-  } else {
-    listEl.innerHTML = notifications
-      .reverse()
-      .map((n) => {
-        const bgColor =
-          n.type === "cancellation" ?
-          "#fff1f2" :
-          n.read ?
-          "transparent" :
-          "#f0f9ff";
-        const iconColor =
-          n.type === "cancellation" ? "var(--danger)" : "var(--primary)";
-
-        return `
-        <div style="padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 13px; background: ${bgColor}">
-          <div style="display: flex; gap: 8px; align-items: start;">
-            <i class="fas ${n.type === "cancellation" ? "fa-times-circle" : "fa-calendar-plus"}" style="margin-top: 3px; color: ${iconColor}"></i>
-            <div style="flex: 1;">
-              <strong>${n.patient}</strong>
-              <div style="color: var(--text-muted); font-size: 11px;">${n.message}</div>
-              <div style="color: var(--text-muted); font-size: 10px; margin-top: 4px;">${n.time}</div>
-            </div>
-          </div>
-        </div>`;
-      })
-      .join("");
-  }
-}
-
-function toggleNotifications() {
-  const dropdown = document.getElementById("notification-dropdown");
-  const isVisible = dropdown.style.display === "block";
-  dropdown.style.display = isVisible ? "none" : "block";
-
-  if (!isVisible) {
-    let notifications = DB.get("notifications");
-    notifications.forEach((n) => (n.read = true));
-    DB.set("notifications", notifications);
-    checkNotifications();
-  }
-}
-
-function clearNotifications(e) {
-  e.stopPropagation();
-  DB.set("notifications", []);
-  checkNotifications();
-}
-
-// ==========================================
-// 6. RENDER FUNCTIONS (UI GENERATION)
+// 6. UI RENDERERS (DOM GENERATION)
 // ==========================================
 
 function renderPatients() {
   const q = document.getElementById("patient-search").value.toLowerCase();
   const f = document.getElementById("patient-filter").value;
   let patients = DB.get("patients").filter(
-    (p) =>
-    (!q || p.name.toLowerCase().includes(q) || p.phone.includes(q)) &&
-    (!f || p.blood === f),
+    (p) => (!q || p.name.toLowerCase().includes(q) || p.phone.includes(q)) && (!f || p.blood === f)
   );
+  
   const tbody = document.getElementById("patients-tbody");
   if (patients.length === 0) {
     tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-injured"></i></span></div><p>No patients found</p></div></td></tr>`;
@@ -575,15 +489,15 @@ function renderPatients() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('patient', ${p.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('patient', ${p.id})">Del</button>
       </td>
-    </tr>`,
-    )
-    .join("");
+    </tr>`
+    ).join("");
 }
 
 function viewPatient(id) {
   const p = DB.get("patients").find((x) => x.id === id);
   const records = DB.get("records").filter((r) => r.patient === p.name);
   const billing = DB.get("billing").filter((b) => b.patient === p.name);
+  
   document.getElementById("view-modal-title").textContent = p.name;
   document.getElementById("view-modal-body").innerHTML = `
     <div class="detail-grid" style="margin-bottom:16px">
@@ -609,12 +523,9 @@ function renderDoctors() {
   const q = document.getElementById("doctor-search").value.toLowerCase();
   const f = document.getElementById("doctor-filter").value;
   let doctors = DB.get("doctors").filter(
-    (d) =>
-    (!q ||
-      d.name.toLowerCase().includes(q) ||
-      d.spec.toLowerCase().includes(q)) &&
-    (!f || d.spec === f),
+    (d) => (!q || d.name.toLowerCase().includes(q) || d.spec.toLowerCase().includes(q)) && (!f || d.spec === f)
   );
+  
   const tbody = document.getElementById("doctors-tbody");
   if (doctors.length === 0) {
     tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="icon"><span class="icon"><i class="fas fa-user-md"></i></span></div><p>No doctors found</p></div></td></tr>`;
@@ -636,9 +547,8 @@ function renderDoctors() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('doctor', ${d.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('doctor', ${d.id})">Del</button>
       </td>
-    </tr>`,
-    )
-    .join("");
+    </tr>`
+    ).join("");
 }
 
 function renderAppointments() {
@@ -646,12 +556,7 @@ function renderAppointments() {
   const f = document.getElementById("appt-filter").value;
   let appts = DB.get("appointments")
     .filter(
-      (a) =>
-      (!q ||
-        a.patient.toLowerCase().includes(q) ||
-        a.doctor.toLowerCase().includes(q) ||
-        a.reason.toLowerCase().includes(q)) &&
-      (!f || a.status === f),
+      (a) => (!q || a.patient.toLowerCase().includes(q) || a.doctor.toLowerCase().includes(q) || a.reason.toLowerCase().includes(q)) && (!f || a.status === f)
     )
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -674,21 +579,14 @@ function renderAppointments() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('appointment', ${a.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('appointment', ${a.id})">Del</button>
       </td>
-    </tr>`,
-    )
-    .join("");
+    </tr>`
+    ).join("");
 }
 
 function renderRecords() {
   const q = document.getElementById("record-search").value.toLowerCase();
   let records = DB.get("records")
-    .filter(
-      (r) =>
-      !q ||
-      r.patient.toLowerCase().includes(q) ||
-      r.diagnosis.toLowerCase().includes(q) ||
-      r.doctor.toLowerCase().includes(q),
-    )
+    .filter((r) => !q || r.patient.toLowerCase().includes(q) || r.diagnosis.toLowerCase().includes(q) || r.doctor.toLowerCase().includes(q))
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const tbody = document.getElementById("records-tbody");
@@ -710,22 +608,15 @@ function renderRecords() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('record', ${r.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('record', ${r.id})">Del</button>
       </td>
-    </tr>`,
-    )
-    .join("");
+    </tr>`
+    ).join("");
 }
 
 function renderBilling() {
   const q = document.getElementById("billing-search").value.toLowerCase();
   const f = document.getElementById("billing-filter").value;
   let bills = DB.get("billing")
-    .filter(
-      (b) =>
-      (!q ||
-        b.patient.toLowerCase().includes(q) ||
-        b.service.toLowerCase().includes(q)) &&
-      (!f || b.status === f),
-    )
+    .filter((b) => (!q || b.patient.toLowerCase().includes(q) || b.service.toLowerCase().includes(q)) && (!f || b.status === f))
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const tbody = document.getElementById("billing-tbody");
@@ -747,9 +638,8 @@ function renderBilling() {
         <button class="btn btn-ghost btn-sm" onclick="openModal('billing', ${b.id})">Edit</button>
         <button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none" onclick="deleteItem('billing', ${b.id})">Del</button>
       </td>
-    </tr>`,
-    )
-    .join("");
+    </tr>`
+    ).join("");
 }
 
 function renderDashboard() {
@@ -760,14 +650,14 @@ function renderDashboard() {
 
   const today = new Date().toISOString().split("T")[0];
   const todayAppts = appointments.filter(
-    (a) =>
-    a.date === today &&
-    !["Completed", "Cancelled", "No Show"].includes(a.status),
+    (a) => a.date === today && !["Completed", "Cancelled", "No Show"].includes(a.status)
   ).length;
+  
   const totalRevenue = billing
     .filter((b) => b.status === "Paid")
     .reduce((s, b) => s + b.amount, 0);
 
+  // Update Stats Cards
   document.getElementById("stats-grid").innerHTML = `
     <div class="stat-card">
       <div class="stat-icon" style="background:#e3f4ff;font-size:22px"><span class="icon"><i class="fas fa-user-injured"></i></span></div>
@@ -793,9 +683,7 @@ function renderDashboard() {
   // Recent appointments list
   const recentAppts = appointments.slice(-5).reverse();
   document.getElementById("dash-appointments").innerHTML = recentAppts.length ?
-    recentAppts
-    .map(
-      (a) => `
+    recentAppts.map((a) => `
       <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
         <div class="appt-date">
           <div class="day">${new Date(a.date + "T00:00:00").getDate()}</div>
@@ -806,208 +694,142 @@ function renderDashboard() {
           <div style="font-size:12px;color:var(--text-muted)">${a.doctor} · ${a.time}</div>
         </div>
         ${getStatusBadge(a.status)}
-      </div>`,
-    )
-    .join("") :
+      </div>`).join("") :
     '<div class="empty-state"><p>No appointments yet</p></div>';
 
   // Recent patients list
   const recentPatients = patients.slice(-5).reverse();
   document.getElementById("dash-patients").innerHTML = recentPatients.length ?
-    recentPatients
-    .map(
-      (p) => `
+    recentPatients.map((p) => `
       <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
         <div style="width:38px;height:38px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;flex-shrink:0">
-          ${p.name
-            .split(" ")
-            .map((w) => w[0])
-            .slice(0, 2)
-            .join("")}
+          ${p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
         </div>
         <div style="flex:1">
           <div style="font-size:14px;font-weight:500">${p.name}</div>
           <div style="font-size:12px;color:var(--text-muted)">${p.gender} · ${calcAge(p.dob)} yrs · ${p.blood || "N/A"}</div>
         </div>
         ${getStatusBadge(p.status)}
-      </div>`,
-    )
-    .join("") :
+      </div>`).join("") :
     '<div class="empty-state"><p>No patients yet</p></div>';
 }
 
 // ==========================================
-// 7. SEED DATA (INITIALIZATION)
+// 7. NOTIFICATION SYSTEM
+// ==========================================
+
+function checkNotifications() {
+  const notifications = DB.get("notifications") || [];
+  const unread = notifications.filter((n) => !n.read);
+  const countEl = document.getElementById("notification-count");
+  const listEl = document.getElementById("notification-list");
+
+  if (unread.length > 0) {
+    countEl.innerText = unread.length;
+    countEl.style.display = "block";
+  } else {
+    countEl.style.display = "none";
+  }
+
+  if (notifications.length === 0) {
+    listEl.innerHTML = '<div style="padding:15px; text-align:center; color:var(--text-muted); font-size:13px;">No new notifications</div>';
+  } else {
+    listEl.innerHTML = notifications.reverse().map((n) => {
+        const bgColor = n.type === "cancellation" ? "#fff1f2" : n.read ? "transparent" : "#f0f9ff";
+        const iconColor = n.type === "cancellation" ? "var(--danger)" : "var(--primary)";
+        return `
+        <div style="padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 13px; background: ${bgColor}">
+          <div style="display: flex; gap: 8px; align-items: start;">
+            <i class="fas ${n.type === "cancellation" ? "fa-times-circle" : "fa-calendar-plus"}" style="margin-top: 3px; color: ${iconColor}"></i>
+            <div style="flex: 1;">
+              <strong>${n.patient}</strong>
+              <div style="color: var(--text-muted); font-size: 11px;">${n.message}</div>
+              <div style="color: var(--text-muted); font-size: 10px; margin-top: 4px;">${n.time}</div>
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+  }
+}
+
+function toggleNotifications() {
+  const dropdown = document.getElementById("notification-dropdown");
+  const isVisible = dropdown.style.display === "block";
+  dropdown.style.display = isVisible ? "none" : "block";
+
+  if (!isVisible) {
+    let notifications = DB.get("notifications");
+    notifications.forEach((n) => (n.read = true));
+    DB.set("notifications", notifications);
+    checkNotifications();
+  }
+}
+
+function clearNotifications(e) {
+  e.stopPropagation();
+  DB.set("notifications", []);
+  checkNotifications();
+}
+
+// ==========================================
+// 8. DATA INITIALIZATION (SEEDING)
 // ==========================================
 
 function seedData() {
   if (DB.get("patients").length > 0) return;
 
-  // Seed Patients with Passwords
-  DB.set("patients", [{
-      id: 1,
-      name: "Vets Tres",
-      dob: "2006-12-30",
-      gender: "Male",
-      blood: "--",
-      phone: "+63 909 090 9090",
-      email: "vetstres@gmail.com",
-      password: "tresvets", // Added password
-      address: "Taguig City, Metro Manila",
-      history: "Hypertension, Penicillin allergy",
-      status: "Active",
-      emergency: "09171234568",
-    },
-    {
-      id: 2,
-      name: "Jun Jez",
-      dob: "2006-06-21",
-      gender: "Male",
-      blood: "--",
-      phone: "+63 909 090 9090",
-      email: "junjez@gmail.com",
-      password: "jezjun", // Added password
-      address: "Taguig City, Metro Manila",
-      history: "Type 2 Diabetes",
-      status: "Critical",
-      emergency: "Liberty",
-    },
-    {
-      id: 3,
-      name: "Sao",
-      dob: "2006-02-27",
-      gender: "Male",
-      blood: "--",
-      phone: "+63 909 090 9090",
-      email: "sao@gmail.com",
-      password: "saosao", // Added password
-      address: "Taguig City, Metro Manila",
-      history: "Ngek",
-      status: "Active",
-      emergency: "",
-    },
+  // Seed Patients
+  DB.set("patients", [
+    { id: 1, name: "Vets Tres", dob: "2006-12-30", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "vetstres@gmail.com", password: "tresvets", address: "Taguig City, Metro Manila", history: "Hypertension, Penicillin allergy", status: "Active", emergency: "09171234568" },
+    { id: 2, name: "Jun Jez", dob: "2006-06-21", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "junjez@gmail.com", password: "jezjun", address: "Taguig City, Metro Manila", history: "Type 2 Diabetes", status: "Critical", emergency: "Liberty" },
+    { id: 3, name: "Sao", dob: "2006-02-27", gender: "Male", blood: "--", phone: "+63 909 090 9090", email: "sao@gmail.com", password: "saosao", address: "Taguig City, Metro Manila", history: "Ngek", status: "Active", emergency: "" }
   ]);
 
-  // Seed Doctors with Passwords
-  DB.set("doctors", [{
-      id: 1,
-      name: "John Michael",
-      spec: "General Dentistry",
-      phone: "+63 909 090 9090",
-      email: "jm@lardizabaldental.com",
-      password: "michaeljohn", // Added password
-      license: "PRC-12345",
-      schedule: "Mon-Fri (Morning)",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Joshua",
-      spec: "Orthodontics",
-      phone: "+63 909 090 9090",
-      email: "joshua@lardizabaldental.com",
-      password: "huajos", // Added password
-      license: "PRC-23456",
-      schedule: "Mon-Fri (Afternoon)",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Kym Brian",
-      spec: "Oral & Maxillofacial Surgery",
-      phone: "+63 909 090 9090",
-      email: "kym@lardizabaldental.com",
-      password: "briankym", // Added password
-      license: "PRC-34567",
-      schedule: "Tue-Sat",
-      status: "Active",
-    },
+  // Seed Doctors
+  DB.set("doctors", [
+    { id: 1, name: "John Michael", spec: "General Dentistry", phone: "+63 909 090 9090", email: "jm@lardizabaldental.com", password: "michaeljohn", license: "PRC-12345", schedule: "Mon-Fri (Morning)", status: "Active" },
+    { id: 2, name: "Joshua", spec: "Orthodontics", phone: "+63 909 090 9090", email: "joshua@lardizabaldental.com", password: "huajos", license: "PRC-23456", schedule: "Mon-Fri (Afternoon)", status: "Active" },
+    { id: 3, name: "Kym Brian", spec: "Oral & Maxillofacial Surgery", phone: "+63 909 090 9090", email: "kym@lardizabaldental.com", password: "briankym", license: "PRC-34567", schedule: "Tue-Sat", status: "Active" }
   ]);
 
   const today = new Date().toISOString().split("T")[0];
-  DB.set("appointments", [{
-      id: 1,
-      patient: "Vets Tres",
-      doctor: "Dr. John Michael",
-      date: today,
-      time: "09:00",
-      reason: "Routine checkup",
-      status: "Scheduled",
-      notes: "",
-    },
-    {
-      id: 2,
-      patient: "Jun Jez",
-      doctor: "Dr. Joshua",
-      date: today,
-      time: "10:30",
-      reason: "Fever and cough",
-      status: "Completed",
-      notes: "Prescribed Amoxicillin",
-    },
+  
+  // Seed Appointments
+  DB.set("appointments", [
+    { id: 1, patient: "Vets Tres", doctor: "Dr. John Michael", date: today, time: "09:00", reason: "Routine checkup", status: "Scheduled", notes: "" },
+    { id: 2, patient: "Jun Jez", doctor: "Dr. Joshua", date: today, time: "10:30", reason: "Fever and cough", status: "Completed", notes: "Prescribed Amoxicillin" }
   ]);
 
-  DB.set("records", [{
-      id: 1,
-      patient: "Steven Tres",
-      doctor: "Dr. John Michael",
-      diagnosis: "Hypertension Stage 1",
-      prescription: "Amlodipine 5mg daily",
-      notes: "Monitor BP weekly",
-      date: today,
-      type: "Consultation",
-    },
-    {
-      id: 2,
-      patient: "Jez Jun",
-      doctor: "Dr. Joshua",
-      diagnosis: "Acute Upper Respiratory Infection",
-      prescription: "Amoxicillin 500mg TID x 7 days, Paracetamol PRN",
-      notes: "Rest and hydration",
-      date: today,
-      type: "Consultation",
-    },
+  // Seed Records
+  DB.set("records", [
+    { id: 1, patient: "Steven Tres", doctor: "Dr. John Michael", diagnosis: "Hypertension Stage 1", prescription: "Amlodipine 5mg daily", notes: "Monitor BP weekly", date: today, type: "Consultation" },
+    { id: 2, patient: "Jez Jun", doctor: "Dr. Joshua", diagnosis: "Acute Upper Respiratory Infection", prescription: "Amoxicillin 500mg TID x 7 days, Paracetamol PRN", notes: "Rest and hydration", date: today, type: "Consultation" }
   ]);
 
-  DB.set("billing", [{
-      id: 1,
-      patient: "Steven Tres",
-      service: "Consultation – Cardiology",
-      amount: 1500,
-      date: today,
-      status: "Paid",
-      method: "Cash",
-    },
-    {
-      id: 3,
-      patient: "Jez Jun",
-      service: "Diabetes Monitoring Package",
-      amount: 2200,
-      date: today,
-      status: "Pending",
-      method: "PhilHealth",
-    },
+  // Seed Billing
+  DB.set("billing", [
+    { id: 1, patient: "Steven Tres", service: "Consultation – Cardiology", amount: 1500, date: today, status: "Paid", method: "Cash" },
+    { id: 3, patient: "Jez Jun", service: "Diabetes Monitoring Package", amount: 2200, date: today, status: "Pending", method: "PhilHealth" }
   ]);
 }
 
 // ==========================================
-// 8. INITIALIZATION & LISTENERS
+// 9. LIFECYCLE & EVENT LISTENERS
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Initialize Header Date
   const dateStr = new Date().toLocaleDateString("en-PH", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
   const dateEl = document.getElementById("current-date");
   if (dateEl) dateEl.textContent = dateStr;
 
+  // Initial Boot
   seedData();
   renderDashboard();
   checkNotifications();
 
-  // Polling for notifications
+  // Notification Polling (5 seconds)
   setInterval(checkNotifications, 5000);
 });

@@ -1,3 +1,20 @@
+/* ==========================================================================
+   LARDIZABAL DENTAL — MAIN LANDING PAGE STYLES
+   1. CORE CONFIGURATION (Variables, Reset, Base)
+   2. GLOBAL UI ELEMENTS (Navigation)
+   3. HERO SECTION (Layout, Content, Decor, Stat Cards)
+   4. TRUST & SOCIAL PROOF (Trust Bar)
+   5. FEATURE MODULES (Services, Experience)
+   6. CONVERSION BLOCKS (CTA Banner)
+   7. SITE FOOTER (Brand Info, Links, Socials)
+   8. UTILITIES & ANIMATIONS (Keyframes, Reveal States)
+   9. RESPONSIVE DESIGN (Media Queries)
+   ========================================================================== */
+
+/* ==========================================================================
+   1. CORE CONFIGURATION
+   ========================================================================== */
+
 :root {
     --ink: #0a1628;
     --ink-light: #2d3f5c;
@@ -22,15 +39,12 @@
 
 html {
     scroll-behavior: smooth;
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    scrollbar-width: none;
-    /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;    /* Firefox */
 }
 
 html::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari and Opera */
+    display: none; /* Chrome, Safari and Opera */
 }
 
 body {
@@ -46,7 +60,11 @@ body::-webkit-scrollbar {
     display: none;
 }
 
-/* ── NAV ── */
+/* ==========================================================================
+   2. GLOBAL UI ELEMENTS
+   ========================================================================== */
+
+/* --- Navigation --- */
 nav {
     position: fixed;
     top: 0;
@@ -163,7 +181,10 @@ nav.scrolled {
     transform: translateY(-1px);
 }
 
-/* ── HERO ── */
+/* ==========================================================================
+   3. HERO SECTION
+   ========================================================================== */
+
 .hero {
     min-height: 100vh;
     display: grid;
@@ -173,6 +194,7 @@ nav.scrolled {
     overflow: hidden;
 }
 
+/* --- Hero Decoration --- */
 .hero-bg-decor {
     position: absolute;
     inset: 0;
@@ -200,6 +222,7 @@ nav.scrolled {
     background: linear-gradient(to bottom, transparent, rgba(13, 110, 122, 0.12), transparent);
 }
 
+/* --- Hero Content (Left) --- */
 .hero-left {
     display: flex;
     flex-direction: column;
@@ -304,7 +327,7 @@ nav.scrolled {
     left: 100%;
 }
 
-/* Status indicator */
+/* --- Status Indicator --- */
 .open-indicator {
     display: inline-flex;
     align-items: center;
@@ -338,19 +361,7 @@ nav.scrolled {
     animation: ripple 2s infinite;
 }
 
-@keyframes ripple {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(1.8);
-        opacity: 0;
-    }
-}
-
-/* ── HERO RIGHT ── */
+/* --- Hero Visual (Right) --- */
 .hero-right {
     position: relative;
     display: flex;
@@ -381,7 +392,7 @@ nav.scrolled {
             transparent 30%);
 }
 
-/* Floating stat cards */
+/* --- Floating Stat Cards --- */
 .stat-card {
     position: absolute;
     background: white;
@@ -401,18 +412,6 @@ nav.scrolled {
     top: 60px;
     right: 24px;
     animation-delay: 2.5s;
-}
-
-@keyframes floatCard {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-12px);
-    }
 }
 
 .stat-number {
@@ -444,7 +443,10 @@ nav.scrolled {
     font-size: 0.9rem;
 }
 
-/* ── TRUST BAR ── */
+/* ==========================================================================
+   4. TRUST & SOCIAL PROOF
+   ========================================================================== */
+
 .trust-bar {
     background: var(--ink);
     padding: 22px 7%;
@@ -474,12 +476,11 @@ nav.scrolled {
     background: rgba(255, 255, 255, 0.15);
 }
 
-/* ── SERVICES ── */
-.services {
-    padding: 120px 7%;
-    background: var(--cream);
-}
+/* ==========================================================================
+   5. FEATURE MODULES
+   ========================================================================== */
 
+/* --- Section Headers --- */
 .section-header {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -530,6 +531,12 @@ nav.scrolled {
     max-width: 420px;
 }
 
+/* --- Services Grid --- */
+.services {
+    padding: 120px 7%;
+    background: var(--cream);
+}
+
 .services-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -568,17 +575,9 @@ nav.scrolled {
     color: var(--teal-bright);
 }
 
-.service-card:hover .service-title {
-    color: white;
-}
-
-.service-card:hover .service-desc {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.service-card:hover .service-num {
-    color: rgba(255, 255, 255, 0.15);
-}
+.service-card:hover .service-title { color: white; }
+.service-card:hover .service-desc { color: rgba(255, 255, 255, 0.6); }
+.service-card:hover .service-num { color: rgba(255, 255, 255, 0.15); }
 
 .service-card:hover::after {
     transform: scaleX(1);
@@ -627,7 +626,7 @@ nav.scrolled {
     transition: color 0.4s;
 }
 
-/* ── EXPERIENCE SECTION ── */
+/* --- Experience Content --- */
 .experience {
     padding: 120px 7%;
     display: grid;
@@ -730,7 +729,10 @@ nav.scrolled {
     font-weight: 300;
 }
 
-/* ── CTA BANNER ── */
+/* ==========================================================================
+   6. CONVERSION BLOCKS
+   ========================================================================== */
+
 .cta-section {
     margin: 0 7% 120px;
     background: var(--teal);
@@ -744,6 +746,7 @@ nav.scrolled {
     overflow: hidden;
 }
 
+/* --- Section Decor --- */
 .cta-section::before {
     content: '';
     position: absolute;
@@ -834,7 +837,10 @@ nav.scrolled {
     background: rgba(255, 255, 255, 0.08);
 }
 
-/* ── FOOTER ── */
+/* ==========================================================================
+   7. SITE FOOTER
+   ========================================================================== */
+
 footer {
     background: var(--ink);
     color: white;
@@ -850,6 +856,7 @@ footer {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* --- Brand Info --- */
 .footer-brand .logo-row {
     display: flex;
     align-items: center;
@@ -907,6 +914,7 @@ footer {
     color: white;
 }
 
+/* --- Links & Contact --- */
 .footer-col h4 {
     font-size: 0.7rem;
     font-weight: 600;
@@ -956,6 +964,7 @@ footer {
     line-height: 1.5;
 }
 
+/* --- Socials & Copy --- */
 .footer-bottom {
     display: flex;
     align-items: center;
@@ -993,29 +1002,31 @@ footer {
     color: white;
 }
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(24px);
-    }
+/* ==========================================================================
+   8. UTILITIES & ANIMATIONS
+   ========================================================================== */
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes ripple {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
+/* --- Scroll Revel --- */
 .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -1027,7 +1038,10 @@ footer {
     transform: translateY(0);
 }
 
-/* ── RESPONSIVE ── */
+/* ==========================================================================
+   9. RESPONSIVE DESIGN
+   ========================================================================== */
+
 @media (max-width: 900px) {
     .hero {
         grid-template-columns: 1fr;

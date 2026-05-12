@@ -1,7 +1,15 @@
-/*admin-styles.css*/
+/* ==========================================================================
+   ADMIN DASHBOARD STYLESHEET
+   1. CORE CONFIGURATION (Variables, Reset, Base)
+   2. LAYOUT WRAPPERS (Sidebar, Main Content, Topbar)
+   3. ATOMIC COMPONENTS (Buttons, Badges, Icons)
+   4. DATA CONTAINERS (Cards, Tables, Grids)
+   5. INTERACTIVE UI (Forms, Modals, Tabs, Search)
+   6. UTILITIES & FEEDBACK (Alerts, Empty States, Page States)
+   ========================================================================== */
 
 /* ==========================================================================
-   1. ROOT VARIABLES & GLOBAL STYLES
+   1. CORE CONFIGURATION
    ========================================================================== */
 
 /* Global color palette, spacing, and reusable design variables */
@@ -41,10 +49,10 @@ body {
 }
 
 /* ==========================================================================
-   2. SIDEBAR NAVIGATION
+   2. LAYOUT WRAPPERS
    ========================================================================== */
 
-/* Main sidebar container */
+/* --- Sidebar Navigation --- */
 #sidebar {
   width: 260px;
   background: var(--sidebar-bg);
@@ -52,7 +60,12 @@ body {
   padding: 0;
 }
 
-/* School/company logo styling */
+.sidebar-logo {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 25px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .lardizabal-logo {
   width: 100px;
   border-radius: 50px;
@@ -62,14 +75,6 @@ body {
   cursor: pointer;
 }
 
-/* Sidebar top/logo section */
-.sidebar-logo {
-  background: rgba(0, 0, 0, 0.1);
-  padding: 25px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Sidebar main title */
 .sidebar-logo h1 {
   font-family: "Segoe UI", sans-serif;
   font-size: 1.2rem;
@@ -77,7 +82,6 @@ body {
   letter-spacing: 1px;
 }
 
-/* Sidebar subtitle or tagline */
 .sidebar-logo span {
   font-size: 11px;
   color: var(--sidebar-text);
@@ -85,14 +89,12 @@ body {
   text-transform: uppercase;
 }
 
-/* Navigation links container */
 .sidebar-nav {
   flex: 1;
   padding: 16px 12px;
   overflow-y: auto;
 }
 
-/* Section label inside sidebar navigation */
 .nav-section {
   font-size: 10px;
   text-transform: uppercase;
@@ -101,7 +103,6 @@ body {
   padding: 12px 8px 6px;
 }
 
-/* Individual navigation item */
 .nav-item {
   display: flex;
   align-items: center;
@@ -116,20 +117,17 @@ body {
   transition: all 0.15s;
 }
 
-/* Hover effect for navigation items */
 .nav-item:hover {
   background: var(--primary);
   color: #fff;
 }
 
-/* Active/current navigation item */
 .nav-item.active {
   background: var(--sidebar-accent);
   color: #fff;
   font-weight: 500;
 }
 
-/* Navigation icon styling */
 .nav-item .icon {
   width: 20px;
   display: inline-flex;
@@ -140,14 +138,11 @@ body {
   color: var(--sidebar-text);
 }
 
-/* Active navigation icon color */
 .nav-item.active .icon i {
   color: var(--sidebar-active);
 }
 
-/* Sidebar Footer & User Profile */
-
-/* Bottom footer section inside sidebar */
+/* --- Sidebar Footer & User Profile --- */
 .sidebar-footer {
   width: 100%;
   padding: 16px;
@@ -156,14 +151,12 @@ body {
   top: 19%;
 }
 
-/* User profile layout inside sidebar */
 .sidebar-user {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Circular user avatar */
 .user-avatar {
   width: 36px;
   height: 36px;
@@ -177,24 +170,18 @@ body {
   color: #fff;
 }
 
-/* User name text */
 .user-info p {
   font-size: 13px;
   font-weight: 500;
   color: #fff;
 }
 
-/* User role/status text */
 .user-info span {
   font-size: 11px;
   color: var(--sidebar-text);
 }
 
-/* ==========================================================================
-   3. MAIN CONTENT AREA & TOPBAR
-   ========================================================================== */
-
-/* Main page content container */
+/* --- Main Content Structure --- */
 #main {
   flex: 1;
   display: flex;
@@ -202,7 +189,6 @@ body {
   overflow: hidden;
 }
 
-/* Top navigation/header bar */
 #topbar {
   background: var(--card);
   border-bottom: 1px solid var(--border);
@@ -212,27 +198,23 @@ body {
   justify-content: space-between;
 }
 
-/* Main page title */
 .topbar-left h2 {
   font-size: 20px;
   font-weight: 600;
   color: var(--text);
 }
 
-/* Subtitle or breadcrumb text */
 .topbar-left p {
   font-size: 13px;
   color: var(--text-muted);
 }
 
-/* Right side controls in topbar */
 .topbar-right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* Scrollable main content area */
 #content {
   flex: 1;
   overflow-y: auto;
@@ -240,12 +222,10 @@ body {
 }
 
 /* ==========================================================================
-   4. UI COMPONENTS (BUTTONS, CARDS, BADGES)
+   3. ATOMIC COMPONENTS
    ========================================================================== */
 
-/* Buttons */
-
-/* Base button styling */
+/* --- Buttons --- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -259,18 +239,15 @@ body {
   transition: all 0.15s;
 }
 
-/* Primary action button */
 .btn-primary {
   background: var(--primary);
   color: #fff;
 }
 
-/* Hover effect for primary button */
 .btn-primary:hover {
   opacity: 0.8;
 }
 
-/* Transparent/ghost button */
 .btn-ghost {
   text-decoration: none;
   background: transparent;
@@ -278,44 +255,65 @@ body {
   border: 1px solid var(--border);
 }
 
-/* Hover effect for ghost button */
 .btn-ghost:hover {
   background: var(--bg);
 }
 
-/* Danger/delete button */
 .btn-danger {
   background: var(--danger);
   color: #fff;
 }
 
-/* Hover effect for danger button */
 .btn-danger:hover {
   background: #dc2626;
 }
 
-/* Success/confirm button */
 .btn-success {
   background: var(--success);
   color: #fff;
 }
 
-/* Smaller button variant */
 .btn-sm {
   padding: 6px 12px;
   font-size: 12px;
 }
 
-/* Cards & Dashboards */
+/* --- Badges --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+}
 
-/* Grid layout for dashboard cards */
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-yellow { background: #fef9c3; color: #854d0e; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-blue { background: #e3efff; color: #00858a; }
+.badge-gray { background: #f1f5f9; color: #475569; }
+.badge-gold { background: #fff6e4; color: #e29624; }
+
+/* ==========================================================================
+   4. DATA CONTAINERS
+   ========================================================================== */
+
+/* --- Grids --- */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
-/* Reusable card container */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* --- Cards --- */
 .card {
   background: var(--card);
   border: none;
@@ -325,7 +323,6 @@ body {
   transition: transform 0.2s;
 }
 
-/* Card top/header section */
 .card-header {
   padding: 18px 20px 14px;
   border-bottom: 1px solid var(--border);
@@ -334,28 +331,15 @@ body {
   justify-content: space-between;
 }
 
-/* Card title */
 .card-header h3 {
   font-size: 15px;
   font-weight: 600;
 }
 
-/* Main card content */
 .card-body {
   padding: 20px;
 }
 
-/* Stats */
-
-/* Grid layout for statistics cards */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-/* Individual statistic card */
 .stat-card {
   background: var(--card);
   border: none;
@@ -365,7 +349,6 @@ body {
   transition: transform 0.2s;
 }
 
-/* Statistic icon container */
 .stat-icon {
   width: 44px;
   height: 44px;
@@ -377,91 +360,32 @@ body {
   margin-bottom: 12px;
 }
 
-/* Statistic icon size */
 .stat-icon i {
   font-size: 24px;
 }
 
-/* Main statistic number/value */
 .stat-value {
   font-size: 28px;
   font-weight: 600;
 }
 
-/* Statistic label/description */
 .stat-label {
   font-size: 13px;
   color: var(--text-muted);
   margin-top: 2px;
 }
 
-/* Badges */
-
-/* Base badge styling */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-/* Green status badge */
-.badge-green {
-  background: #dcfce7;
-  color: #166534;
-}
-
-/* Yellow warning badge */
-.badge-yellow {
-  background: #fef9c3;
-  color: #854d0e;
-}
-
-/* Red danger badge */
-.badge-red {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-/* Blue information badge */
-.badge-blue {
-  background: #e3efff;
-  color: #00858a;
-}
-
-/* Gray neutral badge */
-.badge-gray {
-  background: #f1f5f9;
-  color: #475569;
-}
-
-/* Gold premium badge */
-.badge-gold {
-  background: #fff6e4;
-  color: #e29624;
-}
-
-/* ==========================================================================
-   5. DATA PRESENTATION (TABLES, DETAILS, TABS)
-   ========================================================================== */
-
-/* Tables */
-
-/* Wrapper for responsive table scrolling */
+/* --- Tables --- */
 .table-wrap {
   overflow-x: auto;
 }
 
-/* Main table styling */
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-/* Table header cells */
 thead th {
   background: #f8f9fa;
   padding: 12px 14px;
@@ -474,7 +398,6 @@ thead th {
   border-bottom: 2px solid var(--border);
 }
 
-/* Table body cells */
 tbody td {
   padding: 15px 12px;
   border-bottom: 1px solid var(--border);
@@ -482,26 +405,25 @@ tbody td {
   font-size: 14px;
 }
 
-/* Hover effect for table rows */
 tbody tr:hover td {
   background: #f8fafc;
 }
 
-/* Remove border from last row */
 tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Patient / Detail Items */
+.actions-cell {
+  white-space: nowrap;
+}
 
-/* Grid layout for detail items */
+/* --- Detail Items --- */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* Label text inside detail items */
 .detail-item .lbl {
   font-size: 11px;
   color: var(--text-muted);
@@ -510,15 +432,16 @@ tbody tr:last-child td {
   margin-bottom: 2px;
 }
 
-/* Value text inside detail items */
 .detail-item .val {
   font-size: 14px;
   font-weight: 500;
 }
 
-/* Tabs */
+/* ==========================================================================
+   5. INTERACTIVE UI
+   ========================================================================== */
 
-/* Tab navigation container */
+/* --- Tabs --- */
 .tabs {
   display: flex;
   gap: 0;
@@ -526,7 +449,6 @@ tbody tr:last-child td {
   margin-bottom: 20px;
 }
 
-/* Individual tab button */
 .tab {
   padding: 10px 18px;
   font-size: 14px;
@@ -537,19 +459,12 @@ tbody tr:last-child td {
   margin-bottom: -1px;
 }
 
-/* Active tab styling */
 .tab.active {
   color: var(--primary);
   border-bottom-color: var(--primary);
 }
 
-/* ==========================================================================
-   6. FORMS, MODALS & SEARCH
-   ========================================================================== */
-
-/* Search Bar */
-
-/* Search bar container */
+/* --- Search Bar --- */
 .search-bar {
   display: flex;
   align-items: center;
@@ -557,14 +472,12 @@ tbody tr:last-child td {
   margin-bottom: 18px;
 }
 
-/* Wrapper for search input and icon */
 .search-input-wrap {
   position: relative;
   flex: 1;
   max-width: 320px;
 }
 
-/* Search input field */
 .search-input-wrap input {
   width: 100%;
   padding: 9px 12px 9px 36px;
@@ -576,12 +489,10 @@ tbody tr:last-child td {
   outline: none;
 }
 
-/* Focus state for search input */
 .search-input-wrap input:focus {
   border-color: var(--primary);
 }
 
-/* Search icon inside input */
 .search-icon {
   position: absolute;
   left: 11px;
@@ -591,7 +502,6 @@ tbody tr:last-child td {
   font-size: 15px;
 }
 
-/* Dropdown filter/select field */
 .filter-select {
   padding: 9px 12px;
   border: 1px solid var(--border);
@@ -604,28 +514,23 @@ tbody tr:last-child td {
   cursor: pointer;
 }
 
-/* Forms */
-
-/* Grid layout for forms */
+/* --- Forms --- */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
 
-/* Full-width form field */
 .form-full {
   grid-column: 1 / -1;
 }
 
-/* Individual form field group */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-/* Form labels */
 .form-group label {
   font-size: 12px;
   font-weight: 500;
@@ -634,7 +539,6 @@ tbody tr:last-child td {
   letter-spacing: 0.5px;
 }
 
-/* Inputs, selects, and textarea styling */
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -649,7 +553,6 @@ tbody tr:last-child td {
   transition: border-color 0.15s;
 }
 
-/* Focus state for form fields */
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
@@ -657,15 +560,12 @@ tbody tr:last-child td {
   background: #fff;
 }
 
-/* Textarea specific behavior */
 .form-group textarea {
   resize: vertical;
   min-height: 80px;
 }
 
-/* Modal */
-
-/* Dark overlay behind modal */
+/* --- Modals --- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -677,7 +577,6 @@ tbody tr:last-child td {
   backdrop-filter: blur(2px);
 }
 
-/* Main modal container */
 .modal {
   background: var(--card);
   border-radius: 16px;
@@ -688,7 +587,6 @@ tbody tr:last-child td {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
-/* Modal header section */
 .modal-header {
   padding: 20px 24px 16px;
   border-bottom: 1px solid var(--border);
@@ -697,13 +595,11 @@ tbody tr:last-child td {
   align-items: center;
 }
 
-/* Modal title */
 .modal-header h3 {
   font-size: 17px;
   font-weight: 600;
 }
 
-/* Close button for modal */
 .modal-close {
   background: none;
   border: none;
@@ -713,12 +609,10 @@ tbody tr:last-child td {
   line-height: 1;
 }
 
-/* Main modal content area */
 .modal-body {
   padding: 20px 24px 24px;
 }
 
-/* Modal footer with actions/buttons */
 .modal-footer {
   padding: 16px 24px;
   border-top: 1px solid var(--border);
@@ -728,12 +622,10 @@ tbody tr:last-child td {
 }
 
 /* ==========================================================================
-   7. UTILITIES & MISC
+   6. UTILITIES & FEEDBACK
    ========================================================================== */
 
-/* Appointment Pill */
-
-/* Appointment date card/pill */
+/* --- Appointment Pills --- */
 .appt-date {
   display: flex;
   flex-direction: column;
@@ -744,14 +636,12 @@ tbody tr:last-child td {
   min-width: 48px;
 }
 
-/* Appointment day number */
 .appt-date .day {
   font-size: 18px;
   font-weight: 600;
   line-height: 1;
 }
 
-/* Appointment month text */
 .appt-date .month {
   font-size: 10px;
   color: var(--text-muted);
@@ -759,9 +649,7 @@ tbody tr:last-child td {
   letter-spacing: 0.5px;
 }
 
-/* Alerts */
-
-/* Base alert message styling */
+/* --- Alerts --- */
 .alert {
   padding: 12px 16px;
   border-radius: 8px;
@@ -769,56 +657,40 @@ tbody tr:last-child td {
   margin-bottom: 16px;
 }
 
-/* Success alert message */
 .alert-success {
   background: #dcfce7;
   color: #166534;
   border: 1px solid #bbf7d0;
 }
 
-/* Error alert message */
 .alert-error {
   background: #fee2e2;
   color: #991b1b;
   border: 1px solid #fecaca;
 }
 
-/* Empty State */
-
-/* Empty/no-data screen */
+/* --- Empty States --- */
 .empty-state {
   text-align: center;
   padding: 48px 20px;
   color: var(--text-muted);
 }
 
-/* Icon inside empty state */
 .empty-state .icon {
   font-size: 48px;
   margin-bottom: 12px;
   opacity: 0.4;
 }
 
-/* Empty state description text */
 .empty-state p {
   font-size: 14px;
 }
 
-/* Page States */
-
-/* Hidden page section */
+/* --- Page & Visibility States --- */
 .page {
   display: none;
 }
 
-/* Visible/active page section */
 .page.active {
   display: block;
-}
-
-/* Responsive adjustments */
-
-/* Prevent action buttons from wrapping */
-.actions-cell {
-  white-space: nowrap;
 }

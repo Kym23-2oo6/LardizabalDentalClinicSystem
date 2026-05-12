@@ -1,24 +1,20 @@
 /* ==========================================================================
    PATIENT MANAGEMENT SYSTEM STYLESHEET
-   File: patient-styles.css
-   Description:
-   Central stylesheet for the patient dashboard interface including:
-   - Layout structure
-   - Sidebar navigation
-   - Dashboard cards and statistics
-   - Forms, tables, modals, and alerts
-   - Utility helpers and responsive UI elements
+   1. CORE CONFIGURATION (Variables, Reset, Base)
+   2. SIDEBAR NAVIGATION (Logo, Nav Menu, User Footer)
+   3. LAYOUT WRAPPERS (Main Content, Topbar)
+   4. ATOMIC COMPONENTS (Buttons, Badges, Stat Cards)
+   5. DATA CONTAINERS (Dashboard Cards, Tables, Tabs)
+   6. INTERACTIVE UI (Search, Forms, Modals)
+   7. UTILITIES & FEEDBACK (Alerts, Empty States, Page States)
+   8. ANIMATIONS (Keyframes)
    ========================================================================== */
-
 
 /* ==========================================================================
-   1. ROOT VARIABLES & GLOBAL RESET
+   1. CORE CONFIGURATION
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Design System Variables
-   Global colors, spacing, borders, shadows, and reusable UI tokens.
-   -------------------------------------------------------------------------- */
+/* Design System Variables: Global colors, spacing, and UI tokens */
 :root {
   --primary: #014d5b;
   --secondary: #37acbe;
@@ -37,20 +33,14 @@
   --radius: 8px;
 }
 
-/* --------------------------------------------------------------------------
-   Global Reset
-   Removes default spacing and applies border-box sizing model.
-   -------------------------------------------------------------------------- */
+/* Global Reset: Removes default spacing and applies border-box sizing */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* --------------------------------------------------------------------------
-   Base Body Layout
-   Defines application typography, layout flow, and viewport behavior.
-   -------------------------------------------------------------------------- */
+/* Base Body Layout: Typography and application flow */
 body {
   font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg);
@@ -60,15 +50,10 @@ body {
   overflow: hidden;
 }
 
-
 /* ==========================================================================
    2. SIDEBAR NAVIGATION
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Sidebar Container
-   Primary vertical navigation panel.
-   -------------------------------------------------------------------------- */
 #sidebar {
   width: 260px;
   background: var(--sidebar-bg);
@@ -76,11 +61,13 @@ body {
   padding: 0;
 }
 
-/* --------------------------------------------------------------------------
-   Sidebar Branding / Logo
-   -------------------------------------------------------------------------- */
+/* --- Sidebar Branding --- */
+.sidebar-logo {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 25px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
 
-/* Circular school or organization logo */
 .lardizabal-logo {
   width: 100px;
   border-radius: 50px;
@@ -90,14 +77,6 @@ body {
   cursor: pointer;
 }
 
-/* Logo wrapper section at the top of sidebar */
-.sidebar-logo {
-  background: rgba(0, 0, 0, 0.1);
-  padding: 25px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Main sidebar title */
 .sidebar-logo h1 {
   font-family: "Segoe UI", sans-serif;
   font-size: 1.2rem;
@@ -105,7 +84,6 @@ body {
   letter-spacing: 1px;
 }
 
-/* Subtitle, department label, or tagline */
 .sidebar-logo span {
   font-size: 11px;
   color: var(--sidebar-text);
@@ -113,18 +91,13 @@ body {
   text-transform: uppercase;
 }
 
-/* --------------------------------------------------------------------------
-   Sidebar Navigation Menu
-   -------------------------------------------------------------------------- */
-
-/* Navigation links wrapper */
+/* --- Navigation Menu --- */
 .sidebar-nav {
   flex: 1;
   padding: 16px 12px;
   overflow-y: auto;
 }
 
-/* Section labels inside the navigation menu */
 .nav-section {
   font-size: 10px;
   text-transform: uppercase;
@@ -133,7 +106,6 @@ body {
   padding: 12px 8px 6px;
 }
 
-/* Individual clickable navigation item */
 .nav-item {
   display: flex;
   align-items: center;
@@ -148,20 +120,17 @@ body {
   transition: all 0.15s;
 }
 
-/* Hover state for sidebar navigation items */
 .nav-item:hover {
   background: var(--primary);
   color: #fff;
 }
 
-/* Active/current navigation state */
 .nav-item.active {
   background: var(--sidebar-accent);
   color: #fff;
   font-weight: 500;
 }
 
-/* Icon container inside navigation item */
 .nav-item .icon {
   width: 20px;
   display: inline-flex;
@@ -172,16 +141,11 @@ body {
   color: var(--sidebar-text);
 }
 
-/* Active navigation icon color override */
 .nav-item.active .icon i {
   color: var(--sidebar-active);
 }
 
-/* --------------------------------------------------------------------------
-   Sidebar Footer & User Information
-   -------------------------------------------------------------------------- */
-
-/* Footer area located at the bottom of sidebar */
+/* --- User Footer --- */
 .sidebar-footer {
   width: 100%;
   padding: 16px;
@@ -190,14 +154,12 @@ body {
   top: 35%;
 }
 
-/* User profile layout container */
 .sidebar-user {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Circular avatar with initials or icon */
 .user-avatar {
   width: 36px;
   height: 36px;
@@ -211,27 +173,21 @@ body {
   color: #fff;
 }
 
-/* User display name */
 .user-info p {
   font-size: 13px;
   font-weight: 500;
   color: #fff;
 }
 
-/* User role, position, or status text */
 .user-info span {
   font-size: 11px;
   color: var(--sidebar-text);
 }
 
-
 /* ==========================================================================
-   3. MAIN CONTENT AREA & TOPBAR
+   3. LAYOUT WRAPPERS
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Main Application Content Wrapper
-   -------------------------------------------------------------------------- */
 #main {
   flex: 1;
   display: flex;
@@ -239,9 +195,6 @@ body {
   overflow: hidden;
 }
 
-/* --------------------------------------------------------------------------
-   Top Navigation Bar
-   -------------------------------------------------------------------------- */
 #topbar {
   background: var(--card);
   border-bottom: 1px solid var(--border);
@@ -251,46 +204,34 @@ body {
   justify-content: space-between;
 }
 
-/* Main page heading/title */
 .topbar-left h2 {
   font-size: 20px;
   font-weight: 600;
   color: var(--text);
 }
 
-/* Subtitle, helper text, or breadcrumbs */
 .topbar-left p {
   font-size: 13px;
   color: var(--text-muted);
 }
 
-/* Right-side action buttons or controls */
 .topbar-right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* --------------------------------------------------------------------------
-   Scrollable Content Area
-   -------------------------------------------------------------------------- */
 #content {
   flex: 1;
   overflow-y: auto;
   padding: 24px 28px;
 }
 
-
 /* ==========================================================================
-   4. UI COMPONENTS
-   Buttons, cards, statistics, and badges.
+   4. ATOMIC COMPONENTS
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Buttons
-   -------------------------------------------------------------------------- */
-
-/* Shared base button styling */
+/* --- Buttons --- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -304,18 +245,15 @@ body {
   transition: all 0.15s;
 }
 
-/* Primary call-to-action button */
 .btn-primary {
   background: var(--primary);
   color: #fff;
 }
 
-/* Hover effect for primary buttons */
 .btn-primary:hover {
   opacity: 0.8;
 }
 
-/* Minimal transparent button */
 .btn-ghost {
   text-decoration: none;
   background: transparent;
@@ -323,80 +261,62 @@ body {
   border: 1px solid var(--border);
 }
 
-/* Hover state for ghost buttons */
 .btn-ghost:hover {
   background: var(--bg);
 }
 
-/* Destructive or delete action button */
 .btn-danger {
   background: var(--danger);
   color: #fff;
 }
 
-/* Hover state for danger buttons */
 .btn-danger:hover {
   background: #dc2626;
 }
 
-/* Positive confirmation button */
 .btn-success {
   background: var(--success);
   color: #fff;
 }
 
-/* Compact/small button variation */
 .btn-sm {
   padding: 6px 12px;
   font-size: 12px;
 }
 
-/* --------------------------------------------------------------------------
-   Dashboard Cards
-   -------------------------------------------------------------------------- */
-
-/* Responsive grid for dashboard cards */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-/* Generic reusable card container */
-.card {
-  background: var(--card);
+.btn-link {
+  background: none;
   border: none;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 20px;
-  transition: transform 0.2s;
+  color: #014d5b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
 }
 
-/* Card header section */
-.card-header {
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
+.btn-link:hover {
+  color: #026b7d;
+}
+
+/* --- Badges --- */
+.badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
 }
 
-/* Card title heading */
-.card-header h3 {
-  font-size: 15px;
-  font-weight: 600;
-}
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-yellow { background: #fef9c3; color: #854d0e; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-blue { background: #e3efff; color: #00858a; }
+.badge-gray { background: #f1f5f9; color: #475569; }
+.badge-gold { background: #fff6e4; color: #e29624; }
 
-/* Main card content/body area */
-.card-body {
-  padding: 20px;
-}
-
-/* --------------------------------------------------------------------------
-   Statistics Cards
-   -------------------------------------------------------------------------- */
-
-/* Grid layout for statistic summary cards */
+/* --- Statistic Cards --- */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -404,7 +324,6 @@ body {
   margin-bottom: 24px;
 }
 
-/* Individual statistic card container */
 .stat-card {
   background: var(--card);
   border: none;
@@ -414,7 +333,6 @@ body {
   transition: transform 0.2s;
 }
 
-/* Statistic icon wrapper */
 .stat-icon {
   width: 44px;
   height: 44px;
@@ -426,97 +344,50 @@ body {
   margin-bottom: 12px;
 }
 
-/* Statistic icon size adjustments */
-.stat-icon i {
-  font-size: 24px;
-}
-
-/* Large statistic value/number */
-.stat-value {
-  font-size: 28px;
-  font-weight: 600;
-}
-
-/* Statistic label or description */
-.stat-label {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* --------------------------------------------------------------------------
-   Status Badges
-   -------------------------------------------------------------------------- */
-
-/* Shared badge appearance */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-/* Success status badge */
-.badge-green {
-  background: #dcfce7;
-  color: #166534;
-}
-
-/* Warning status badge */
-.badge-yellow {
-  background: #fef9c3;
-  color: #854d0e;
-}
-
-/* Error or danger badge */
-.badge-red {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-/* Informational badge */
-.badge-blue {
-  background: #e3efff;
-  color: #00858a;
-}
-
-/* Neutral/default badge */
-.badge-gray {
-  background: #f1f5f9;
-  color: #475569;
-}
-
-/* Premium/highlight badge */
-.badge-gold {
-  background: #fff6e4;
-  color: #e29624;
-}
-
+.stat-icon i { font-size: 24px; }
+.stat-value { font-size: 28px; font-weight: 600; }
+.stat-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 
 /* ==========================================================================
-   5. DATA PRESENTATION
-   Tables, detail views, and tab navigation.
+   5. DATA CONTAINERS
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Tables
-   -------------------------------------------------------------------------- */
-
-/* Wrapper to allow horizontal scrolling on smaller screens */
-.table-wrap {
-  overflow-x: auto;
+/* --- Dashboard Grid & Cards --- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-/* Base table styling */
+.card {
+  background: var(--card);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  transition: transform 0.2s;
+}
+
+.card-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header h3 { font-size: 15px; font-weight: 600; }
+.card-body { padding: 20px; }
+
+/* --- Tables --- */
+.table-wrap { overflow-x: auto; }
+
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-/* Table header cells */
 thead th {
   background: #f8f9fa;
   padding: 12px 14px;
@@ -529,7 +400,6 @@ thead th {
   border-bottom: 2px solid var(--border);
 }
 
-/* Table body data cells */
 tbody td {
   padding: 15px 12px;
   border-bottom: 1px solid var(--border);
@@ -537,28 +407,16 @@ tbody td {
   font-size: 14px;
 }
 
-/* Row hover highlight effect */
-tbody tr:hover td {
-  background: #f8fafc;
-}
+tbody tr:hover td { background: #f8fafc; }
+tbody tr:last-child td { border-bottom: none; }
 
-/* Removes border from final table row */
-tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* --------------------------------------------------------------------------
-   Patient Detail Layout
-   -------------------------------------------------------------------------- */
-
-/* Grid layout for patient or record details */
+/* --- Detail Layout --- */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* Small detail label text */
 .detail-item .lbl {
   font-size: 11px;
   color: var(--text-muted);
@@ -567,17 +425,9 @@ tbody tr:last-child td {
   margin-bottom: 2px;
 }
 
-/* Detail value text */
-.detail-item .val {
-  font-size: 14px;
-  font-weight: 500;
-}
+.detail-item .val { font-size: 14px; font-weight: 500; }
 
-/* --------------------------------------------------------------------------
-   Tab Navigation
-   -------------------------------------------------------------------------- */
-
-/* Tabs navigation container */
+/* --- Tab Navigation --- */
 .tabs {
   display: flex;
   gap: 0;
@@ -585,7 +435,6 @@ tbody tr:last-child td {
   margin-bottom: 20px;
 }
 
-/* Individual tab item */
 .tab {
   padding: 10px 18px;
   font-size: 14px;
@@ -596,22 +445,16 @@ tbody tr:last-child td {
   margin-bottom: -1px;
 }
 
-/* Active tab indicator */
 .tab.active {
   color: var(--primary);
   border-bottom-color: var(--primary);
 }
 
-
 /* ==========================================================================
-   6. FORMS, MODALS & SEARCH INTERFACE
+   6. INTERACTIVE UI
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Search Bar Components
-   -------------------------------------------------------------------------- */
-
-/* Search toolbar container */
+/* --- Search Interface --- */
 .search-bar {
   display: flex;
   align-items: center;
@@ -619,14 +462,12 @@ tbody tr:last-child td {
   margin-bottom: 18px;
 }
 
-/* Search input wrapper with icon positioning */
 .search-input-wrap {
   position: relative;
   flex: 1;
   max-width: 320px;
 }
 
-/* Main search input field */
 .search-input-wrap input {
   width: 100%;
   padding: 9px 12px 9px 36px;
@@ -638,12 +479,8 @@ tbody tr:last-child td {
   outline: none;
 }
 
-/* Focus state for search input */
-.search-input-wrap input:focus {
-  border-color: var(--primary);
-}
+.search-input-wrap input:focus { border-color: var(--primary); }
 
-/* Search icon placed inside input field */
 .search-icon {
   position: absolute;
   left: 11px;
@@ -653,7 +490,6 @@ tbody tr:last-child td {
   font-size: 15px;
 }
 
-/* Dropdown select/filter field */
 .filter-select {
   padding: 9px 12px;
   border: 1px solid var(--border);
@@ -666,30 +502,21 @@ tbody tr:last-child td {
   cursor: pointer;
 }
 
-/* --------------------------------------------------------------------------
-   Form Layout & Inputs
-   -------------------------------------------------------------------------- */
-
-/* Grid layout for grouped form fields */
+/* --- Form Layouts --- */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
 
-/* Makes a form field span full width */
-.form-full {
-  grid-column: 1 / -1;
-}
+.form-full { grid-column: 1 / -1; }
 
-/* Individual form field group */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-/* Form field labels */
 .form-group label {
   font-size: 12px;
   font-weight: 500;
@@ -698,7 +525,6 @@ tbody tr:last-child td {
   letter-spacing: 0.5px;
 }
 
-/* Shared styling for input, select, and textarea */
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -713,7 +539,6 @@ tbody tr:last-child td {
   transition: border-color 0.15s;
 }
 
-/* Focus styles for form controls */
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
@@ -721,17 +546,9 @@ tbody tr:last-child td {
   background: #fff;
 }
 
-/* Textarea-specific resizing behavior */
-.form-group textarea {
-  resize: vertical;
-  min-height: 80px;
-}
+.form-group textarea { resize: vertical; min-height: 80px; }
 
-/* --------------------------------------------------------------------------
-   Modal Components
-   -------------------------------------------------------------------------- */
-
-/* Fullscreen dark overlay behind modal */
+/* --- Modals --- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -743,7 +560,6 @@ tbody tr:last-child td {
   backdrop-filter: blur(2px);
 }
 
-/* Main modal dialog container */
 .modal {
   background: var(--card);
   border-radius: 16px;
@@ -754,7 +570,6 @@ tbody tr:last-child td {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
-/* Modal header section */
 .modal-header {
   padding: 20px 24px 16px;
   border-bottom: 1px solid var(--border);
@@ -763,13 +578,8 @@ tbody tr:last-child td {
   align-items: center;
 }
 
-/* Modal title heading */
-.modal-header h3 {
-  font-size: 17px;
-  font-weight: 600;
-}
+.modal-header h3 { font-size: 17px; font-weight: 600; }
 
-/* Modal close button */
 .modal-close {
   background: none;
   border: none;
@@ -779,12 +589,8 @@ tbody tr:last-child td {
   line-height: 1;
 }
 
-/* Main modal content area */
-.modal-body {
-  padding: 20px 24px 24px;
-}
+.modal-body { padding: 20px 24px 24px; }
 
-/* Footer section for modal action buttons */
 .modal-footer {
   padding: 16px 24px;
   border-top: 1px solid var(--border);
@@ -793,16 +599,11 @@ tbody tr:last-child td {
   gap: 10px;
 }
 
-
 /* ==========================================================================
-   7. UTILITIES, STATES & MISCELLANEOUS HELPERS
+   7. UTILITIES & FEEDBACK
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Appointment Date Pill
-   -------------------------------------------------------------------------- */
-
-/* Compact appointment date container */
+/* --- Appointment Pill --- */
 .appt-date {
   display: flex;
   flex-direction: column;
@@ -813,14 +614,8 @@ tbody tr:last-child td {
   min-width: 48px;
 }
 
-/* Appointment day number */
-.appt-date .day {
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1;
-}
+.appt-date .day { font-size: 18px; font-weight: 600; line-height: 1; }
 
-/* Appointment month label */
 .appt-date .month {
   font-size: 10px;
   color: var(--text-muted);
@@ -828,11 +623,7 @@ tbody tr:last-child td {
   letter-spacing: 0.5px;
 }
 
-/* --------------------------------------------------------------------------
-   Alert Messages
-   -------------------------------------------------------------------------- */
-
-/* Shared alert component */
+/* --- Alerts --- */
 .alert {
   padding: 12px 16px;
   border-radius: 8px;
@@ -840,99 +631,50 @@ tbody tr:last-child td {
   margin-bottom: 16px;
 }
 
-/* Success notification alert */
 .alert-success {
   background: #dcfce7;
   color: #166534;
   border: 1px solid #bbf7d0;
 }
 
-/* Error or warning notification alert */
 .alert-error {
   background: #fee2e2;
   color: #991b1b;
   border: 1px solid #fecaca;
 }
 
-/* --------------------------------------------------------------------------
-   Empty State Screens
-   -------------------------------------------------------------------------- */
-
-/* Empty/no-data container */
+/* --- Empty States --- */
 .empty-state {
   text-align: center;
   padding: 48px 20px;
   color: var(--text-muted);
 }
 
-/* Large icon displayed in empty states */
 .empty-state .icon {
   font-size: 48px;
   margin-bottom: 12px;
   opacity: 0.4;
 }
 
-/* Empty state helper message */
-.empty-state p {
-  font-size: 14px;
-}
+.empty-state p { font-size: 14px; }
 
-/* --------------------------------------------------------------------------
-   Page Visibility States
-   -------------------------------------------------------------------------- */
+/* --- Page Visibility & Cells --- */
+.page { display: none; }
+.page.active { display: block; }
 
-/* Hidden page/section */
-.page {
-  display: none;
-}
+.actions-cell { white-space: nowrap; }
 
-/* Currently active page/section */
-.page.active {
-  display: block;
-}
+#password-request-area { animation: fadeIn 0.3s ease; }
 
-/* --------------------------------------------------------------------------
-   Utility Helpers
-   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   8. ANIMATIONS
+   ========================================================================== */
 
-/* Prevents action buttons from wrapping onto new lines */
-.actions-cell {
-  white-space: nowrap;
-}
-
-/* Button styled to visually appear like a text link */
-.btn-link {
-  background: none;
-  border: none;
-  color: #014d5b;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0;
-  white-space: nowrap;
-}
-
-/* Hover effect for link-style buttons */
-.btn-link:hover {
-  color: #026b7d;
-}
-
-/* Password request section fade animation trigger */
-#password-request-area {
-  animation: fadeIn 0.3s ease;
-}
-
-/* --------------------------------------------------------------------------
-   Animations
-   -------------------------------------------------------------------------- */
-
-/* Fade-in entrance animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(-10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);

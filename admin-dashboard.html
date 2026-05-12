@@ -8,6 +8,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  
   <link rel="stylesheet" href="admin-styles.css" />
 </head>
 
@@ -60,6 +61,7 @@
   </div>
 
   <div id="main">
+    
     <div id="topbar">
       <div class="topbar-left">
         <h2 id="page-title">Dashboard</h2>
@@ -149,10 +151,14 @@
           </div>
           <select class="filter-select" id="doctor-filter" onchange="renderDoctors()">
             <option value="">All Specializations</option>
-            <option>Cardiology</option><option>Neurology</option>
-            <option>Pediatrics</option><option>Orthopedics</option>
-            <option>General Medicine</option><option>Dermatology</option>
-            <option>Ophthalmology</option><option>Psychiatry</option>
+              <option value="General Dentistry">General Dentistry</option>
+              <option value="Orthodontics">Orthodontics (Braces)</option>
+              <option value="Endodontics">Endodontics (Root Canals)</option>
+              <option value="Periodontics">Periodontics (Gum Treatment)</option>
+              <option value="Pediatric Dentistry">Pediatric Dentistry (Children)</option>
+              <option value="Prosthodontics">Prosthodontics (Dentures/Crowns)</option>
+              <option value="Oral & Maxillofacial Surgery">Oral & Maxillofacial Surgery</option>
+              <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
           </select>
           <div style="margin-left: auto">
             <button class="btn btn-primary" onclick="openModal('doctor')">
@@ -548,9 +554,7 @@
         <button class="btn btn-primary" onclick="saveBilling()">Save Bill</button>
       </div>
     </div>
-  </div>
-
-  <div id="modal-view-overlay" class="modal-overlay" style="display: none" onclick="closeViewModal(event)">
+  </div> <div id="modal-view-overlay" class="modal-overlay" style="display: none" onclick="closeViewModal(event)">
     <div class="modal" style="width: 580px">
       <div class="modal-header">
         <h3 id="view-modal-title">Patient Details</h3>
